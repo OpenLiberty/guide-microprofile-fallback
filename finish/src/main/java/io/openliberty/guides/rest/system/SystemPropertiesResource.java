@@ -15,6 +15,7 @@ package io.openliberty.guides.rest.system;
 // JAX-RS
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.Response;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 
@@ -30,9 +31,18 @@ import javax.enterprise.context.RequestScoped;
 @Path("properties")
 public class SystemPropertiesResource {
 
+    private static int counter = 0;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getProperties() {
+        if (counter >=1){
+            return Response.Status.INTERNAL_SERVER_ERROR;
+        }
+        counter++;
+
+
+
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
         System.getProperties()
