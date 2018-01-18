@@ -1,1 +1,8 @@
 # draft-guide-microprofile-faulttolerance-intro
+# Handling microservice failures with fault tolerance:
+
+Learn how to use the MicroProfile Retry and Fallback policies to create fault tolerant microservices to reduce the impact of failure on the microservices and ensure continued operation of services
+
+https://openlibertydev.mybluemix.net/guides/circuit-breaker.html#what-you-ll-learn
+
+
