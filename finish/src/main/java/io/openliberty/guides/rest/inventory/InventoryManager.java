@@ -31,7 +31,7 @@ public class InventoryManager {
 
     private ConcurrentMap<String, JsonObject> inv = new ConcurrentHashMap<>();
     
-    @Retry(retryOn = Exception.class, maxRetries = 2, delay = 2000)
+    @Retry(retryOn =Exception.class, maxRetries = 2, delay = 2000)
     @Fallback(fallbackMethod= "fallbackForGet")
     public JsonObject get(String hostname) throws Exception{
         System.out.println(++counter);
