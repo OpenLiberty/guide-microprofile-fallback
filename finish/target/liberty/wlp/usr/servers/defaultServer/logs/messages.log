@@ -1,0 +1,65 @@
+********************************************************************************
+product = Open Liberty 17.0.0.3 (wlp-1.0.18.cl170320170927-1854)
+wlp.install.dir = /Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/finish/target/liberty/wlp/
+java.home = /Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre
+java.version = 1.8.0_151
+java.runtime = Java(TM) SE Runtime Environment (1.8.0_151-b12)
+os = Mac OS X (10.13.2; x86_64) (en_GB)
+process = 17520@graces-mbp-2.hursley.uk.ibm.com
+********************************************************************************
+[30/01/18 15:17:25:461 GMT] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0001I: The server defaultServer has been launched.
+[30/01/18 15:17:26:232 GMT] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           I CWWKE0002I: The kernel started after 0.932 seconds
+[30/01/18 15:17:26:260 GMT] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0007I: Feature update started.
+[30/01/18 15:17:26:859 GMT] 00000011 com.ibm.ws.app.manager.internal.monitor.DropinMonitor        A CWWKZ0058I: Monitoring dropins for applications. 
+[30/01/18 15:17:27:052 GMT] 0000001d com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0219I: TCP Channel defaultHttpEndpoint has been started and is now listening for requests on host *  (IPv6) port 9080.
+[30/01/18 15:17:27:333 GMT] 00000022 com.ibm.ws.app.manager.AppMessageHelper                      I CWWKZ0018I: Starting application io.openliberty.guides.microprofile.mpconfig.
+[30/01/18 15:17:27:615 GMT] 00000022 com.ibm.ws.session.WASSessionCore                            I SESN8501I: The session manager did not find a persistent storage location; HttpSession objects will be stored in the local application server's memory.
+[30/01/18 15:17:27:650 GMT] 00000022 org.jboss.weld.Version                                       I WELD-000900: 2.4.3 (Final)
+[30/01/18 15:17:28:276 GMT] 00000022 com.ibm.ws.webcontainer.osgi.webapp.WebGroup                 I SRVE0169I: Loading Web Module: Liberty Project.
+[30/01/18 15:17:28:278 GMT] 00000022 com.ibm.ws.webcontainer                                      I SRVE0250I: Web Module Liberty Project has been bound to default_host.
+[30/01/18 15:17:28:279 GMT] 00000022 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0016I: Web application available (default_host): http://graces-mbp-2.hursley.uk.ibm.com:9080/
+[30/01/18 15:17:28:282 GMT] 00000022 com.ibm.ws.app.manager.AppMessageHelper                      A CWWKZ0001I: Application io.openliberty.guides.microprofile.mpconfig started in 0.949 seconds.
+[30/01/18 15:17:28:286 GMT] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0012I: The server installed the following features: [concurrent-1.0, mpFaultTolerance-1.0, servlet-3.1, jndi-1.0, json-1.0, cdi-1.2, jsonp-1.0, mpConfig-1.1, jaxrs-2.0, jaxrsClient-2.0].
+[30/01/18 15:17:28:287 GMT] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0008I: Feature update completed in 2.054 seconds.
+[30/01/18 15:17:28:287 GMT] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0011I: The server defaultServer is ready to run a smarter planet.
+[30/01/18 15:17:28:298 GMT] 00000027 com.ibm.ws.session.WASSessionCore                            I SESN0176I: A new session context will be created for application key default_host/
+[30/01/18 15:17:28:309 GMT] 00000027 com.ibm.ws.util                                              I SESN0172I: The session manager is using the Java default SecureRandom implementation for session ID generation.
+[30/01/18 15:17:28:428 GMT] 0000002b com.ibm.ws.webcontainer.osgi.mbeans.PluginGenerator          I SRVE9103I: A configuration file for a web server plugin was automatically generated for this server at /Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/finish/target/liberty/wlp/usr/servers/defaultServer/logs/state/plugin-cfg.xml.
+[30/01/18 15:17:32:550 GMT] 0000001d .ibm.ws.jaxrs.2.0.common:1.0.18.cl170320170927-1854(id=124)] I Setting the server's publish address to be /inventory/
+[30/01/18 15:17:32:734 GMT] 0000001d com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [io.openliberty.guides.microprofile.mpconfig] [/] [io.openliberty.guides.inventory.InventoryApplication]: Initialization successful.
+[30/01/18 15:17:32:831 GMT] 0000001d SystemOut                                                    O GetProperties being called
+[30/01/18 15:17:32:832 GMT] 0000001d SystemOut                                                    O Building the URI
+[30/01/18 15:17:32:854 GMT] 0000001a .ibm.ws.jaxrs.2.0.common:1.0.18.cl170320170927-1854(id=124)] I Setting the server's publish address to be /system/
+[30/01/18 15:17:32:870 GMT] 0000001a com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [io.openliberty.guides.microprofile.mpconfig] [/] [io.openliberty.guides.system.SystemApplication]: Initialization successful.
+[30/01/18 15:17:32:887 GMT] 0000001a SystemOut                                                    O The system is not working!
+[30/01/18 15:17:32:913 GMT] 0000001d SystemOut                                                    O serverUnavailable returning false - 503 being returned
+[30/01/18 15:17:32:913 GMT] 0000001d SystemOut                                                    O FALSE GET PROPERTIES
+[30/01/18 15:17:33:071 GMT] 0000001d SystemOut                                                    O GetProperties being called
+[30/01/18 15:17:33:072 GMT] 0000001d SystemOut                                                    O Building the URI
+[30/01/18 15:17:33:079 GMT] 00000025 SystemOut                                                    O The system is not working!
+[30/01/18 15:17:33:081 GMT] 0000001d SystemOut                                                    O serverUnavailable returning false - 503 being returned
+[30/01/18 15:17:33:081 GMT] 0000001d SystemOut                                                    O FALSE GET PROPERTIES
+[30/01/18 15:17:33:082 GMT] 0000001d SystemOut                                                    O GetProperties being called
+[30/01/18 15:17:33:082 GMT] 0000001d SystemOut                                                    O Building the URI
+[30/01/18 15:17:33:087 GMT] 00000018 SystemOut                                                    O The system is not working!
+[30/01/18 15:17:33:088 GMT] 0000001d SystemOut                                                    O serverUnavailable returning false - 503 being returned
+[30/01/18 15:17:33:089 GMT] 0000001d SystemOut                                                    O FALSE GET PROPERTIES
+[30/01/18 15:17:33:089 GMT] 0000001d SystemOut                                                    O GetProperties being called
+[30/01/18 15:17:33:090 GMT] 0000001d SystemOut                                                    O Building the URI
+[30/01/18 15:17:33:095 GMT] 00000029 SystemOut                                                    O The system is not working!
+[30/01/18 15:17:33:096 GMT] 0000001d SystemOut                                                    O serverUnavailable returning false - 503 being returned
+[30/01/18 15:17:33:097 GMT] 0000001d SystemOut                                                    O FALSE GET PROPERTIES
+[30/01/18 15:17:33:098 GMT] 0000001d SystemOut                                                    O This is the Fallback method being called!!!
+[30/01/18 15:17:47:808 GMT] 0000001b SystemOut                                                    O GetProperties being called
+[30/01/18 15:17:47:808 GMT] 0000001b SystemOut                                                    O Building the URI
+[30/01/18 15:17:47:825 GMT] 0000001b SystemOut                                                    O serverUnavailable returning true - 503 NOT being returned
+[30/01/18 15:17:47:846 GMT] 0000001b SystemOut                                                    O Building the URI
+[30/01/18 15:17:47:847 GMT] 0000001b SystemOut                                                    O This is the builder for the properties
+[30/01/18 15:17:47:962 GMT] 0000001b SystemOut                                                    O SUCCESS! You have connected to your microservice!
+[30/01/18 20:58:47:270 GMT] 0000000e com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0085I: The server defaultServer is stopping because the JVM is exiting.
+[30/01/18 20:58:47:276 GMT] 00000958 com.ibm.ws.runtime.update.internal.RuntimeUpdateManagerImpl  A CWWKE1100I: Waiting for up to 30 seconds for the server to quiesce.
+[30/01/18 20:58:47:281 GMT] 00000959 com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0220I: TCP Channel defaultHttpEndpoint has stopped listening for requests on host *  (IPv6) port 9080.
+[30/01/18 20:58:47:282 GMT] 00000959 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0017I: Web application removed (default_host): http://graces-mbp-2.hursley.uk.ibm.com:9080/
+[30/01/18 20:58:47:288 GMT] 00000958 com.ibm.ws.runtime.update.internal.RuntimeUpdateManagerImpl  I CWWKE1101I: Server quiesce complete.
+[30/01/18 20:58:47:331 GMT] 00000945 com.ibm.ws.app.manager.AppMessageHelper                      A CWWKZ0009I: The application io.openliberty.guides.microprofile.mpconfig has stopped successfully.
+[30/01/18 20:58:47:557 GMT] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0036I: The server defaultServer stopped after 3 hours, 40 minutes, 34.138 seconds.

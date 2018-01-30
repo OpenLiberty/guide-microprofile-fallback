@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>io.openliberty.guides.rest-cdi</name>
+	<name>io.openliberty.guides.microprofile.mpconfig</name>
 	<comment></comment>
 	<projects>
 	</projects>

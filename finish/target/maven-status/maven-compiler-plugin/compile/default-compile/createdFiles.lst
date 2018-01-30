@@ -1,0 +1,16 @@
+io/openliberty/guides/system/SystemApplication.class
+io/openliberty/guides/inventory/InventoryConfig.class
+io/openliberty/guides/common/JsonMessages.class
+io/openliberty/guides/config/ConfigResource.class
+io/openliberty/guides/common/JsonMessages$1.class
+io/openliberty/guides/inventory/InventoryManager.class
+io/openliberty/guides/config/CustomConfigSource$1.class
+io/openliberty/guides/inventory/InventoryApplication.class
+io/openliberty/guides/config/CustomEmailConverter.class
+io/openliberty/guides/inventory/InventoryResource.class
+io/openliberty/guides/system/PropertiesResource.class
+io/openliberty/guides/config/CustomConfigSource.class
+io/openliberty/guides/config/Email.class
+io/openliberty/guides/system/SystemConfig.class
+io/openliberty/guides/inventory/util/InventoryUtil.class
+io/openliberty/guides/config/ConfigApplication.class

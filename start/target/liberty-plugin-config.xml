@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liberty-plugin-config>
+    <installDirectory>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty/wlp</installDirectory>
+    <serverDirectory>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty/wlp/usr/servers/defaultServer</serverDirectory>
+    <userDirectory>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty/wlp/usr</userDirectory>
+    <serverOutputDirectory>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty/wlp/usr/servers/defaultServer</serverOutputDirectory>
+    <serverName>defaultServer</serverName>
+    <configFile>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/src/main/liberty/config/server.xml</configFile>
+    <bootstrapProperties>
+        <default.http.port>9080</default.http.port>
+        <default.https.port>9443</default.https.port>
+    </bootstrapProperties>
+    <appsDirectory>apps</appsDirectory>
+    <looseApplication>false</looseApplication>
+    <stripVersion>false</stripVersion>
+    <installAppPackages>dependencies</installAppPackages>
+    <assemblyArtifact>
+        <groupId>io.openliberty</groupId>
+        <artifactId>openliberty-runtime</artifactId>
+        <version>17.0.0.3</version>
+        <type>zip</type>
+    </assemblyArtifact>
+    <assemblyArchive>/Users/gracejansen/.m2/repository/io/openliberty/openliberty-runtime/17.0.0.3/openliberty-runtime-17.0.0.3.zip</assemblyArchive>
+    <assemblyInstallDirectory>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty</assemblyInstallDirectory>
+    <refresh>false</refresh>
+    <installAppsConfigDropins>/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/start/target/liberty/wlp/usr/servers/defaultServer/configDropins/defaults/install_apps_configuration_1491924271.xml</installAppsConfigDropins>
+</liberty-plugin-config>
