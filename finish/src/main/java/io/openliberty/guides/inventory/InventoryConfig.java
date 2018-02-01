@@ -23,15 +23,11 @@ import io.openliberty.guides.config.Email;
 @RequestScoped
 public class InventoryConfig {
 
-  // tag::build-in-converter[]
   @Inject
   @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
   private Provider<Boolean> inMaintenance;
-  // end::build-in-converter[]
 
-  // tag::isInMaintenance[]
   public boolean isInvInMaintenance() {
     return inMaintenance.get();
   }
-  // end::isInMaintenance[]
 }
