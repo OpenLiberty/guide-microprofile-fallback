@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="it.io.openliberty.guides.inventory.EndpointTest" time="0.125" tests="1" errors="0" skipped="0" failures="0">
+<testsuite name="it.io.openliberty.guides.inventory.EndpointTest" time="0.111" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib"/>
     <property name="java.vm.version" value="25.151-b12"/>
     <property name="gopherProxySet" value="false"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
-    <property name="maven.multiModuleProjectDirectory" value="/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/finish"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/gracejansen/GitHub/Github_testing/draft-guide-microprofile-faulttolerance-intro/finish"/>
     <property name="java.vendor.url" value="http://java.oracle.com/"/>
     <property name="path.separator" value=":"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/Users/gracejansen/GitHub/FT_guide_tutorial/Newest_FT_Guide/finish"/>
+    <property name="user.dir" value="/Users/gracejansen/GitHub/Github_testing/draft-guide-microprofile-faulttolerance-intro/finish"/>
     <property name="java.runtime.version" value="1.8.0_151-b12"/>
     <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/endorsed"/>
@@ -62,5 +62,5 @@
     <property name="sun.cpu.isalist" value=""/>
     <property name="org.apache.commons.logging.Log" value="org.apache.commons.logging.impl.SimpleLog"/>
   </properties>
-  <testcase name="testSuite" classname="it.io.openliberty.guides.inventory.EndpointTest" time="0.125"/>
+  <testcase name="testSuite" classname="it.io.openliberty.guides.inventory.EndpointTest" time="0.111"/>
 </testsuite>

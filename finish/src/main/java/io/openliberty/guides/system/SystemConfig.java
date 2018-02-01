@@ -25,10 +25,11 @@ public class SystemConfig {
   // tag::config[]
   @Inject
   @ConfigProperty(name = "io_openliberty_guides_system_inMaintenance")
-  private Provider<Boolean> inMaintenance;
+  Provider<Boolean> inMaintenance;
   // end::config[]
 
   public boolean isInMaintenance() {
+    System.out.println("GRACE LOOK HERE:" +inMaintenance.get());
     return inMaintenance.get();
   }
 
