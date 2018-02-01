@@ -50,13 +50,8 @@ public class PropertiesResource {
             .forEach(entry -> builder.add((String) entry.getKey(),
                                           (String) entry.getValue()));
 
-      // return builder.build();
-      //System.out.println(Response.ok(builder.build()).build().toString());
       return Response.ok(builder.build()).build();
     } else {
-      // return JsonMessages.returnMessage("PropertiesResource",
-      //                                   systemConfig.getEmail());
-      //System.out.println(Response.status(Response.Status.SERVICE_UNAVAILABLE).build());
       System.out.println("The system is not working!");
       return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
