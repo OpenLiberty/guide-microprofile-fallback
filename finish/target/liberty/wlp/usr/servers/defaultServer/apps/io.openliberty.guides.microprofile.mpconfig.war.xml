@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<archive>
-    <dir sourceOnDisk="/Users/gracejansen/GitHub/Github_testing/draft-guide-microprofile-faulttolerance-intro/finish/src/main/webapp" targetInArchive="/"/>
-    <dir sourceOnDisk="/Users/gracejansen/GitHub/Github_testing/draft-guide-microprofile-faulttolerance-intro/finish/target/classes" targetInArchive="/WEB-INF/classes"/>
-</archive>
