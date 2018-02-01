@@ -58,10 +58,10 @@ public class EndpointTest {
     // tag::testSuite[]
     @Test
     public void testSuite() {
-         //this.testEmptyInventory();
-         //this.testHostRegistration();
-         //this.testSystemPropertiesMatch();
-         //this.testUnknownHost();
+        // this.testEmptyInventory();
+        // // this.testHostRegistration();
+        // this.testSystemPropertiesMatch();
+        // this.testUnknownHost();
     }
     // end::testSuite[]
 

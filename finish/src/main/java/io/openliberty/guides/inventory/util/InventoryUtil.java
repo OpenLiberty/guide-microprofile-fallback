@@ -34,96 +34,6 @@ public class InventoryUtil {
     private static final String PROTOCOL = "http";
     private static final String SYSTEM_PROPERTIES = "/system/properties";
 
-    
-
-    /**
-     * <p>Builds the URI to the system service for a particular host. This is just a helper method.</p>
-     *
-     * @param hostname - name of host.
-     * @return URI object representation of the URI to the system properties service.
-     */
-    private static URI buildUri(String hostname, int port) {
-        System.out.println("Building the URI");
-        return UriBuilder.fromUri(SYSTEM_PROPERTIES)
-                         .host(hostname)
-                         .port(port)
-                         .scheme(PROTOCOL)
-                         .build();
-    }
-    /**
-     * <p>Returns whether or not a particular host is running the system service on the
-     * given port number.</p>
-     */
-    private static boolean responseOkHelper(String hostname, int port) {
-        try {
-            URL target = new URL(buildUri(hostname, port).toString());
-            HttpURLConnection http = (HttpURLConnection) target.openConnection();
-            http.setConnectTimeout(50);
-            int response = http.getResponseCode();
-            System.out.println("Grace this is the response" +response);
-            return (response != 200) ? false : true;
-        } catch (Exception e) {
-            System.out.println("Exception caused by non-200 response being sent");
-            return false;
-        }
-    }
-    /**
-     * <p>Returns whether or not a particular host is exposing its JVM's system properties.
-     * In other words, returns whether or not the system service is running on a
-     * particular host.</p>
-     *
-     * @param hostname - name of host.
-     * @return true if the host is currently running the system service and false otherwise.
-     */
-    public static boolean responseOk(String hostname) {
-        System.out.println("ResponseOK being called");
-        return responseOkHelper(hostname, DEFAULT_PORT);
-
-    }
-    /**
-     * <p>Returns whether or not a particular host is exposing its JVM's system properties on the
-     * given port number. In other words, returns whether or not the system service is running on a
-     * particular host on the given port number.</p>
-     *
-     * @param hostname - name of host.
-     * @param port     - port number.
-     * @return true if the host is currently running the system service and false otherwise.
-     */
-    public static boolean responseOk(String hostname, int port) {
-        System.out.println("ResponseOK for both hostname and port being called");
-        return responseOkHelper(hostname, port);
-    }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * <p>Creates a JAX-RS client that retrieves the JVM system properties for the particular host
-     * on the given port number.</p>
-     */
-    private static JsonObject getPropertiesHelper(String hostname, int port) throws IOException{
-        if(serverUnavailableHelper(hostname, port) == true){
-            Client client = ClientBuilder.newClient();
-            URI propURI = InventoryUtil.buildUri(hostname, port);
-            System.out.println("This is the builder for the properties");
-            return client.target(propURI).request().get(JsonObject.class);        }
-        else{
-            System.out.println("FALSE GET PROPERTIES");
-            throw new IOException();
-        }
-    }
     /**
      * <p>Retrieves the JVM system properties of a particular host.</p>
      *
@@ -134,9 +44,9 @@ public class InventoryUtil {
      * @return JSON Java object containing the system properties of the host's JVM.
      */
     public static JsonObject getProperties(String hostname) throws IOException{
-        System.out.println("GetProperties being called");
         return getPropertiesHelper(hostname, DEFAULT_PORT);
     }
+
     /**
      * <p>Retrieves the JVM system properties of a particular host for the given port number.</p>
      *
@@ -148,20 +58,25 @@ public class InventoryUtil {
      * @return JSON Java object containing the system properties of the host's JVM.
      */
     public static JsonObject getProperties(String hostname, int port) throws IOException{
-        System.out.println("GetProperties with port being called");
         return getPropertiesHelper(hostname, port);
     }
 
+    /**
+     * <p>Creates a JAX-RS client that retrieves the JVM system properties for the particular host
+     * on the given port number.</p>
+     */
+    private static JsonObject getPropertiesHelper(String hostname, int port) throws IOException{
+        if(serverUnavailableHelper(hostname, port) == true){
+            Client client = ClientBuilder.newClient();
+            URI propURI = InventoryUtil.buildUri(hostname, port);
+            return client.target(propURI).request().get(JsonObject.class);
+        }
+        else{
+            throw new IOException();
+        }
 
 
-
-
-
-
-
-
-
-
+    }
 
     /**
      * <p>Returns whether or not a particular host is running the system service on the
@@ -174,18 +89,69 @@ public class InventoryUtil {
             http.setConnectTimeout(50);
             int response = http.getResponseCode();
             if(response == 503) {
-                System.out.println("serverUnavailable returning false - 503 being returned");
                 return false;
             }
-            else {
-                System.out.println("serverUnavailable returning true - 503 NOT being returned");
-                return true;
+            else {return true;
             }
         } catch (Exception e) {
             return false;
         }
     }
 
+    /**
+     * <p>Returns whether or not a particular host is exposing its JVM's system properties.
+     * In other words, returns whether or not the system service is running on a
+     * particular host.</p>
+     *
+     * @param hostname - name of host.
+     * @return true if the host is currently running the system service and false otherwise.
+     */
+    public static boolean responseOk(String hostname) {
+        return responseOkHelper(hostname, DEFAULT_PORT);
+    }
 
+    /**
+     * <p>Returns whether or not a particular host is exposing its JVM's system properties on the
+     * given port number. In other words, returns whether or not the system service is running on a
+     * particular host on the given port number.</p>
+     *
+     * @param hostname - name of host.
+     * @param port     - port number.
+     * @return true if the host is currently running the system service and false otherwise.
+     */
+    public static boolean responseOk(String hostname, int port) {
+        return responseOkHelper(hostname, port);
+    }
+
+    /**
+     * <p>Returns whether or not a particular host is running the system service on the
+     * given port number.</p>
+     */
+    private static boolean responseOkHelper(String hostname, int port) {
+        try {
+            URL target = new URL(buildUri(hostname, port).toString());
+            HttpURLConnection http = (HttpURLConnection) target.openConnection();
+            http.setConnectTimeout(50);
+            int response = http.getResponseCode();
+            System.out.println(response);
+            return (response != 200) ? false : true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * <p>Builds the URI to the system service for a particular host. This is just a helper method.</p>
+     *
+     * @param hostname - name of host.
+     * @return URI object representation of the URI to the system properties service.
+     */
+    private static URI buildUri(String hostname, int port) {
+        return UriBuilder.fromUri(SYSTEM_PROPERTIES)
+                         .host(hostname)
+                         .port(port)
+                         .scheme(PROTOCOL)
+                         .build();
+    }
 
 }

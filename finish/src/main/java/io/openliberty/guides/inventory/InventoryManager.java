@@ -39,20 +39,41 @@ public class InventoryManager {
 
   private ConcurrentMap<String, JsonObject> inv = new ConcurrentHashMap<>();
 
+
+    // public JsonObject get(String hostname) {
+    //     if (InventoryUtil.responseOk(hostname)) {
+    //         System.out.println("response OK");
+    //         JsonObject properties = InventoryUtil.getProperties(hostname);
+    //         inv.putIfAbsent(hostname, properties);
+    //         return properties;
+    //     } 
+    //     else {
+    //         System.out.println("response not ok");
+    //     }
+        
+    // }
     @Retry(retryOn=IOException.class, maxRetries=3)
     @Fallback(fallbackMethod= "fallbackForGet")
     public JsonObject get(String hostname) throws IOException{
         try{
+            // throw new IOException();
             JsonObject properties = InventoryUtil.getProperties(hostname);
             inv.putIfAbsent(hostname, properties);
-            System.out.println("SUCCESS! You have connected to your microservice!");
             return properties;
         } catch (NullPointerException e) {
+            System.out.println("You have not been able to connect to your desired microservice");
+            // throw new Exception();   
             e.printStackTrace();     
         }
-        System.out.println("Is try catch working?");
+        //return json;
         return JsonMessages.SERVICE_UNREACHABLE.getJson();
     }
+
+
+
+
+
+
 
     
     public JsonObject fallbackForGet(String hostname) {
