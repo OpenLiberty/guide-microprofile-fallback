@@ -11,7 +11,6 @@
  *******************************************************************************/
 // end::copyright[]
 
-// tag::config-methods[]
 package io.openliberty.guides.inventory;
 
 // CDI
@@ -30,8 +29,6 @@ import javax.ws.rs.core.MediaType;
 import io.openliberty.guides.common.JsonMessages;
 import io.openliberty.guides.inventory.InventoryConfig;
 
-import java.io.IOException;
-
 @RequestScoped
 @Path("hosts")
 public class InventoryResource {
@@ -43,10 +40,8 @@ public class InventoryResource {
     @Path("{hostname}")
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getPropertiesForHost(@PathParam("hostname") String hostname) throws Exception{
-        //return manager.get(hostname);
-        // return config.isInMaintenance() ? throw new IOException() : manager.get(hostname);
         if (config.isInvInMaintenance()) {
-            throw new Exception();
+          return JsonMessages.SERVICE_UNREACHABLE.getJson();
         } 
         else{
             return manager.get(hostname);
@@ -61,4 +56,3 @@ public class InventoryResource {
 
 }
 
-// end::config-methods[]
