@@ -75,205 +75,93 @@ In this guide we will be focusing on @Retry and @Fallback.
 [source, java, indent=0, role="no_copy"]
 
 // =================================================================================================
-// Injecting configuration into the application
+// Enabling Fault Tolerance into the application
 // =================================================================================================
-== Injecting configuration into the application
+== Enabling Fault Tolerance into the application
 
-Begin by enabling the MicroProfile Config feature in your `pom.xml` file. This feature allows you to 
-use the MicroProfile Config API to externalize configuration data.
+Begin by enabling the MicroProfile Fault Tolerance feature in your `pom.xml` file. This feature allows 
+you to use the MicroProfile Fault Tolerance API to build fault tolerant microservices.
 Navigate to the `start/pom.xml` file and add the required dependency:
 [source, xml, indent=0]
 ----
-include::finish/pom.xml[tags=config]
+include::finish/pom.xml[tags=fault_tolerance]
 ----
 The mp-config feature also needs to be added to the `start/src/main/liberty/config/server.xml` file:
 [source, xml, indent=0]
 ----
-include::finish/src/main/liberty/config/server.xml[tags=config]
+include::finish/src/main/liberty/config/server.xml[tags=fault_tolerance]
 ----
-Now that the MicroProfile Config feature has been enabled, navigate to the local 
-`microprofile-config.properties` configuration file in the `start/src/main/resources/META-INF` directory 
-to start enabling some static configuration. This configuration file is the default configuration source 
-for an application that uses MicroProfile Config.
+Now that the MicroProfile Fault Tolerance feature has been enabled, 
+navigate to the PorpertiesResource.java file to begin setting up the application's fallback mechanism.
 
-The `io_openliberty_guides_port_number` property that has already been defined in this file, 
-determines the port number of the REST service. 
+For the sake of ease of use, the two microservice being run in this application are being :serverd up" 
+by the same server.
+This means that one cannot be taken down without the other.
+To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
+executed when a server cannot be reached due to the server being taken down Maintanence.
+
+In this PropertiesResource file replace the if, else statement inside getProperties() with the following:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/resources/META-INF/microprofile-config.properties[tags=inventory-port-number]
+include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=if_else_statement]
 ----
-To use this configuration property, access the partially implemented `InventoryConfig` file in the 
-`start/src/main/java/io/openliberty/guides/microprofile` directory and add the following 
-configuration injection:
+This new if, else statement now means that if the config property `io_openliberty_guides_system_inMaintenance` 
+is assigned the value of false the PropertiesResource class returns a json object of the system properties. 
+However if this config prooerty is assigned a value of true, then the PropertiesResource class returns a 
+503 HTTP response and prints a message to the terminal to let the developer know that the service is down.
+
+This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
+(Inventory). To do this, navigate to the InventoryUtil.java file.
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=port-number]
-----
-
-This `@Inject` annotation injects the port number directly, the injection value is static and fixed 
-on application starting.
-
-Add the `getPortNumber()` class method. This method directly returns the value of `portNumber` because 
-it has been injected.
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=getPortNumber]
-----
-
-Open the `InventoryResource.java` file. Inject the `InventoryConfig` object to modify the existing class.
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=config-injection]
-----
-
-Get the port number from the configuration and pass this value to the 
-`getProperties(String hostname, int port)` method in the `InventoryUtil.java` to get the system properties.
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=config-port]
-----
-
-
-// =================================================================================================
-// Creating custom configuration sources
-// =================================================================================================
-== Creating custom configuration sources
-
-Note that default config sources are static and fixed on application starting, so you cannot modify 
-them while the server is running.
-However, you can externalize configuration data out of the application package so that the service 
-updates configuration changes dynamically.
-
-Now you have a `CustomConfigSource.json` file that is located outside of your application
-and peers into the `pom.xml` file. Transform the data object from the JSON file to the configuration 
-for your application.
-
-In addition to the three default configuration sources, you can create custom configuration sources by
-implementing the `org.eclipse.microprofile.config.spi.ConfigSource` interface and using the 
-`java.util.ServiceLoader` mechanism.
-
-Open the custom configuration `start/src/main/java/io/openliberty/guides/config/CustomConfigSource.java` 
-source file.
-Add the following content to override the `ConfigSource` interface:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/config/CustomConfigSource.java[tags=customConfig]
-----
-
-The `setProperties()` private method reads the key value pairs from the `CustomConfigSource.json` 
-JSON file and writes the information into a map.
-
-To register the custom configuration source, add the full class name in the 
-`start/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource` file:
-
-[source, java, indent=0]
-----
-include::finish/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource[tags=register]
-----
-
-
-// =================================================================================================
-// Enabling dynamic configuration injection
-// =================================================================================================
-== Enabling dynamic configuration injection
-
-Access the partially implemented `InventoryConfig.java` Java class in the 
-`start/src/main/java/io/openliberty/guides/microprofile` directory.
-
-Add the following two configuration injections:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=config]
-----
-
-The first `@Inject` annotation injects the Config object, which is request scoped.
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=build-in-converter]
-----
-
-The second `@Inject` annotation injects the `io_openliberty_guides_inventory_inMaintenance` 
-configuration property, a dynamic injection that uses the `Provider<>` interface, which forces the 
-service to retrieve the `inMaintenance` value just in time.
-
-Add the `isInMaintenance()` class method as shown in the following example:
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=isInMaintenance]
-----
-
-Every time that you invoke the `inMaintenance.get()` method, the `Provider<>` interface picks up the
-latest value of the `io_openliberty_guides_inventory_inMaintenance` property from configuration sources.
-
-Open the `InventoryResource.java` file. Use the `inventoryConfig.isInMaintenance()` class method to 
-determine whether the inventory service is in maintenance
-or not according to the configuration. If you set the `io_openliberty_guides_inventory_inMaintenance` 
-property to `true` in the configuration, the inventory service returns the message, 
-`Service is temporarily down for maintenance`.
-Modify the existing class to the following code:
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=config-methods]
+CODE --> CHANGED loads
 ----
 
 // =================================================================================================
-// Creating custom converters
+// Adding the @Retry and @Fallback annotations
 // =================================================================================================
-== Adding custom converters
-Configuration values are purely Strings. MicroProfile Config API has built-in converters that automatically 
-converts configured Strings into target types such as `int`, `Integer`, `boolean`, `Boolean`, `float`, 
-`Float`, `double` and `Double`.
-Therefore, in the previous section, it is type-safe to directly set the variable type to `Provider<Boolean>`:
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=build-in-converter]
-----
+== Adding the @Retry and @Fallback annotations
 
-To convert configured Strings to an arbitrary class type, such as the `Email` class type which is defined in 
-the `start/src/main/java/io/openliberty/guides/config/Email.java` source file,
-add a custom converter by implementing the generic interface `org.eclipse.microprofile.config.spi.Converter<T>`.
-
-Open the `start/src/main/java/io/openliberty/guides/config/CustomEmailConverter.java` file.
-Add the following content to override the `Converter<T>` interface:
+Now that our inventory microservice is able to recognise that the system microservice has been taken 
+down for maintenance, a fallback method needs to be set out.
+Navigate to the InventoryManager.java file in `finish/src/main/io/openliberty/guides/inventory`.
+The first edit that is needed for this class is to add the fault tolerance import:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/config/CustomEmailConverter.java[tags=customConfig]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=fault_tolerance_import]
 ----
 
-To register the custom converter, add the full class name in the 
-`start/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.Converter` file:
+Next, replace the getProperties() function with the following code:
+
 [source, java, indent=0]
 ----
-include::finish/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.Converter[tags=register]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=retry_fallback_methods]
 ----
 
-To use the custom `Email` converter, open the `InventoryConfig.java` file, inject the 
-`io_openliberty_guides_email` property, and add the `getEmail()` method:
+The Retry annotation specified here dictates on what conditions to retry establishing the connection 
+to the system service (on an IOException) and how many times it should be retried.
+The Fallback annotation specified here dictates which method to call when the reties are unsuccessful 
+(in this case use the fallbackForGet method).
+
+Next navigate to the InventoryResource.java file and add the following import:
+
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryConfig.java[tags=custom-converter;getEmail]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=IOException_import]
 ----
 
-Open the `InventoryResource.java` file. Modify the returnMessage().
-[source, java, indent=0]
+Next, in the same file, replace the getPropertiesForHost method with the following:
+
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=email]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerant_exception]
 ----
 
-Open the `start/src/main/java/io/openliberty/guides/common/JsonMessages.java` file. Add the 
-`returnMessage()` method.
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/common/JsonMessages.java[tags=returnMessage]
-----
+This if statement now throws an IOException everytime the InMaintenance value is true.
+
+The application has now been sucessfully set up to be fault tolerant.
 
 
 // =================================================================================================
