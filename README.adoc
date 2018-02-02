@@ -94,30 +94,39 @@ include::finish/src/main/liberty/config/server.xml[tags=fault_tolerance]
 Now that the MicroProfile Fault Tolerance feature has been enabled, 
 navigate to the PorpertiesResource.java file to begin setting up the application's fallback mechanism.
 
-For ease of use, the two microservice being run in this application are being :serverd up" 
+For ease of use, the two microservice being run in this application are being "serverd up" 
 by the same server.
 This means that one cannot be taken down without the other.
 To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
 executed when a server cannot be reached due to the server being taken down Maintanence.
 
-In this PropertiesResource file replace the if, else statement inside getProperties() with the following:
+In this PropertiesResource file input the following:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=if_else_statement]
+include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
 ----
-This new if, else statement now means that if the config property `io_openliberty_guides_system_inMaintenance` 
+The new if, else statement here means that if the config property `io_openliberty_guides_system_inMaintenance` 
 is assigned the value of false the PropertiesResource class returns a json object of the system properties. 
 However if this config prooerty is assigned a value of true, then the PropertiesResource class returns a 
 503 HTTP response and prints a message to the terminal to let the developer know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
-(Inventory). To do this, navigate to the InventoryUtil.java file.
+(Inventory). To do this, navigate to the InventoryUtil.java file and modify the existing class with the following:
 
 [source, java, indent=0]
 ----
-CODE --> CHANGED loads
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
 ----
+
+In this class, a new `serverUnavailableHelper()` method has been added. This method checks the HTTP response 
+returned by the PropertiesResource.java class. Unlike the responseOKHelper method, which is checking if 
+the response is ok (a 200 response), this method checks for the server unavailable response (a 503 response).
+If the response is a 503 (i.e. the service is in maintenance), then false is returned. 
+
+The returned value of the `serverUnavailableHelper()` method called by the `getPropertiesHelper()` method. 
+If the server is down and serverUnavaliable helper therefore returns false, then an IOException is thrown 
+by `getPropertiesHelper()`.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
@@ -125,41 +134,39 @@ CODE --> CHANGED loads
 == Adding the @Retry and @Fallback annotations
 
 Now that our inventory microservice is able to recognise that the system microservice has been taken 
-down for maintenance, a fallback method needs to be set out.
-Navigate to the InventoryManager.java file in `finish/src/main/io/openliberty/guides/inventory`.
-The first edit that is needed for this class is to add the fault tolerance import:
+down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
+as a result of this microservice being in maintanence, a fallback method needs to be set out.
+Navigate to the InventoryManager.java file in `finish/src/main/io/openliberty/guides/inventory` and 
+add the following code to override the existing class:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=fault_tolerance_import]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
 ----
 
-Next, replace the getProperties() function with the following code:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=retry_fallback_methods]
-----
-
-The Retry annotation specified here dictates on what conditions to retry establishing the connection 
-to the system service (on an IOException) and how many times it should be retried.
-The Fallback annotation specified here dictates which method to call when the reties are unsuccessful 
+The `@Retry` annotation specified here dictates on what conditions to retry establishing the connection 
+to the system service (i.e. on an IOException) and how many times it should be retried (i.e. 3 times).
+The `@Fallback` annotation specified dictates which method to call when the reties are unsuccessful 
 (in this case use the fallbackForGet method).
 
-Next navigate to the InventoryResource.java file and add the following import:
+The `fallbackForGet()` method that has been added as the designated fallback method for the original `get()` 
+method, checks to see if the properties variable is null. If the properties variable is null, this suggests 
+that the application has not been able to successfully reach the system service to get the system's 
+properties previously, thus the method simply prints out a json warning message in the browser. However, if 
+the properties variable is not null, this method retruns a json of the cached property values to the browser.
+
+
+Next navigate to the InventoryResource.java file and modify this existing file with the following code:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=IOException_import]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerance]
 ----
 
-Next, in the same file, replace the getPropertiesForHost method with the following:
-
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerant_exception]
-----
-
-This if statement now throws an IOException everytime the InMaintenance value is true.
+The if statement in this class now returns an error message when the inventory service is down for maintanence 
+and calls the `get()` method in the InventoryManager.java class when the inventory service is up and running 
+as normal.
+All references to the email configuration property have been removed from this file.
 
 The application has now been sucessfully set up to be fault tolerant.
 

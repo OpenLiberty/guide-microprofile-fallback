@@ -11,6 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 
+// tag::fault_tolerance[]
 package io.openliberty.guides.inventory;
 
 // CDI
@@ -55,4 +56,6 @@ public class InventoryResource {
   }
 
 }
+
+// end::fault_tolerance[]
 

@@ -31,14 +31,13 @@ import io.openliberty.guides.common.JsonMessages;
 import io.openliberty.guides.system.SystemConfig;
 import javax.ws.rs.core.Response;
 
+// tag::503_response[]
 @RequestScoped
 @Path("properties")
 public class PropertiesResource {
 
-  // tag::config-injection[]
   @Inject
   SystemConfig systemConfig;
-  // end::config-injection[]
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -59,3 +58,4 @@ public class PropertiesResource {
   }
 
 }
+// end::503_response[]
