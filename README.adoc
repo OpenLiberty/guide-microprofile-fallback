@@ -64,12 +64,17 @@ They dictate whether and when executions should take place, and fallbacks offer 
 when an execution does not complete successfully.
 
 MP Fault Tolerance offers the following Fault Tolerance policies:
-• Timeout: Define a duration for timeout
-• Retry: Define a criteria on when to retry
-• Fallback: provide an alternative solution for a failed execution.
-• CircuitBreaker: offer a way of fail fast by automatically failing execution to prevent the system 
-overloading and indefinite wait or timeout by the clients.
-• Bulkhead: isolate failures in part of the system while the rest part of the system can still function.
+
+* Timeout: Define a duration for timeout
+
+* Retry: Define a criteria on when to retry
+
+* Fallback: provide an alternative solution for a failed execution
+
+* CircuitBreaker: offer a way of fail fast by automatically failing execution to prevent the system 
+overloading and indefinite wait or timeout by the clients
+
+* Bulkhead: isolate failures in part of the system while the rest part of the system can still function
 
 In this guide we will be focusing on @Retry and @Fallback.
 [source, java, indent=0, role="no_copy"]
