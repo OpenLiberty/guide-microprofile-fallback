@@ -94,7 +94,7 @@ include::finish/src/main/liberty/config/server.xml[tags=fault_tolerance]
 Now that the MicroProfile Fault Tolerance feature has been enabled, 
 navigate to the PorpertiesResource.java file to begin setting up the application's fallback mechanism.
 
-For the sake of ease of use, the two microservice being run in this application are being :serverd up" 
+For ease of use, the two microservice being run in this application are being :serverd up" 
 by the same server.
 This means that one cannot be taken down without the other.
 To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
