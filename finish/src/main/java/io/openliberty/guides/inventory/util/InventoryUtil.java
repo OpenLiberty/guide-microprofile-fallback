@@ -27,6 +27,9 @@ import javax.ws.rs.core.UriBuilder;
 
 import java.io.IOException;
 
+
+// tag::throw_IOException[]
+
 public class InventoryUtil {
 
     // Constants for building URI to the system service.
@@ -74,14 +77,9 @@ public class InventoryUtil {
         else{
             throw new IOException();
         }
-
-
     }
 
-    /**
-     * <p>Returns whether or not a particular host is running the system service on the
-     * given port number.</p>
-     */
+  
     private static boolean serverUnavailableHelper(String hostname, int port) {
         try {
             URL target = new URL(buildUri(hostname, port).toString());
@@ -155,3 +153,5 @@ public class InventoryUtil {
     }
 
 }
+
+// end::throw_IOException[]

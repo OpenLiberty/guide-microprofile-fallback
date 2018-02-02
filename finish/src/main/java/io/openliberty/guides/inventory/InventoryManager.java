@@ -34,6 +34,8 @@ import java.io.StringReader;
 
 import org.eclipse.microprofile.faulttolerance.*;
 
+// tag::add_retry_fallback[]
+
 @ApplicationScoped
 public class InventoryManager {
 
@@ -77,3 +79,5 @@ public class InventoryManager {
     return systems.build();
   }
 }
+
+// end::add_retry_fallback[]
