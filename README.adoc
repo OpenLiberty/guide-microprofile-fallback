@@ -143,7 +143,7 @@ by `getPropertiesHelper()`.
 Now that our inventory microservice is able to recognise that the system microservice has been taken 
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
 as a result of this microservice being in maintanence, a fallback method needs to be set out.
-Navigate to the InventoryManager.java file in `finish/src/main/io/openliberty/guides/inventory` and 
+Navigate to the InventoryManager.java file in `start/src/main/io/openliberty/guides/inventory` and 
 replace the code in this file with the following:
 
 [source, java, indent=0]
