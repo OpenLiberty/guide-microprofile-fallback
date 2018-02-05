@@ -114,8 +114,8 @@ include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.ja
 The `getProperties()` method has been modified so that if the config property 
 `io_openliberty_guides_system_inMaintenance` from the `CustomConfigProperties.json` file is assigned 
 the value of false, a json object containing the system properties is returned. However, if this config 
-property is assigned a value of true, then a 503 HTTP response is returned and a message is returned to 
-the terminal to let the developer know that the service is down.
+property is assigned a value of true, then a 503 HTTP response is returned to the browser and a message 
+is returned to the terminal to let the developer know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
 (Inventory). To do this, navigate to the InventoryUtil.java file and replace the code in the existing class 
