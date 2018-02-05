@@ -26,13 +26,10 @@ even when one of the microservices is unavailable.
 == What you'll learn
 You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and 
 ensure continued operation of services.
-You will use the @Retry and @Fallback methods to define a criteria on when to retry and to provide an 
+You will use the `@Retry` and `@Fallback` methods to define a criteria on when to retry and to provide an 
 alternative solution for a failed execution.
-Fault Tolerance enables the applications to function even when on of the services is unavailable, 
+Fault Tolerance enables the applications to function even when one of the services is unavailable, 
 making service invocation more resilient.
-
-This guide will be building on top of the "Configuring Microservices using MicroProfile Config" 
-guide so if you wish to learn more about configuration please visit this guide at: 
 
 After starting the application, you will be able to access two microservices to test availability:
 
@@ -53,9 +50,9 @@ include::{common-includes}/gitclone.adoc[]
 
 
 // =================================================================================================
-// Background Concepts
+// Why use MP Fault Tolerance?
 // =================================================================================================
-== Background Concepts
+== Why use MP Fault Tolerance?
 It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP) 
 Fault Tolerance provides a simple and flexible solution.
 Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
@@ -76,7 +73,7 @@ overloading and indefinite wait or timeout by the clients
 
 * Bulkhead: isolate failures in part of the system while the rest part of the system can still function
 
-In this guide we will be focusing on @Retry and @Fallback.
+In this guide we will be focusing on `@Retry` and `@Fallback`.
 [source, java, indent=0, role="no_copy"]
 
 // =================================================================================================
@@ -99,25 +96,30 @@ include::finish/src/main/liberty/config/server.xml[tags=fault_tolerance]
 Now that the MicroProfile Fault Tolerance feature has been enabled, 
 navigate to the PorpertiesResource.java file to begin setting up the application's fallback mechanism.
 
-For ease of use, the two microservice being run in this application are being "serverd up" 
+For ease of use, the two microservice being run in this application are being "served up" 
 by the same server.
 This means that one cannot be taken down without the other.
 To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
-executed when a server cannot be reached due to the server being taken down Maintanence.
+executed when a server cannot be reached due to the server being taken down maintenance. Taking the server
+up and down dynamically will be done in this guide using dynamic configuration using MP config. To learn 
+more about MP Config and how to set up dynamic configuration properties, visit the "Configuring 
+Microservices using MicroProfile Config" guide.
 
-In this PropertiesResource file input the following:
+In the PropertiesResource, replace the code in this file with the following:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
 ----
-The new if, else statement here means that if the config property `io_openliberty_guides_system_inMaintenance` 
-is assigned the value of false the PropertiesResource class returns a json object of the system properties. 
-However if this config prooerty is assigned a value of true, then the PropertiesResource class returns a 
-503 HTTP response and prints a message to the terminal to let the developer know that the service is down.
+The `getProperties()` method has been modified so that if the config property 
+`io_openliberty_guides_system_inMaintenance` from the `CustomConfigProperties.json` file is assigned 
+the value of false, a json object containing the system properties is returned. However, if this config 
+property is assigned a value of true, then a 503 HTTP response is returned and a message is returned to 
+the terminal to let the developer know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
-(Inventory). To do this, navigate to the InventoryUtil.java file and modify the existing class with the following:
+(Inventory). To do this, navigate to the InventoryUtil.java file and replace the code in the existing class 
+with the following:
 
 [source, java, indent=0]
 ----
@@ -142,7 +144,7 @@ Now that our inventory microservice is able to recognise that the system microse
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
 as a result of this microservice being in maintanence, a fallback method needs to be set out.
 Navigate to the InventoryManager.java file in `finish/src/main/io/openliberty/guides/inventory` and 
-add the following code to override the existing class:
+replace the code in this file with the following:
 
 [source, java, indent=0]
 ----
@@ -161,7 +163,7 @@ properties previously, thus the method simply prints out a json warning message 
 the properties variable is not null, this method retruns a json of the cached property values to the browser.
 
 
-Next navigate to the InventoryResource.java file and modify this existing file with the following code:
+Next navigate to the InventoryResource.java file and replace the code in this file with the following code:
 
 [source, java, indent=0]
 ----

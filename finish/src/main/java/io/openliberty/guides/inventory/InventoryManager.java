@@ -10,6 +10,8 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
+
+// tag::add_retry_fallback[]
 package io.openliberty.guides.inventory;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,8 +35,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import org.eclipse.microprofile.faulttolerance.*;
-
-// tag::add_retry_fallback[]
 
 @ApplicationScoped
 public class InventoryManager {
