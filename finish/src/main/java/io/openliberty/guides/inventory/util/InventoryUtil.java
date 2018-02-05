@@ -10,6 +10,9 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
  // end::copyright[]
+
+
+// tag::throw_IOException[]
 package io.openliberty.guides.inventory.util;
 
 import java.io.IOException;
@@ -27,8 +30,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import java.io.IOException;
 
-
-// tag::throw_IOException[]
 
 public class InventoryUtil {
 
