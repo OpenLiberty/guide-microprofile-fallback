@@ -101,9 +101,8 @@ by the same server.
 This means that one cannot be taken down without the other.
 To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
 executed when a server cannot be reached due to the server being taken down maintenance. Taking the server
-up and down dynamically will be done in this guide using dynamic configuration using MP config. To learn 
-more about MP Config and how to set up dynamic configuration properties, visit the "Configuring 
-Microservices using MicroProfile Config" guide.
+up and down dynamically will be done in this guide using dynamic configuration using MP config. If you want 
+to learn more about setting up dynamic configuration, see `Configuring Microprofile with MP Config`.
 
 In the PropertiesResource, replace the code in this file with the following:
 
