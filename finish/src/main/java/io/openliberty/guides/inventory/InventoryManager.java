@@ -36,6 +36,7 @@ import java.io.StringReader;
 
 import org.eclipse.microprofile.faulttolerance.*;
 
+
 @ApplicationScoped
 public class InventoryManager {
 
@@ -44,22 +45,21 @@ public class InventoryManager {
     @Retry(retryOn=IOException.class, maxRetries=3)
     @Fallback(fallbackMethod= "fallbackForGet")
     public JsonObject get(String hostname) throws IOException{
-        try{
+        if (InventoryUtil.responseOk(hostname)) {
             JsonObject properties = InventoryUtil.getProperties(hostname);
             inv.putIfAbsent(hostname, properties);
             return properties;
-        } catch (NullPointerException e) {
-            System.out.println("You have not been able to connect to your desired microservice");   
-            e.printStackTrace();     
+        } else {
+            System.out.println("You have not been able to connect to your desired microservice");
+            return JsonMessages.SERVICE_UNREACHABLE.getJson();
         }
-        return JsonMessages.SERVICE_UNREACHABLE.getJson();
     }
-    
     public JsonObject fallbackForGet(String hostname) {
         JsonObject properties = inv.get(hostname);
         if (properties == null) {
             System.out.println("This is the Fallback method being called!!!");
-            return JsonMessages.SERVICE_UNREACHABLE.getJson();        }
+            return JsonMessages.SERVICE_UNREACHABLE.getJson();
+        }
         return properties;
     }
 
