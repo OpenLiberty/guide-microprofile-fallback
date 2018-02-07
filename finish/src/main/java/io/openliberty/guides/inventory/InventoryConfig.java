@@ -18,7 +18,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import io.openliberty.guides.config.Email;
+//import io.openliberty.guides.config.Email;
 
 @RequestScoped
 public class InventoryConfig {
