@@ -17,31 +17,18 @@ import javax.inject.Inject;
 
 import javax.inject.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import io.openliberty.guides.config.Email;
+//import io.openliberty.guides.config.Email;
 
 @RequestScoped
 public class SystemConfig {
 
-  // tag::config[]
   @Inject
   @ConfigProperty(name = "io_openliberty_guides_system_inMaintenance")
   Provider<Boolean> inMaintenance;
-  // end::config[]
-
-  // tag::custom-converter[]
-  @Inject
-  @ConfigProperty(name = "io_openliberty_guides_email")
-  private Provider<Email> email;
-  // end::custom-converter[]
 
   public boolean isInMaintenance() {
+    System.out.println("GRACE LOOK HERE:" +inMaintenance.get());
     return inMaintenance.get();
   }
-
-  // tag::getEmail[]
-  public Email getEmail() {
-    return email.get();
-  }
-  // end::getEmail[]
 
 }

@@ -11,18 +11,23 @@
  *******************************************************************************/
 // end::copyright[]
 
-// tag::customConfig[]
-package io.openliberty.guides.config;
+// tag::config-class[]
+package io.openliberty.guides.inventory;
 
-import org.eclipse.microprofile.config.spi.Converter;
-import io.openliberty.guides.config.Email;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+//import io.openliberty.guides.config.Email;
 
-public class CustomEmailConverter implements Converter<Email> {
+@RequestScoped
+public class InventoryConfig {
 
-  @Override
-  public Email convert(String value) {
-    return new Email(value);
+  @Inject
+  @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
+  private Provider<Boolean> inMaintenance;
+
+  public boolean isInvInMaintenance() {
+    return inMaintenance.get();
   }
-
 }
-// end::customConfig[]

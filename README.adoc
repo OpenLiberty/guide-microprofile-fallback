@@ -81,20 +81,14 @@ In this guide we will be focusing on `@Retry` and `@Fallback`.
 // =================================================================================================
 == Enabling Fault Tolerance into the application
 
-Begin by enabling the MicroProfile Fault Tolerance feature in your `pom.xml` file. This feature allows 
-you to use the MicroProfile Fault Tolerance API to build fault tolerant microservices.
-Navigate to the `start/pom.xml` file and add the required dependency:
-[source, xml, indent=0]
-----
-include::finish/pom.xml[tags=fault_tolerance]
-----
-The mp-config feature also needs to be added to the `start/src/main/liberty/config/server.xml` file:
-[source, xml, indent=0]
-----
-include::finish/src/main/liberty/config/server.xml[tags=fault_tolerance]
-----
-Now that the MicroProfile Fault Tolerance feature has been enabled, 
-navigate to the PorpertiesResource.java file to begin setting up the application's fallback mechanism.
+Begin by navigating to the `pom.xml` file to check the required dependency. The microprofile-fault-tolerance-api 
+dependency has been added for you in the start/pom.xml file. This feature allows you to use the MicroProfile 
+Fault Tolerance API to build fault tolerant microservices.
+
+The mpFaultTolerance-1.0 feature has also been enabled in the `start/src/main/liberty/config/server.xml` file.
+
+Now that the MicroProfile Fault Tolerance feature has been enabled, the application's fallback mechanism needs 
+to be set up.
 
 For ease of use, the two microservice being run in this application are being "served up" 
 by the same server.
@@ -104,27 +98,29 @@ executed when a server cannot be reached due to the server being taken down main
 up and down dynamically will be done in this guide using dynamic configuration using MP config. If you want 
 to learn more about setting up dynamic configuration, see `Configuring Microprofile with MP Config`.
 
-In the PropertiesResource, replace the code in this file with the following:
+Create the Properties Resource class in `start/src/main/java/io/openliberty/guides/system/PropertiesResource.java`:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
 ----
-The `getProperties()` method has been modified so that if the config property 
-`io_openliberty_guides_system_inMaintenance` from the `CustomConfigProperties.json` file is assigned 
-the value of false, a json object containing the system properties is returned. However, if this config 
-property is assigned a value of true, then a 503 HTTP response is returned to the browser and a message 
-is returned to the terminal to let the developer know that the service is down.
+This file retrieves all of the system properties and returns them as a JSON Object.
+The `getProperties()` method in this class has been modified for this fault tolerance guide so that 
+if the config property `io_openliberty_guides_system_inMaintenance` from the 
+`CustomConfigProperties.json` file is assigned the value of false, a json object containing the system 
+properties is returned. However, if this config property is assigned a value of true, then a 503 HTTP 
+response is returned to the browser and a message is returned to the terminal to let the developer 
+know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
-(Inventory). To do this, navigate to the InventoryUtil.java file and replace the code in the existing class 
-with the following:
+(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java`
+to create the Inventory Util class:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
 ----
-
+This class is a Client for the system service.
 In this class, a new `serverUnavailableHelper()` method has been added. This method checks the HTTP response 
 returned by the PropertiesResource.java class. Unlike the responseOKHelper method, which is checking if 
 the response is ok (a 200 response), this method checks for the server unavailable response (a 503 response).
@@ -142,8 +138,8 @@ by `getPropertiesHelper()`.
 Now that our inventory microservice is able to recognise that the system microservice has been taken 
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
 as a result of this microservice being in maintanence, a fallback method needs to be set out.
-Navigate to the InventoryManager.java file in `start/src/main/io/openliberty/guides/inventory` and 
-replace the code in this file with the following:
+Navigate to `start/src/main/io/openliberty/guides/inventory/InventoryManager.java` to create the 
+Inventory Manager class:
 
 [source, java, indent=0]
 ----
@@ -162,7 +158,8 @@ properties previously, thus the method simply prints out a json warning message 
 the properties variable is not null, this method retruns a json of the cached property values to the browser.
 
 
-Next navigate to the InventoryResource.java file and replace the code in this file with the following code:
+Next navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryResource.java` to create the 
+Inventory Resource class:
 
 [source, java, indent=0]
 ----
