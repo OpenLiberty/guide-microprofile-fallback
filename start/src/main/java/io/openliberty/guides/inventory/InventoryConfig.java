@@ -9,39 +9,25 @@
  * Contributors:
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
- // end::copyright[]
+// end::copyright[]
+
+// tag::config-class[]
 package io.openliberty.guides.inventory;
 
-// CDI
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
-// JSON-P
-import javax.json.JsonObject;
-
-// JAX-RS
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.inject.Provider;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+//import io.openliberty.guides.config.Email;
 
 @RequestScoped
-@Path("hosts")
-public class InventoryResource {
+public class InventoryConfig {
 
-    @Inject InventoryManager manager;
+  @Inject
+  @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
+  private Provider<Boolean> inMaintenance;
 
-    @GET
-    @Path("{hostname}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getPropertiesForHost(@PathParam("hostname") String hostname) {
-        return manager.get(hostname, 9080);
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject listContents() {
-        return manager.list();
-    }
+  public boolean isInvInMaintenance() {
+    return inMaintenance.get();
+  }
 }

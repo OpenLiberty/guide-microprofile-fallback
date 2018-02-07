@@ -10,6 +10,9 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
  // end::copyright[]
+
+
+// tag::throw_IOException[]
 package io.openliberty.guides.inventory.util;
 
 import java.io.IOException;
@@ -26,6 +29,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.UriBuilder;
 
 import java.io.IOException;
+
+
 
 public class InventoryUtil {
 
@@ -65,38 +70,12 @@ public class InventoryUtil {
      * <p>Creates a JAX-RS client that retrieves the JVM system properties for the particular host
      * on the given port number.</p>
      */
-    private static JsonObject getPropertiesHelper(String hostname, int port) throws IOException{
-        if(serverUnavailableHelper(hostname, port) == true){
-            Client client = ClientBuilder.newClient();
-            URI propURI = InventoryUtil.buildUri(hostname, port);
-            return client.target(propURI).request().get(JsonObject.class);
-        }
-        else{
-            throw new IOException();
-        }
-
-
+    private static JsonObject getPropertiesHelper(String hostname, int port) {
+        Client client = ClientBuilder.newClient();
+        URI propURI = InventoryUtil.buildUri(hostname, port);
+        return client.target(propURI).request().get(JsonObject.class); 
     }
 
-    /**
-     * <p>Returns whether or not a particular host is running the system service on the
-     * given port number.</p>
-     */
-    private static boolean serverUnavailableHelper(String hostname, int port) {
-        try {
-            URL target = new URL(buildUri(hostname, port).toString());
-            HttpURLConnection http = (HttpURLConnection) target.openConnection();
-            http.setConnectTimeout(50);
-            int response = http.getResponseCode();
-            if(response == 503) {
-                return false;
-            }
-            else {return true;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     /**
      * <p>Returns whether or not a particular host is exposing its JVM's system properties.
@@ -106,7 +85,7 @@ public class InventoryUtil {
      * @param hostname - name of host.
      * @return true if the host is currently running the system service and false otherwise.
      */
-    public static boolean responseOk(String hostname) {
+    public static boolean responseOk(String hostname) throws IOException{
         return responseOkHelper(hostname, DEFAULT_PORT);
     }
 
@@ -119,7 +98,7 @@ public class InventoryUtil {
      * @param port     - port number.
      * @return true if the host is currently running the system service and false otherwise.
      */
-    public static boolean responseOk(String hostname, int port) {
+    public static boolean responseOk(String hostname, int port) throws IOException {
         return responseOkHelper(hostname, port);
     }
 
@@ -127,15 +106,21 @@ public class InventoryUtil {
      * <p>Returns whether or not a particular host is running the system service on the
      * given port number.</p>
      */
-    private static boolean responseOkHelper(String hostname, int port) {
+    private static boolean responseOkHelper(String hostname, int port) throws IOException {
         try {
             URL target = new URL(buildUri(hostname, port).toString());
             HttpURLConnection http = (HttpURLConnection) target.openConnection();
             http.setConnectTimeout(50);
             int response = http.getResponseCode();
             System.out.println(response);
+            if (response == 503) {
+                throw new IOException();
+            }
             return (response != 200) ? false : true;
-        } catch (Exception e) {
+        } catch (IOException e) {
+            throw e;
+        }
+        catch (Exception e) {
             return false;
         }
     }
@@ -155,3 +140,5 @@ public class InventoryUtil {
     }
 
 }
+
+// end::throw_IOException[]
