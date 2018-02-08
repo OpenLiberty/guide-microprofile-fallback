@@ -1,1 +1,218 @@
-# draft-guide-microprofile-faulttolerance-intro
+// Copyright (c) 2017 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//   IBM Corporation
+:projectid: microprofile-fault_tolerance
+:page-layout: guide
+:page-duration: 30 minutes
+:page-releasedate: 2017-12-11
+:page-description: Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function even when one of the microservices is unavailable.
+:page-tags: ['REST', 'MicroProfile', 'Fault Tolerance', '@Retry', '@Fallback']
+:page-permalink: /guides/{projectid}
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:source-highlighter: prettify
+= Handling failures with Fault Tolerance
+
+Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function 
+even when one of the microservices is unavailable.
+
+// =================================================================================================
+// What you'll learn
+// =================================================================================================
+
+== What you'll learn
+You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and 
+ensure continued operation of services.
+You will use the `@Retry` and `@Fallback` methods to define a criteria on when to retry and to provide an 
+alternative solution for a failed execution.
+Fault Tolerance enables the applications to function even when one of the services is unavailable, 
+making service invocation more resilient.
+
+After starting the application, you will be able to access two microservices to test availability:
+
+* `http://localhost:9080/system/properties` retrieves the information for a specific host
+
+* `http://localhost:9080/inventory/hosts` retrieves the information for a list of all previously 
+registered hosts
+
+To learn more about these two microservices and how you can write the MicroProfile application, see
+https://openliberty.io/guides/microprofile-intro.html[Creating a MicroProfile application].
+
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+
+include::{common-includes}/gitclone.adoc[]
+
+
+// =================================================================================================
+// Why use MP Fault Tolerance?
+// =================================================================================================
+== Why use MP Fault Tolerance?
+It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP) 
+Fault Tolerance provides a simple and flexible solution.
+Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
+Retry policies, bulkheads, and circuit breakers are popular concepts in this area. 
+They dictate whether and when executions should take place, and fallbacks offer an alternative result 
+when an execution does not complete successfully.
+
+MP Fault Tolerance offers the following Fault Tolerance policies:
+
+* Timeout: Define a duration for timeout
+
+* Retry: Define a criteria on when to retry
+
+* Fallback: provide an alternative solution for a failed execution
+
+* CircuitBreaker: offer a way of fail fast by automatically failing execution to prevent the system 
+overloading and indefinite wait or timeout by the clients
+
+* Bulkhead: isolate failures in part of the system while the rest part of the system can still function
+
+In this guide we will be focusing on `@Retry` and `@Fallback`.
+[source, java, indent=0, role="no_copy"]
+
+// =================================================================================================
+// Enabling Fault Tolerance into the application
+// =================================================================================================
+== Enabling Fault Tolerance into the application
+
+Begin by navigating to the `pom.xml` file to check the required dependency. The microprofile-fault-tolerance-api 
+dependency has been added for you in the start/pom.xml file. This feature allows you to use the MicroProfile 
+Fault Tolerance API to build fault tolerant microservices.
+
+The mpFaultTolerance-1.0 feature has also been enabled in the `start/src/main/liberty/config/server.xml` file.
+
+Now that the MicroProfile Fault Tolerance feature has been enabled, the application's fallback mechanism needs 
+to be set up.
+
+For ease of use, the two microservice being run in this application are being "served up" 
+by the same server.
+This means that one cannot be taken down without the other.
+To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be 
+executed when a server cannot be reached due to the server being taken down maintenance. Taking the server
+up and down dynamically will be done in this guide using dynamic configuration using MP config. If you want 
+to learn more about setting up dynamic configuration, see `Configuring Microprofile with MP Config`.
+
+Create the Properties Resource class in `start/src/main/java/io/openliberty/guides/system/PropertiesResource.java`:
+
+[source, java, indent=0]
+----
+include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
+----
+This file retrieves all of the system properties and returns them as a JSON Object.
+The `getProperties()` method in this class has been modified for this fault tolerance guide so that 
+if the config property `io_openliberty_guides_system_inMaintenance` from the 
+`CustomConfigProperties.json` file is assigned the value of false, a json object containing the system 
+properties is returned. However, if this config property is assigned a value of true, then a 503 HTTP 
+response is returned to the browser and a message is returned to the terminal to let the developer 
+know that the service is down.
+
+This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
+(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java`
+to create the Inventory Util class:
+
+[source, java, indent=0]
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
+----
+This class is a Client for the system service.
+In this class, a new `serverUnavailableHelper()` method has been added. This method checks the HTTP response 
+returned by the PropertiesResource.java class. Unlike the responseOKHelper method, which is checking if 
+the response is ok (a 200 response), this method checks for the server unavailable response (a 503 response).
+If the response is a 503 (i.e. the service is in maintenance), then false is returned. 
+
+The returned value of the `serverUnavailableHelper()` method called by the `getPropertiesHelper()` method. 
+If the server is down and serverUnavaliable helper therefore returns false, then an IOException is thrown 
+by `getPropertiesHelper()`.
+
+// =================================================================================================
+// Adding the @Retry and @Fallback annotations
+// =================================================================================================
+== Adding the @Retry and @Fallback annotations
+
+Now that our inventory microservice is able to recognise that the system microservice has been taken 
+down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
+as a result of this microservice being in maintanence, a fallback method needs to be set out.
+Navigate to `start/src/main/io/openliberty/guides/inventory/InventoryManager.java` to create the 
+Inventory Manager class:
+
+[source, java, indent=0]
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
+----
+
+The `@Retry` annotation specified here dictates on what conditions to retry establishing the connection 
+to the system service (i.e. on an IOException) and how many times it should be retried (i.e. 3 times).
+The `@Fallback` annotation specified dictates which method to call when the reties are unsuccessful 
+(in this case use the fallbackForGet method).
+
+The `fallbackForGet()` method that has been added as the designated fallback method for the original `get()` 
+method, checks to see if the properties variable is null. If the properties variable is null, this suggests 
+that the application has not been able to successfully reach the system service to get the system's 
+properties previously, thus the method simply prints out a json warning message in the browser. However, if 
+the properties variable is not null, this method retruns a json of the cached property values to the browser.
+
+
+Next navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryResource.java` to create the 
+Inventory Resource class:
+
+[source, java, indent=0]
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerance]
+----
+
+The if statement in this class now returns an error message when the inventory service is down for maintanence 
+and calls the `get()` method in the InventoryManager.java class when the inventory service is up and running 
+as normal.
+All references to the email configuration property have been removed from this file.
+
+The application has now been sucessfully set up to be fault tolerant.
+
+
+// =================================================================================================
+// Building the application
+// =================================================================================================
+
+include::{common-includes}/mvnbuild.adoc[]
+
+
+// =================================================================================================
+// Starting the application
+// =================================================================================================
+
+== Starting the application
+
+To see the new application in action, run the Maven `liberty:start-server` command from the `start` 
+directory:
+
+[source]
+----
+$ mvn liberty:start-server
+----
+
+Once the server is running, you can test the fault tolerance of the application by dynamically changing 
+the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfiProperties.json` file. This 
+property will be set to true at first, but change it to false and save the file and your changes will be 
+added dynamically, there is no need to reset the server (this is dynamic config). If you want more information 
+on how these dynamic configuration properties were set up please visit the "Configuring Microservices" guide 
+on the OpenLiberty website. Simply refresh the page now to see the dynamic changes.
+
+Change the value back to true to see the cached version of the properties.
+
+
+// =================================================================================================
+// Testing the application
+// =================================================================================================
+
+== Testing the application
+
+== Great work! You're done!
+
+You just built and tested a MicroProfile application with MicroProfile Fault Tolerance and Open Liberty.
+
+include::{common-includes}/finish.adoc[]
