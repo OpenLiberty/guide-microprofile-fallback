@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2017 IBM Corporation and others.
+ * Copyright (c) 2017, 2018 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,70 +14,70 @@
 // tag::add_retry_fallback[]
 package io.openliberty.guides.inventory;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-// CDI
+import java.io.IOException;
+import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
-
-// JSON-P
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
 
-import io.openliberty.guides.inventory.util.InventoryUtil;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
 import io.openliberty.guides.common.JsonMessages;
-
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-
-import org.eclipse.microprofile.faulttolerance.*;
-
+import io.openliberty.guides.inventory.client.SystemClient;
+import io.openliberty.guides.inventory.model.InventoryList;
+import io.openliberty.guides.system.SystemConfig;
 
 @ApplicationScoped
 public class InventoryManager {
 
-  private ConcurrentMap<String, JsonObject> inv = new ConcurrentHashMap<>();
+  private InventoryList invList = new InventoryList();
+  private static int retryCounter = 0;
+  
+  @Inject
+  SystemConfig systemConfig;
 
-    @Retry(retryOn=IOException.class, maxRetries=3)
-    @Fallback(fallbackMethod= "fallbackForGet")
-    public JsonObject get(String hostname) throws IOException{
-        if (InventoryUtil.responseOk(hostname)) {
-            JsonObject properties = InventoryUtil.getProperties(hostname);
-            inv.putIfAbsent(hostname, properties);
-            return properties;
-        } else {
-            System.out.println("You have not been able to connect to your desired microservice");
-            return JsonMessages.SERVICE_UNREACHABLE.getJson();
-        }
+  @Retry(retryOn = IOException.class, maxRetries = 3)
+  @Fallback(fallbackMethod = "fallbackForGet")
+  public Properties get(String hostname) throws IOException {
+    if (systemConfig.isInMaintenance()) {
+      retryCounter++;
     }
-    public JsonObject fallbackForGet(String hostname) {
-        JsonObject properties = inv.get(hostname);
-        if (properties == null) {
-            System.out.println("This is the Fallback method being called!!!");
-            return JsonMessages.SERVICE_UNREACHABLE.getJson();
-        }
-        return properties;
+    SystemClient systemClient = new SystemClient(hostname);
+    if (systemClient.isResponseOk()) {
+      Properties properties = systemClient.getContent();
+      invList.addToInventoryList(hostname, properties);
+      return properties;
     }
-
-
-  public JsonObject list() {
-    JsonObjectBuilder systems = Json.createObjectBuilder();
-    inv.forEach((host, props) -> {
-      JsonObject systemProps = Json.createObjectBuilder()
-                                   .add("os.name", props.getString("os.name"))
-                                   .add("user.name",
-                                        props.getString("user.name"))
-                                   .build();
-      systems.add(host, systemProps);
-    });
-    systems.add("hosts", systems);
-    systems.add("total", inv.size());
-    return systems.build();
+    return null;
   }
-}
 
+  public Properties fallbackForGet(String hostname) {
+    Properties properties = invList.findHost(hostname);
+    if (properties == null) {
+      System.out.println("This is the Fallback method being called!!!");
+      // return JsonMessages.SERVICE_UNREACHABLE.getJson(); - incorrect
+      JsonMessages.serviceInMaintenance("Service is temporarily down for maintenance"); //need to fix this msg
+    }
+    return properties;
+  }
+
+  public InventoryList list() {
+    return invList;
+  }
+
+  public static JsonObject getRetryCounter() {
+    JsonObjectBuilder methods = Json.createObjectBuilder();
+    methods.add("getRetryCounter", retryCounter);
+    JsonObjectBuilder retries = Json.createObjectBuilder();
+    retries.add("Inventory", methods.build());
+    return retries.build();
+  }
+    
+  public static void resetRetryCounter() {
+    retryCounter = 0;
+  }
+  
+}
 // end::add_retry_fallback[]
