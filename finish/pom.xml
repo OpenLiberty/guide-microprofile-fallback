@@ -221,6 +221,7 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
+                            <runOrder>reversealphabetical</runOrder>
                             <includes>
                                 <include>**/it/**</include>
                             </includes>
