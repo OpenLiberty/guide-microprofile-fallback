@@ -113,22 +113,24 @@ response is returned to the browser and a message is returned to the terminal to
 know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
-(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java`
-to create the Inventory Util class:
+(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java`
+to create the System Client class:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
 ----
 This class is a Client for the system service.
-In this class, a new `serverUnavailableHelper()` method has been added. This method checks the HTTP response 
-returned by the PropertiesResource.java class. Unlike the responseOKHelper method, which is checking if 
-the response is ok (a 200 response), this method checks for the server unavailable response (a 503 response).
-If the response is a 503 (i.e. the service is in maintenance), then false is returned. 
+In this class there is a method called `setStaus()`. This method returns a boolean based on whether a 200 
+response is returned by the system service. If a 200 is returned, the method returns true. However if the response 
+is anything other than 200, then false is returned. In this guide, a new if statement has been added to the 
+method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the 
+server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which 
+would likely be alleviated after some delay). If the response is 503, an IOException is thrown. This type of 
+exception is thrown when an input or output operation is failed or interpreted.
 
-The returned value of the `serverUnavailableHelper()` method called by the `getPropertiesHelper()` method. 
-If the server is down and serverUnavaliable helper therefore returns false, then an IOException is thrown 
-by `getPropertiesHelper()`.
+This `setStatus()` method is called by the public `isResponseOk()` method which is used in 
+`InventoryManager.java`.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
