@@ -54,6 +54,7 @@ public class FaultToleranceTest {
     client.close();
     response.close();
     changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
+    resetRetryCounter();
   }
 
   @Test
@@ -96,7 +97,6 @@ public class FaultToleranceTest {
     int getCounterValue = obj.getJsonObject("Inventory").getInt("getRetryCounter");
     int expectedHits = 4;
     assertEquals(getCounterValue, expectedHits);
-    resetRetryCounter();
   }
 
   private Response getResponse(String url) {
