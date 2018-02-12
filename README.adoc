@@ -228,31 +228,28 @@ link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultTolerance
 ----
 
 The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case, 
-the oneTimeSetup method retrieves the port number for the Open Liberty server and builds a base URL string 
+the `oneTimeSetup()` method retrieves the port number for the Open Liberty server and builds a base URL string 
 that is used throughout the tests.
 
 The `@Before` and `@After` annotations are placed on methods that execute before and after every test case. These 
 methods are generally used to perform any setup and teardown tasks. In this case, the setup method creates a 
 JAX-RS client which makes HTTP requests to the inventory service. This client must also be registered with a 
 JSON-P provider (JsrJsonpProvider) to process JSON resources. The teardown method simply destroys this client 
-instance.
+instance as well as the HTTP responses and resets the changed configuration file.
 
 Let’s break down the test cases:
 
-* `testFallbackForGet()` returns the system properties for a hostname when inventory service is available. After 
-that, it take the System service down and gets the system properties from inventory service when this service 
-is down. It then confirms that the system properties for the specific host was returned from the inventory 
-service when the system service is down by asserting if the total number of the system properties, when 
-the system service is up, is greater than the total number of the system properties when service is down. The 
-total number of system properties from inventory service and system service should differ because the inventory 
-service only caches two of the system properties returned from the system service.
+* `testFallbackForGet()` sends a request to `inventory` service to get the systems properties for a 
+hostname, when `system` service is avialable. Then, it puts the `system` service on maintenance. After that, 
+it makes a second request to `inventory` service to return the system properties for that hostname. 
+Lastly, it asserts if the system properties returned from the first request were more than the second time. 
 
+** In the second request, the fallback method from `inventory` service was called to return the cached properties. However for the first request, the `inventory` service returned the properties from making a connection to `system` service.
 
-* `testRetryGettingSystemProperties()` checks to see if the retry is being called the same number 
-of times as stated by the max retries in the `@Retry` annotation. If the count from the retry method is equal to 
-the expected number of times for the retry being called, then the service returns a valid response. Otherwise, 
-the service returns the following message: ERROR: Server is currently in maintenance. 
+* `testRetryGettingSystemProperties()` sends a request to `inventory` service to try to get the system properties even though
+`system` service is still in maintenanace from previous test case. Then, it reads the retry counter in `/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from `inventory` service.
 
+** The `inventory` service should retry the same number of times as stated by the `maxRetries` attribute in the `@Retry` annotation to get the system properties. However, it makes a first call on the annotated method assuming that `system` service is avialable. As a result, the total calls on this method are four.
 
 To force these test cases to execute in a particular order, put them in a testSuite() method and label it with 
 a `@Test` annotation so that it automatically executes when your test class run.
