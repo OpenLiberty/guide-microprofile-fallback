@@ -35,8 +35,8 @@ After starting the application, you will be able to access two microservices to 
 
 * `http://localhost:9080/system/properties` retrieves the information for a specific host
 
-* `http://localhost:9080/inventory/hosts` retrieves the information for a list of all previously 
-registered hosts
+* `http://localhost:9080/inventory/systems` retrieves the information for a list of all previously registered 
+hosts
 
 To learn more about these two microservices and how you can write the MicroProfile application, see
 https://openliberty.io/guides/microprofile-intro.html[Creating a MicroProfile application].
