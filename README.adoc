@@ -219,7 +219,10 @@ application, the scopes and dependencies are being tested.
 Create a start/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java file and add 
 the following code:
 
+[source, java, indent=0]
+----
 link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
+----
 
 The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case, 
 the oneTimeSetup method retrieves the port number for the Open Liberty server and builds a base URL string 
