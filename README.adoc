@@ -219,7 +219,7 @@ failure whenever a code change introduces a defect. Since the application is a R
 you can use JUnit and the RESTful web service Client API to write tests. In testing the functionality of the 
 application, the scopes and dependencies are being tested.
 
-Create a start/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java file and add 
+Create `FaultToleranceTest.java` class in `start/src/test/java/it/io/openliberty/guides/faulttolerance/` and add 
 the following code:
 
 [source, java, indent=0]
