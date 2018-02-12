@@ -1,4 +1,4 @@
-// Copyright (c) 2017 IBM Corporation and others.
+// Copyright (c) 2018 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -8,9 +8,9 @@
 :projectid: microprofile-fault_tolerance
 :page-layout: guide
 :page-duration: 30 minutes
-:page-releasedate: 2017-12-11
+:page-releasedate: 2018-02-12
 :page-description: Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function even when one of the microservices is unavailable.
-:page-tags: ['REST', 'MicroProfile', 'Fault Tolerance', '@Retry', '@Fallback']
+:page-tags: ['REST', 'MicroProfile', 'microservices', 'MicroServices', 'Fault Tolerance', '@Retry', '@Fallback']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
