@@ -233,7 +233,7 @@ instance.
 
 Let’s break down the test cases:
 
-* testFallbackForGet() returns the system properties for a hostname when inventory service is available. After 
+* `testFallbackForGet()` returns the system properties for a hostname when inventory service is available. After 
 that, it take the System service down and gets the system properties from inventory service when this service 
 is down. It then confirms that the system properties for the specific host was returned from the inventory 
 service when the system service is down by asserting if the total number of the system properties, when 
@@ -242,8 +242,8 @@ total number of system properties from inventory service and system service shou
 service only caches two of the system properties returned from the system service.
 
 
-* testRetryGettingSystemProperties() checks to see if the retry is being called the same number 
-of times as stated by the max retries in the @retry annotation. If the count from the retry method is equal to 
+* `testRetryGettingSystemProperties()` checks to see if the retry is being called the same number 
+of times as stated by the max retries in the `@Retry` annotation. If the count from the retry method is equal to 
 the expected number of times for the retry being called, then the service returns a valid response. Otherwise, 
 the service returns the following message: ERROR: Server is currently in maintenance. 
 
