@@ -121,6 +121,7 @@ to create the System Client class:
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
 ----
 This class is a Client for the system service.
+
 In this class there is a method called `setStaus()`. This method returns a boolean based on whether a 200 
 response is returned by the system service. If a 200 is returned, the method returns true. However if the response 
 is anything other than 200, then false is returned. In this guide, a new if statement has been added to the 
