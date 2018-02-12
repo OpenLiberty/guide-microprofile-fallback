@@ -1,4 +1,4 @@
-// Copyright (c) 2017 IBM Corporation and others.
+// Copyright (c) 2018 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -8,9 +8,9 @@
 :projectid: microprofile-fault_tolerance
 :page-layout: guide
 :page-duration: 30 minutes
-:page-releasedate: 2017-12-11
+:page-releasedate: 2018-02-12
 :page-description: Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function even when one of the microservices is unavailable.
-:page-tags: ['REST', 'MicroProfile', 'Fault Tolerance', '@Retry', '@Fallback']
+:page-tags: ['REST', 'MicroProfile', 'microservices', 'MicroServices', 'Fault Tolerance', '@Retry', '@Fallback']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
@@ -35,8 +35,8 @@ After starting the application, you will be able to access two microservices to 
 
 * `http://localhost:9080/system/properties` retrieves the information for a specific host
 
-* `http://localhost:9080/inventory/hosts` retrieves the information for a list of all previously 
-registered hosts
+* `http://localhost:9080/inventory/systems` retrieves the information for a list of all previously registered 
+hosts
 
 To learn more about these two microservices and how you can write the MicroProfile application, see
 https://openliberty.io/guides/microprofile-intro.html[Creating a MicroProfile application].
@@ -113,22 +113,25 @@ response is returned to the browser and a message is returned to the terminal to
 know that the service is down.
 
 This 503 HTTP response needs to be recognised and acted upon by the other microservice of our application 
-(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java`
-to create the Inventory Util class:
+(Inventory). To do this, navigate to `start/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java`
+to create the System Client class:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
 ----
 This class is a Client for the system service.
-In this class, a new `serverUnavailableHelper()` method has been added. This method checks the HTTP response 
-returned by the PropertiesResource.java class. Unlike the responseOKHelper method, which is checking if 
-the response is ok (a 200 response), this method checks for the server unavailable response (a 503 response).
-If the response is a 503 (i.e. the service is in maintenance), then false is returned. 
 
-The returned value of the `serverUnavailableHelper()` method called by the `getPropertiesHelper()` method. 
-If the server is down and serverUnavaliable helper therefore returns false, then an IOException is thrown 
-by `getPropertiesHelper()`.
+In this class there is a method called `setStaus()`. This method returns a boolean based on whether a 200 
+response is returned by the system service. If a 200 is returned, the method returns true. However if the response 
+is anything other than 200, then false is returned. In this guide, a new if statement has been added to the 
+method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the 
+server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which 
+would likely be alleviated after some delay). If the response is 503, an IOException is thrown. This type of 
+exception is thrown when an input or output operation is failed or interpreted.
+
+This `setStatus()` method is called by the public `isResponseOk()` method which is used in 
+`InventoryManager.java`.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
@@ -210,6 +213,73 @@ Change the value back to true to see the cached version of the properties.
 // =================================================================================================
 
 == Testing the application
+
+While you can test your application manually, you should rely on automated tests since they will trigger a 
+failure whenever a code change introduces a defect. Since the application is a RESTful web service application, 
+you can use JUnit and the RESTful web service Client API to write tests. In testing the functionality of the 
+application, the scopes and dependencies are being tested.
+
+Create a start/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java file and add 
+the following code:
+
+[source, java, indent=0]
+----
+link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
+----
+
+The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case, 
+the oneTimeSetup method retrieves the port number for the Open Liberty server and builds a base URL string 
+that is used throughout the tests.
+
+The `@Before` and `@After` annotations are placed on methods that execute before and after every test case. These 
+methods are generally used to perform any setup and teardown tasks. In this case, the setup method creates a 
+JAX-RS client which makes HTTP requests to the inventory service. This client must also be registered with a 
+JSON-P provider (JsrJsonpProvider) to process JSON resources. The teardown method simply destroys this client 
+instance.
+
+Let’s break down the test cases:
+
+* `testFallbackForGet()` returns the system properties for a hostname when inventory service is available. After 
+that, it take the System service down and gets the system properties from inventory service when this service 
+is down. It then confirms that the system properties for the specific host was returned from the inventory 
+service when the system service is down by asserting if the total number of the system properties, when 
+the system service is up, is greater than the total number of the system properties when service is down. The 
+total number of system properties from inventory service and system service should differ because the inventory 
+service only caches two of the system properties returned from the system service.
+
+
+* `testRetryGettingSystemProperties()` checks to see if the retry is being called the same number 
+of times as stated by the max retries in the `@Retry` annotation. If the count from the retry method is equal to 
+the expected number of times for the retry being called, then the service returns a valid response. Otherwise, 
+the service returns the following message: ERROR: Server is currently in maintenance. 
+
+
+To force these test cases to execute in a particular order, put them in a testSuite() method and label it with 
+a `@Test` annotation so that it automatically executes when your test class run.
+
+https://raw.githubusercontent.com/OpenLiberty/guides-common/master/mvnverify.adoc
+
+To see whether the tests detect a failure, remove the reset retries method of 
+the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test failure occur for the 
+testRetryGettingSystemProperties() test case.
+
+
+The program might take some time to execute the tests. If the tests pass, you receive the following output:
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.faulttolerance.FaultToleranceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.322 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceTest
+Running it.io.openliberty.guides.inventory.EndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.307 sec - in it.io.openliberty.guides.inventory.EndpointTest
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+----
 
 == Great work! You're done!
 
