@@ -55,6 +55,5 @@ public class InventoryResource {
   }
 
 }
-
 // end::fault_tolerance[]
 
