@@ -1,21 +1,31 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2018 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
+
 package it.io.openliberty.guides.faulttolerance;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
-
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.After;
 import org.junit.Before;
