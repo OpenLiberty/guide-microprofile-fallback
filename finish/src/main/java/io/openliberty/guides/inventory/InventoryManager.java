@@ -16,15 +16,14 @@ package io.openliberty.guides.inventory;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import io.openliberty.guides.common.JsonMessages;
 import io.openliberty.guides.inventory.client.SystemClient;
 import io.openliberty.guides.inventory.model.InventoryList;
 import io.openliberty.guides.system.SystemConfig;
@@ -33,6 +32,8 @@ import io.openliberty.guides.system.SystemConfig;
 public class InventoryManager {
 
   private InventoryList invList = new InventoryList();
+  private SystemClient systemClient = new SystemClient();
+  private boolean systemNotFound = false;
   private static int retryCounter = 0;
   
   @Inject
@@ -44,11 +45,13 @@ public class InventoryManager {
     if (systemConfig.isInMaintenance()) {
       retryCounter++;
     }
-    SystemClient systemClient = new SystemClient(hostname);
-    if (systemClient.isResponseOk()) {
-      Properties properties = systemClient.getContent();
-      invList.addToInventoryList(hostname, properties);
-      return properties;
+    
+    systemClient.init(hostname);
+
+    Properties properties = systemClient.getProperties();
+    if (properties != null) {
+        invList.addToInventoryList(hostname, properties);
+        return properties;
     }
     return null;
   }
@@ -57,14 +60,17 @@ public class InventoryManager {
     Properties properties = invList.findHost(hostname);
     if (properties == null) {
       System.out.println("This is the Fallback method being called!!!");
-      // return JsonMessages.SERVICE_UNREACHABLE.getJson(); - incorrect
-      JsonMessages.serviceInMaintenance("Service is temporarily down for maintenance"); //need to fix this msg
+      systemNotFound = true;
     }
     return properties;
   }
 
   public InventoryList list() {
     return invList;
+  }
+
+  public boolean isSystemNotFound() {
+    return systemNotFound;
   }
 
   public static JsonObject getRetryCounter() {
@@ -80,4 +86,3 @@ public class InventoryManager {
   }
   
 }
-// end::add_retry_fallback[]

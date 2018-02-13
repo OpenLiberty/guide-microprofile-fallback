@@ -39,21 +39,22 @@ public class InventoryResource {
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws Exception {
     Properties props = manager.get(hostname);
     if (props == null) {
+      if (manager.isSystemNotFound()) {
+        return Response.status(Response.Status.NOT_FOUND)
+            .entity("ERROR: Unknown hostname or the system is not found in the inventory")
+            .build();
+      }
       return Response.status(Response.Status.NOT_FOUND)
                      .entity("ERROR: Unknown hostname or the resource may not be running on the host machine")
                      .build();
     }
     return Response.ok(props).build();
   }
-  //may need to rework the Exception to be more specific.. 
-  //also don't think we need to set/check if inventory service is in maintenancef for this guide's purpose
-
+  
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public InventoryList listContents() {
     return manager.list();
   }
-
+  
 }
-// end::fault_tolerance[]
-
