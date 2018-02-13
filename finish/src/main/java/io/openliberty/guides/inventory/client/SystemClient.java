@@ -33,12 +33,10 @@ public class SystemClient {
   private String url;
   private Builder clientBuilder;
 
-  // Used by the following guide(s): CDI, MP-METRICS, FAULT-TOLERANCE
   public void init(String hostname) {
     this.initHelper(hostname, DEFAULT_PORT);
   }
 
-  // Used by the following guide(s): MP-CONFIG, MP-HEALTH
   public void init(String hostname, int port) {
     this.initHelper(hostname, port);
   }
@@ -106,5 +104,4 @@ public class SystemClient {
     }
     return null;
   }
-
 }
