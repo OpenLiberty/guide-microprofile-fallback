@@ -11,7 +11,6 @@
  *******************************************************************************/
 // end::copyright[]
 
-// tag::add_retry_fallback[]
 package io.openliberty.guides.inventory;
 
 import java.io.IOException;
@@ -33,11 +32,9 @@ public class InventoryManager {
 
   private InventoryList invList = new InventoryList();
   private SystemClient systemClient = new SystemClient();
-  private boolean systemNotFound = false;
   private static int retryCounter = 0;
   
-  @Inject
-  SystemConfig systemConfig;
+  @Inject SystemConfig systemConfig;
 
   @Retry(retryOn = IOException.class, maxRetries = 3)
   @Fallback(fallbackMethod = "fallbackForGet")
@@ -47,7 +44,6 @@ public class InventoryManager {
     }
     
     systemClient.init(hostname);
-
     Properties properties = systemClient.getProperties();
     if (properties != null) {
         invList.addToInventoryList(hostname, properties);
@@ -59,18 +55,15 @@ public class InventoryManager {
   public Properties fallbackForGet(String hostname) {
     Properties properties = invList.findHost(hostname);
     if (properties == null) {
-      System.out.println("This is the Fallback method being called!!!");
-      systemNotFound = true;
+      Properties msgProp = new Properties();
+      msgProp.setProperty(hostname, "System is not found in the inventory");
+      return msgProp;
     }
     return properties;
   }
 
   public InventoryList list() {
     return invList;
-  }
-
-  public boolean isSystemNotFound() {
-    return systemNotFound;
   }
 
   public static JsonObject getRetryCounter() {
@@ -84,5 +77,4 @@ public class InventoryManager {
   public static void resetRetryCounter() {
     retryCounter = 0;
   }
-  
 }
