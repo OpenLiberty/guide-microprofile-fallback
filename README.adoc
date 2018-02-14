@@ -98,11 +98,11 @@ executed when a server cannot be reached due to the server being taken down main
 up and down dynamically will be done in this guide using dynamic configuration using MP config. If you want 
 to learn more about setting up dynamic configuration, see `Configuring Microprofile with MP Config`.
 
-Create the Properties Resource class in `start/src/main/java/io/openliberty/guides/system/PropertiesResource.java`:
+Create the System Resource class in `start/src/main/java/io/openliberty/guides/system/SystemResource.java`:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
 ----
 This file retrieves all of the system properties and returns them as a JSON Object.
 The `getProperties()` method in this class has been modified for this fault tolerance guide so that 
@@ -118,7 +118,7 @@ to create the System Client class:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
+include::finish/src/main/java/io/openliberty/guides/inventory/SystemClient.java[tags=throw_IOException]
 ----
 This class is a Client for the system service.
 
@@ -199,7 +199,7 @@ $ mvn liberty:start-server
 ----
 
 Once the server is running, you can test the fault tolerance of the application by dynamically changing 
-the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfiProperties.json` file. This 
+the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfigProperties.json` file. This 
 property will be set to true at first, but change it to false and save the file and your changes will be 
 added dynamically, there is no need to reset the server (this is dynamic config). If you want more information 
 on how these dynamic configuration properties were set up please visit the "Configuring Microservices" guide 
@@ -224,7 +224,7 @@ the following code:
 
 [source, java, indent=0]
 ----
-link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
+link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing]
 ----
 
 The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case, 
