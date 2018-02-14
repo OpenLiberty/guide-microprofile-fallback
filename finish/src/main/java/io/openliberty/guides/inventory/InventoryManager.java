@@ -11,6 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 
+// tag::add_retry_fallback[]
 package io.openliberty.guides.inventory;
 
 import java.io.IOException;
@@ -78,3 +79,4 @@ public class InventoryManager {
     retryCounter = 0;
   }
 }
+// tag::add_retry_fallback[]

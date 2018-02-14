@@ -10,7 +10,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-
+// tag::503_response[]
 package io.openliberty.guides.system;
 
 import javax.enterprise.context.RequestScoped;
@@ -37,3 +37,4 @@ public class SystemResource {
     return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
   }
 }
+// end::503_response[]

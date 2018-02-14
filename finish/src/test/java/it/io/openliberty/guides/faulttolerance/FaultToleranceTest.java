@@ -11,6 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 
+// tag::ft_testing[]
 package it.io.openliberty.guides.faulttolerance;
 
 import static org.junit.Assert.assertEquals;
@@ -144,3 +145,4 @@ public class FaultToleranceTest {
   }
 
 }
+// end::ft_testing[]
