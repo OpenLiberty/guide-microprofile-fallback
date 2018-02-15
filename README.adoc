@@ -135,11 +135,10 @@ Now, navigate back to the `start` directory to begin.
 
 == Enabling Fault Tolerance into the application
 
-The MicroProfile Fault Tolerance feature is added as a dependency in your `pom.xml` file. Look for the 
+The MicroProfile Fault Tolerance API is added as a dependency in your `pom.xml` file. Look for the 
 dependancy with the groupID `org.eclipse.microprofile.fault-tolerance`.
 This feature allows you to use the MicroProfile
 Fault Tolerance API to build fault tolerant microservices.
-
 The `mpFaultTolerance-1.0` feature has also been enabled in the `start/src/main/liberty/config/server.xml` file.
 
 Now that the MicroProfile Fault Tolerance feature has been enabled, the application's fallback mechanism needs
@@ -198,7 +197,7 @@ This `getPropertiesHelper()` method is called by the public `getProperties()` me
 Now that our inventory microservice is able to recognise that the system microservice has been taken
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException
 as a result of this microservice being in maintanence, a fallback method needs to be set out.
-Create the inventory manager class in the `start/src/main/io/openliberty/guides/inventory/InventoryManager.java` file:
+Create the inventory manager class in the `start/src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
 [source, java, indent=0]
 ----
