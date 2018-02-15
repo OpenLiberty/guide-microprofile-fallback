@@ -9,15 +9,14 @@
 :page-layout: guide
 :page-duration: 15 minutes
 :page-releasedate: 2018-02-12
-:page-description: Learn how to use MicroProfile Fault Tolerance to enable applications to function even when one of the microservices is unavailable.
+:page-description: Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 :page-tags: ['REST', 'MicroProfile', 'microservices', 'Fault Tolerance', '@Retry', '@Fallback']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 = Handling failures with Fault Tolerance
 
-Learn how to use MicroProfile Fault Tolerance to enable applications to function
-even when one of the microservices is unavailable.
+Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 
 // =================================================================================================
 // What you'll learn
@@ -28,14 +27,15 @@ even when one of the microservices is unavailable.
 You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and
 ensure continued operation of services.
 
-The application that you will be working with is an `inventory` service, which stores the information about
-various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve
-the JVM system properties of a particular host, the `inventory` service communicates with the `system` service
-on that host to get these system properties. The system properties are then stored and returned.
+You will update an `inventory` service (a service which stores a list of all previously registered hosts and 
+information about each hosts system properties, stored from the `system` service) to be able to recognise when 
+the `system` service is in maintenance and use MicroProfile Fault Tolerance methods to address this.
+You will also update the `system` service in order to be able to simulate the service being brought down for 
+maintenance 
 
-You will use the `@Retry` and `@Fallback` methods to define a criteria on when to retry and to provide an
-alternative solution for a failed execution.
-Fault Tolerance enables the applications to function even when one of the services is unavailable,
+You will use the `@Retry` and `@Fallback` Fault Tolerance methods to define a criteria on when to retry and when to 
+provide an alternative solution for a failed execution.
+Fault Tolerance enables the application to function even when one of it's services is unavailable,
 making service invocation more resilient.
 
 The implementation of the application and its services are provided for you in the `start/src` directory.
@@ -177,15 +177,16 @@ include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClien
 ----
 This class is a Client for the system service.
 
-In this class there is a method called `setStaus()`. This method returns a boolean based on whether a 200
-response is returned by the system service. If a 200 is returned, the method returns true. However if the response
-is anything other than 200, then false is returned. In this guide, a new if statement has been added to the
+In this class there is a method called `getPropertiesHelper()`. This method returns a response based on whether a 200
+HTTP response is returned by the system service. If a 200 is returned, the method returns the system properties 
+returned from the system service. However if the response is anything other than 200, then a message is printed in 
+the terminal to explain that the response status was not Ok. In this guide, a new if statement has been added to the
 method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the
 server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which
-would likely be alleviated after some delay). If the response is 503, an IOException is thrown. This type of
+would likely be alleviated after some delay. If the response is 503, an IOException is thrown. This type of
 exception is thrown when an input or output operation is failed or interpreted.
 
-This `setStatus()` method is called by the public `isResponseOk()` method which is used in
+This `getPropertiesHelper()` method is called by the public `getProperties()` method which is used in
 `InventoryManager.java`.
 
 // =================================================================================================
