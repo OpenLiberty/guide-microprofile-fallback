@@ -65,7 +65,7 @@ public class FaultToleranceTest {
     client.close();
     response.close();
     changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
-    resetRetryCounter();
+    // resetRetryCounter();
   }
 
   @Test
