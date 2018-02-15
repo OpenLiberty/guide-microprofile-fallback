@@ -11,6 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 
+// tag::fault_tolerance[]
 package io.openliberty.guides.inventory;
 
 import java.util.Properties;
@@ -51,3 +52,4 @@ public class InventoryResource {
     return manager.list();
   }
 }
+// tag::fault_tolerance[]

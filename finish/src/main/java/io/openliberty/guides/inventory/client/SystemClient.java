@@ -10,6 +10,8 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
+
+// tag::throw_IOException[]
 package io.openliberty.guides.inventory.client;
 
 import java.io.IOException;
@@ -105,3 +107,4 @@ public class SystemClient {
     return null;
   }
 }
+// tag::throw_IOException[]

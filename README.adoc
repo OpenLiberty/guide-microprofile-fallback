@@ -7,16 +7,16 @@
 //   IBM Corporation
 :projectid: microprofile-fault_tolerance
 :page-layout: guide
-:page-duration: 30 minutes
+:page-duration: 15 minutes
 :page-releasedate: 2018-02-12
-:page-description: Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function even when one of the microservices is unavailable.
-:page-tags: ['REST', 'MicroProfile', 'microservices', 'MicroServices', 'Fault Tolerance', '@Retry', '@Fallback']
+:page-description: Learn how to use MicroProfile Fault Tolerance to enable applications to function even when one of the microservices is unavailable.
+:page-tags: ['REST', 'MicroProfile', 'microservices', 'Fault Tolerance', '@Retry', '@Fallback']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 = Handling failures with Fault Tolerance
 
-Learn how to use the MicroProfile Fault Tolerance specification to enable applications to function 
+Learn how to use MicroProfile Fault Tolerance to enable applications to function 
 even when one of the microservices is unavailable.
 
 // =================================================================================================
@@ -24,35 +24,31 @@ even when one of the microservices is unavailable.
 // =================================================================================================
 
 == What you'll learn
+
 You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and 
 ensure continued operation of services.
+
+The application that you will be working with is an `inventory` service, which stores the information about 
+various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve 
+the JVM system properties of a particular host, the `inventory` service communicates with the system service 
+on that host to get these system properties. The `system` properties are then stored and returned.
+
 You will use the `@Retry` and `@Fallback` methods to define a criteria on when to retry and to provide an 
 alternative solution for a failed execution.
 Fault Tolerance enables the applications to function even when one of the services is unavailable, 
 making service invocation more resilient.
 
-After starting the application, you will be able to access two microservices to test availability:
-
-* `http://localhost:9080/system/properties` retrieves the information for a specific host
-
-* `http://localhost:9080/inventory/systems` retrieves the information for a list of all previously registered 
-hosts
-
-To learn more about these two microservices and how you can write the MicroProfile application, see
-https://openliberty.io/guides/microprofile-intro.html[Creating a MicroProfile application].
-
-
-// =================================================================================================
-// Getting Started
-// =================================================================================================
-
-include::{common-includes}/gitclone.adoc[]
-
+The implementation of the application and its services are provided for you in the `start/src` directory. 
+The `system` service can be found in `start/src/main/java/io/openliberty/guides/system`, and the `inventory` 
+service can be found in `start/src/main/java/io/openliberty/guides/inventory`. If you want to learn how to 
+create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
 
 // =================================================================================================
 // Why use MP Fault Tolerance?
 // =================================================================================================
-== Why use MP Fault Tolerance?
+
+=== Why use MP Fault Tolerance?
+
 It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP) 
 Fault Tolerance provides a simple and flexible solution.
 Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
@@ -77,8 +73,58 @@ In this guide we will be focusing on `@Retry` and `@Fallback`.
 [source, java, indent=0, role="no_copy"]
 
 // =================================================================================================
+// Getting Started
+// =================================================================================================
+
+include::{common-includes}/gitclone.adoc[]
+
+
+// =================================================================================================
+// Try what you'll build
+// =================================================================================================
+
+=== Try what you'll build
+
+The `finish` directory in the root of this guide contains the finished fault tolerance implementation 
+for the application. Feel free to give it a try before you proceed with building your own.
+
+To try out the application, first navigate to the `finish` directory and then execute the following
+Maven goals to build the application and run it inside Open Liberty:
+
+```
+mvn clean install
+mvn liberty:start-server
+
+```
+
+Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL. You see a result in 
+JSON format with the system properties of your local JVM. When you visit this URL, these system properties 
+are automatically stored in the inventory. You can repeat this process for your own hostname or any other 
+machine that is running the system service.
+
+Now navigate to the `CustomConfigProperties.json` file in the `finish` directory and change the property 
+`io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need to 
+restart the server.Now return to your browser and point back to the 
+`http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from 
+systems for this localhost due to the system service now being in maintanence.
+You will now see the cached properties for this localhost due to the system service being in maintenance.
+For simplicity, only the OS name and username are stored in cache for each host.
+
+Once you are done checking out the application, go to the `CustomConfigProperties.json` file and change the 
+property `io_openliberty_guides_system_inMaintenance` from `true` to `false` otherwise the test will fail.
+
+Stop the Open Liberty server:
+
+```
+mvn liberty:stop-server
+```
+
+Now, navigate back to the `start` directory to begin.
+
+// =================================================================================================
 // Enabling Fault Tolerance into the application
 // =================================================================================================
+
 == Enabling Fault Tolerance into the application
 
 Begin by navigating to the `pom.xml` file to check the required dependency. The microprofile-fault-tolerance-api 
@@ -98,11 +144,11 @@ executed when a server cannot be reached due to the server being taken down main
 up and down dynamically will be done in this guide using dynamic configuration using MP config. If you want 
 to learn more about setting up dynamic configuration, see `Configuring Microprofile with MP Config`.
 
-Create the Properties Resource class in `start/src/main/java/io/openliberty/guides/system/PropertiesResource.java`:
+Create the System Resource class in `start/src/main/java/io/openliberty/guides/system/SystemResource.java`:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/system/PropertiesResource.java[tags=503_response]
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
 ----
 This file retrieves all of the system properties and returns them as a JSON Object.
 The `getProperties()` method in this class has been modified for this fault tolerance guide so that 
@@ -118,7 +164,7 @@ to create the System Client class:
 
 [source, java, indent=0]
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryUtil.java[tags=throw_IOException]
+include::finish/src/main/java/io/openliberty/guides/inventory/SystemClient.java[tags=throw_IOException]
 ----
 This class is a Client for the system service.
 
@@ -136,7 +182,7 @@ This `setStatus()` method is called by the public `isResponseOk()` method which 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
 // =================================================================================================
-== Adding the @Retry and @Fallback annotations
+=== Adding the @Retry and @Fallback annotations
 
 Now that our inventory microservice is able to recognise that the system microservice has been taken 
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException 
@@ -176,37 +222,50 @@ All references to the email configuration property have been removed from this f
 
 The application has now been sucessfully set up to be fault tolerant.
 
-
 // =================================================================================================
-// Building the application
-// =================================================================================================
-
-include::{common-includes}/mvnbuild.adoc[]
-
-
-// =================================================================================================
-// Starting the application
+// Building and running the application
 // =================================================================================================
 
-== Starting the application
+== Building and running the application
 
-To see the new application in action, run the Maven `liberty:start-server` command from the `start` 
-directory:
+To build the application, run the Maven install goal from the command line:
 
-[source]
-----
-$ mvn liberty:start-server
-----
+```
+  mvn install
+```
+
+This goal builds the application and creates a .war file in the target directory and also
+configures and installs Open Liberty into the target/liberty/wlp directory.
+
+Next, run the Maven liberty:start-server goal:
+
+```
+  mvn liberty:start-server
+```
+
+This goal starts an Open Liberty server instance. Your Maven pom.xml is already configured to
+start the application in this server instance.
 
 Once the server is running, you can test the fault tolerance of the application by dynamically changing 
-the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfiProperties.json` file. This 
+the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfigProperties.json` file. This 
 property will be set to true at first, but change it to false and save the file and your changes will be 
 added dynamically, there is no need to reset the server (this is dynamic config). If you want more information 
 on how these dynamic configuration properties were set up please visit the "Configuring Microservices" guide 
 on the OpenLiberty website. Simply refresh the page now to see the dynamic changes.
 
 Change the value back to true to see the cached version of the properties.
+If you make changes to the code, use the Maven package command to rebuild the application and have
+the running Open Liberty server pick them up automatically:
 
+```
+  mvn package
+```
+
+To stop the Open Liberty server, run the Maven liberty:stop-server goal:
+
+```
+  mvn liberty:stop-server
+```
 
 // =================================================================================================
 // Testing the application
@@ -224,7 +283,7 @@ the following code:
 
 [source, java, indent=0]
 ----
-link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
+link:finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing]
 ----
 
 The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case, 
@@ -254,17 +313,9 @@ Lastly, it asserts if the system properties returned from the first request were
 To force these test cases to execute in a particular order, put them in a testSuite() method and label it with 
 a `@Test` annotation so that it automatically executes when your test class run.
 
-https://raw.githubusercontent.com/OpenLiberty/guides-common/master/mvnverify.adoc
+include::{common-includes}/mvnverify.adoc[]
 
-To see whether the tests detect a failure, remove the reset retries method of 
-the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test failure occur for the 
-testRetryGettingSystemProperties() test case.
-
-
-The program might take some time to execute the tests. If the tests pass, you receive the following output:
-
-[source, role="no_copy"]
-----
+```
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
@@ -276,10 +327,22 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.307 sec - in i
 Results :
 
 Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
-----
+```
+
+To see whether the tests detect a failure, remove the reset retries method of 
+the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test failure occur for the 
+testRetryGettingSystemProperties() test case.
+
+// =================================================================================================
+// Great work! You're done!
+// =================================================================================================
 
 == Great work! You're done!
 
 You just built and tested a MicroProfile application with MicroProfile Fault Tolerance and Open Liberty.
+
+You can continue to try one of the related guides, which demonstrate new technologies that you can 
+learn and expand on top what you built in this guide.
+
 
 include::{common-includes}/finish.adoc[]
