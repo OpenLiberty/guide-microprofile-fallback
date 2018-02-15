@@ -27,13 +27,13 @@ Learn how to add retry and fallback behavior to microservice dependencies to man
 You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and
 ensure continued operation of services.
 
-The application that you will be working with is an inventory service, which stores the information about 
-various JVMs that run on different systems. Whenever a request is made to the inventory service to retrieve 
-the JVM system properties of a particular host, the inventory service communicates with the system service on 
+The application that you will be working with is an `inventory` service, which stores the information about
+various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve
+the JVM system properties of a particular host, the `inventory` service communicates with the `system` service on 
 that host to get these system properties. The system properties are then stored and returned.
 
 
-You will use the `@Retry` and `@Fallback` Fault Tolerance methods to define a criteria on when to retry and when to 
+You will use the `@Retry` and `@Fallback` Fault Tolerance methods to define a criteria on when to retry and when to
 provide an alternative solution for a failed execution.
 Fault Tolerance enables the application to function even when one of it's services is unavailable,
 making service invocation more resilient.
@@ -135,7 +135,7 @@ Now, navigate back to the `start` directory to begin.
 
 == Enabling Fault Tolerance into the application
 
-The MicroProfile Fault Tolerance API is added as a dependency in your `pom.xml` file. Look for the 
+The MicroProfile Fault Tolerance API is added as a dependency in your `pom.xml` file. Look for the
 dependancy with the groupID `org.eclipse.microprofile.fault-tolerance`.
 This feature allows you to use the MicroProfile
 Fault Tolerance API to build fault tolerant microservices.
@@ -178,8 +178,8 @@ include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClien
 This class is a Client for the system service.
 
 In this class there is a method called `getPropertiesHelper()`. This method returns a response based on whether a 200
-HTTP response is returned by the system service. If a 200 is returned, the method returns the system properties 
-returned from the system service. However if the response is anything other than 200, then a message is printed in 
+HTTP response is returned by the system service. If a 200 is returned, the method returns the system properties
+returned from the system service. However if the response is anything other than 200, then a message is printed in
 the terminal to explain that the response status was not Ok. In this guide, a new if statement has been added to the
 method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the
 server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which
