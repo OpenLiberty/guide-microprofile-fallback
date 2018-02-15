@@ -45,7 +45,7 @@ public class FaultToleranceTest {
   private final String INVENTORY_LOCALHOST = "inventory/systems/localhost/";
   private final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
   private final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
-  private final String RETRIES = "retries/";
+  private final String RETRIES = "retries";
   private final String RESET = "/reset";
 
   @BeforeClass

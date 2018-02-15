@@ -135,7 +135,7 @@ Now, navigate back to the `start` directory to begin.
 
 == Enabling Fault Tolerance into the application
 
-Begin by taking a look at the `pom.xml` file to check the required dependency. The `microprofile-fault-tolerance-api`
+Begin by opening the `pom.xml` file to check the required dependency. The `microprofile-fault-tolerance-api`
 dependency has been added for you in the `start/pom.xml` file. This feature allows you to use the MicroProfile
 Fault Tolerance API to build fault tolerant microservices.
 
