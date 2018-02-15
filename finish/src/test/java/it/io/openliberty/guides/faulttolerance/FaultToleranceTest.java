@@ -73,7 +73,8 @@ public class FaultToleranceTest {
     testFallbackForGet();
     testRetryGettingSystemProperties();
   }
-
+  
+  //tag::javadoc[]
   /**  
    * testFallbackForGet - test for checking if the fallback is being called correctly
    * 1. Return system properties for a hostname when inventory service is available.
@@ -84,7 +85,8 @@ public class FaultToleranceTest {
    *    Asserting if the total number of the system properties, when service is up, is
    *    greater than the total number of the system properties when service is down.
    * @return {void}
-   */  
+   */ 
+  //end::javadoc[]
   public void testFallbackForGet() {
     response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
     assertResponse(baseUrl, response);

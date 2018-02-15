@@ -54,7 +54,7 @@ public class SystemClient {
     return getPropertiesHelper(this.clientBuilder);
   }
 
-  // tag::doc[]
+  //tag::javadoc[]
   /**
    * Builds the URI string to the system service for a particular host.
    * @param protocol
@@ -67,7 +67,7 @@ public class SystemClient {
    *          - Note that the path needs to start with a slash!!!
    * @return String representation of the URI to the system properties service.
    */
-  // end::doc[]
+  //end::javadoc[]
   protected String buildUrl(String protocol, String host, int port, String path) {
     try {
       URI uri = new URI(protocol, null, host, port, path, null, null);
