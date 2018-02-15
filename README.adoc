@@ -7,7 +7,7 @@
 //   IBM Corporation
 :projectid: microprofile-fault_tolerance
 :page-layout: guide
-:page-duration: 15-20 minutes
+:page-duration: 15 minutes
 :page-releasedate: 2018-02-12
 :page-description: Learn how to use MicroProfile Fault Tolerance to enable applications to function even when one of the microservices is unavailable.
 :page-tags: ['REST', 'MicroProfile', 'microservices', 'Fault Tolerance', '@Retry', '@Fallback']
@@ -24,70 +24,31 @@ even when one of the microservices is unavailable.
 // =================================================================================================
 
 == What you'll learn
+
 You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and 
 ensure continued operation of services.
+
+The application that you will be working with is an `inventory` service, which stores the information about 
+various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve 
+the JVM system properties of a particular host, the `inventory` service communicates with the system service 
+on that host to get these system properties. The `system` properties are then stored and returned.
+
 You will use the `@Retry` and `@Fallback` methods to define a criteria on when to retry and to provide an 
 alternative solution for a failed execution.
 Fault Tolerance enables the applications to function even when one of the services is unavailable, 
 making service invocation more resilient.
 
-// =================================================================================================
-// Getting Started
-// =================================================================================================
-
-include::{common-includes}/gitclone.adoc[]
-
-
-// =================================================================================================
-// Try what you'll build
-// =================================================================================================
-
-=== Try what you'll build
-
-The `finish` directory in the root of this guide contains the finished
-JWT security implementation for the services in the application. Feel free to give it a try before you proceed with building your own.
-
-To try out the application, first navigate to the `finish` directory and then execute the following
-Maven goals to build the application and run it inside Open Liberty:
-
-```
-mvn clean install
-mvn liberty:start-server
-
-```
-
-Point your browser to the `http://localhost:9080/inventory/systems` URL. This is the starting point of the 
-inventory service and it displays the current contents of the inventory. As you might expect, these are 
-empty since nothing is stored in the inventory yet. Next, point your browser to the 
-`http://localhost:9080/inventory/systems/localhost` URL. You see a result in JSON format with the system 
-properties of your local JVM. When you visit this URL, these system properties are automatically stored 
-in the inventory. Go back to `http://localhost:9080/inventory/systems` and you see a new entry for localhost. 
-For simplicity, only the OS name and username are shown here for each host. You can repeat this process for 
-your own hostname or any other machine that is running the system service.
-
-Now navigate to the `CustomConfigProperties.json` file in the `finish` directory and change the property 
-`io_openliberty_guides_system_inMaintenance` from false to true and save the file. There is no need to 
-restart the server.Now return to your browser and point back to the 
-`http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from 
-systems for this localhost due to the system service now being in maintanence.
-
-Once you are done checking out the application, stop the Open Liberty server:
-
-```
-mvn liberty:stop-server
-```
-
-Now, navigate back to the `start` directory to begin.
-Proceed with the following two sections to add MicroProfile JWT to the back-end and basic app security to the front-end.
-
-
-
-
+The implementation of the application and its services are provided for you in the `start/src` directory. 
+The `system` service can be found in `start/src/main/java/io/openliberty/guides/system`, and the `inventory` 
+service can be found in `start/src/main/java/io/openliberty/guides/inventory`. If you want to learn how to 
+create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
 
 // =================================================================================================
 // Why use MP Fault Tolerance?
 // =================================================================================================
+
 === Why use MP Fault Tolerance?
+
 It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP) 
 Fault Tolerance provides a simple and flexible solution.
 Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
@@ -112,8 +73,58 @@ In this guide we will be focusing on `@Retry` and `@Fallback`.
 [source, java, indent=0, role="no_copy"]
 
 // =================================================================================================
+// Getting Started
+// =================================================================================================
+
+include::{common-includes}/gitclone.adoc[]
+
+
+// =================================================================================================
+// Try what you'll build
+// =================================================================================================
+
+=== Try what you'll build
+
+The `finish` directory in the root of this guide contains the finished fault tolerance implementation 
+for the application. Feel free to give it a try before you proceed with building your own.
+
+To try out the application, first navigate to the `finish` directory and then execute the following
+Maven goals to build the application and run it inside Open Liberty:
+
+```
+mvn clean install
+mvn liberty:start-server
+
+```
+
+Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL. You see a result in 
+JSON format with the system properties of your local JVM. When you visit this URL, these system properties 
+are automatically stored in the inventory. You can repeat this process for your own hostname or any other 
+machine that is running the system service.
+
+Now navigate to the `CustomConfigProperties.json` file in the `finish` directory and change the property 
+`io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need to 
+restart the server.Now return to your browser and point back to the 
+`http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from 
+systems for this localhost due to the system service now being in maintanence.
+You will now see the cached properties for this localhost due to the system service being in maintenance.
+For simplicity, only the OS name and username are stored in cache for each host.
+
+Once you are done checking out the application, go to the `CustomConfigProperties.json` file and change the 
+property `io_openliberty_guides_system_inMaintenance` from `true` to `false` otherwise the test will fail.
+
+Stop the Open Liberty server:
+
+```
+mvn liberty:stop-server
+```
+
+Now, navigate back to the `start` directory to begin.
+
+// =================================================================================================
 // Enabling Fault Tolerance into the application
 // =================================================================================================
+
 == Enabling Fault Tolerance into the application
 
 Begin by navigating to the `pom.xml` file to check the required dependency. The microprofile-fault-tolerance-api 
@@ -211,27 +222,29 @@ All references to the email configuration property have been removed from this f
 
 The application has now been sucessfully set up to be fault tolerant.
 
-
 // =================================================================================================
-// Building the application
-// =================================================================================================
-
-include::{common-includes}/mvnbuild.adoc[]
-
-
-// =================================================================================================
-// Starting the application
+// Building and running the application
 // =================================================================================================
 
-== Starting the application
+== Building and running the application
 
-To see the new application in action, run the Maven `liberty:start-server` command from the `start` 
-directory:
+To build the application, run the Maven install goal from the command line:
 
-[source]
-----
-$ mvn liberty:start-server
-----
+```
+  mvn install
+```
+
+This goal builds the application and creates a .war file in the target directory and also
+configures and installs Open Liberty into the target/liberty/wlp directory.
+
+Next, run the Maven liberty:start-server goal:
+
+```
+  mvn liberty:start-server
+```
+
+This goal starts an Open Liberty server instance. Your Maven pom.xml is already configured to
+start the application in this server instance.
 
 Once the server is running, you can test the fault tolerance of the application by dynamically changing 
 the `io_openliberty_guides_system_inMaintenance` value in the `CustomConfigProperties.json` file. This 
@@ -241,7 +254,18 @@ on how these dynamic configuration properties were set up please visit the "Conf
 on the OpenLiberty website. Simply refresh the page now to see the dynamic changes.
 
 Change the value back to true to see the cached version of the properties.
+If you make changes to the code, use the Maven package command to rebuild the application and have
+the running Open Liberty server pick them up automatically:
 
+```
+  mvn package
+```
+
+To stop the Open Liberty server, run the Maven liberty:stop-server goal:
+
+```
+  mvn liberty:stop-server
+```
 
 // =================================================================================================
 // Testing the application
