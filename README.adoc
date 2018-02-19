@@ -33,7 +33,7 @@ the JVM system properties of a particular host, the `inventory` service communic
 that host to get these system properties. The system properties are then stored and returned.
 
 
-You will use the `@Retry` and `@Fallback` Fault Tolerance methods to define a criteria on when to retry and when to
+You will use the `@Retry` and `@Fallback` Fault Tolerance annotations to define a criteria on when to retry and when to
 provide an alternative solution for a failed execution.
 Fault Tolerance enables the application to function even when one of it's services is unavailable,
 making service invocation more resilient.
