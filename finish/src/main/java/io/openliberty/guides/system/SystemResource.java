@@ -25,16 +25,16 @@ import javax.ws.rs.core.Response;
 @Path("properties")
 public class SystemResource {
 
-  @Inject
-  SystemConfig systemConfig;
+    @Inject
+    SystemConfig systemConfig;
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getProperties() {
-    if (!systemConfig.isInMaintenance()) {
-      return Response.ok(System.getProperties()).build();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProperties() {
+        if (!systemConfig.isInMaintenance()) {
+            return Response.ok(System.getProperties()).build();
+        }
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
-    return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
-  }
 }
 // end::503_response[]

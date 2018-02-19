@@ -30,52 +30,52 @@ import io.openliberty.guides.system.SystemConfig;
 @ApplicationScoped
 public class InventoryManager {
 
-  private InventoryList invList = new InventoryList();
-  private SystemClient systemClient = new SystemClient();
-  private static int retryCounter = 0;
+    private InventoryList invList = new InventoryList();
+    private SystemClient systemClient = new SystemClient();
+    private static int retryCounter = 0;
   
-  @Inject SystemConfig systemConfig;
+    @Inject SystemConfig systemConfig;
 
-  @Retry(retryOn = IOException.class, maxRetries = 3)
-  @Fallback(fallbackMethod = "fallbackForGet")
-  public Properties get(String hostname) throws IOException {
-    if (systemConfig.isInMaintenance()) {
-      retryCounter++;
-    }
+    @Retry(retryOn = IOException.class, maxRetries = 3)
+    @Fallback(fallbackMethod = "fallbackForGet")
+    public Properties get(String hostname) throws IOException {
+        if (systemConfig.isInMaintenance()) {
+            retryCounter++;
+        }
     
-    systemClient.init(hostname);
-    Properties properties = systemClient.getProperties();
-    if (properties != null) {
-        invList.addToInventoryList(hostname, properties);
+        systemClient.init(hostname);
+        Properties properties = systemClient.getProperties();
+        if (properties != null) {
+            invList.addToInventoryList(hostname, properties);
+            return properties;
+        }
+        return null;
+    }
+
+    public Properties fallbackForGet(String hostname) {
+        Properties properties = invList.findHost(hostname);
+        if (properties == null) {
+            Properties msgProp = new Properties();
+            msgProp.setProperty(hostname, "System is not found in the inventory");
+            return msgProp;
+        }
         return properties;
     }
-    return null;
-  }
 
-  public Properties fallbackForGet(String hostname) {
-    Properties properties = invList.findHost(hostname);
-    if (properties == null) {
-      Properties msgProp = new Properties();
-      msgProp.setProperty(hostname, "System is not found in the inventory");
-      return msgProp;
+    public InventoryList list() {
+        return invList;
     }
-    return properties;
-  }
 
-  public InventoryList list() {
-    return invList;
-  }
-
-  public static JsonObject getRetryCounter() {
-    JsonObjectBuilder methods = Json.createObjectBuilder();
-    methods.add("getRetryCounter", retryCounter);
-    JsonObjectBuilder retries = Json.createObjectBuilder();
-    retries.add("Inventory", methods.build());
-    return retries.build();
-  }
+    public static JsonObject getRetryCounter() {
+        JsonObjectBuilder methods = Json.createObjectBuilder();
+        methods.add("getRetryCounter", retryCounter);
+        JsonObjectBuilder retries = Json.createObjectBuilder();
+        retries.add("Inventory", methods.build());
+        return retries.build();
+    }
     
-  public static void resetRetryCounter() {
-    retryCounter = 0;
-  }
+    public static void resetRetryCounter() {
+        retryCounter = 0;
+    }
 }
 // tag::add_retry_fallback[]
