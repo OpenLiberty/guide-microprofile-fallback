@@ -128,10 +128,10 @@ mvn liberty:stop-server
 Now, navigate back to the `start` directory to begin.
 
 // =================================================================================================
-// Enabling Fault Tolerance into the application
+// Enabling Fault Tolerance in the application
 // =================================================================================================
 
-== Enabling Fault Tolerance into the application
+== Enabling Fault Tolerance in the application
 
 The MicroProfile Fault Tolerance API is added as a dependency in your `pom.xml` file. Look for the
 dependancy with the groupID `org.eclipse.microprofile.fault-tolerance`.
