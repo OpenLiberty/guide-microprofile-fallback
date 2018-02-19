@@ -101,8 +101,7 @@ To try out the application, first navigate to the `finish` directory and then ex
 Maven goals to build the application and run it inside Open Liberty:
 
 ```
-mvn clean install
-mvn liberty:start-server
+mvn clean install liberty:start-server
 
 ```
 
