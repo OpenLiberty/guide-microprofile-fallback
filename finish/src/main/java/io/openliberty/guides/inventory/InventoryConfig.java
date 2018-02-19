@@ -21,11 +21,11 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @RequestScoped
 public class InventoryConfig {
 
-  @Inject
-  @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
-  private Provider<Boolean> inMaintenance;
+    @Inject
+    @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
+    private Provider<Boolean> inMaintenance;
 
-  public boolean isInvInMaintenance() {
-    return inMaintenance.get();
-  }
+    public boolean isInvInMaintenance() {
+        return inMaintenance.get();
+    }
 }

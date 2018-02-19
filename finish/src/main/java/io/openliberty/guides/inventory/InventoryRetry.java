@@ -24,18 +24,18 @@ import javax.ws.rs.core.MediaType;
 @Path("retries")
 public class InventoryRetry {
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public JsonObject getRetries() {
-    return InventoryManager.getRetryCounter();
-  }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getRetries() {
+        return InventoryManager.getRetryCounter();
+    }
   
-  @GET
-  @Path("reset")
-  @Produces(MediaType.TEXT_PLAIN)
-  public String resetRetryCounter() {
-    InventoryManager.resetRetryCounter();
-    return "Counters have been reset";
-  }
+    @GET
+    @Path("reset")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String resetRetryCounter() {
+        InventoryManager.resetRetryCounter();
+        return "Counters have been reset";
+    }
 
 }
