@@ -200,16 +200,16 @@ Create the inventory manager class in the `start/src/main/java/io/openliberty/gu
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
 ----
 
-The `@Retry` annotation specified here dictates on what conditions to retry establishing the connection
+The `@Retry` annotation dictates on on what conditions we should reattempt to establish a connection
 to the `system` service and how many times it should be retried, in this case three times.
-The `@Fallback` annotation specified dictates which method to call when the reties are unsuccessful
+The `@Fallback` annotation dictates which method to call when the reties are unsuccessful
 (in this case use the fallbackForGet method).
 
 The `fallbackForGet()` method that has been added as the designated fallback method for the original `get()`
 method, checks to see if the properties variable is null. If the properties variable is null, this suggests
 that the application has not been able to successfully reach the `system` service to get the system's
-properties previously, thus the method simply prints out a json warning message in the browser. However, if
-the properties variable is not null, this method returns a json of the cached property values to the browser.
+properties previously, thus the method simply prints out a json warning message in the browser. However, if 
+the properties variable is not null, this method returns a json of the cached property values instead.
 
 
 Next create the `inventory` resource class in `start/src/main/java/io/openliberty/guides/inventory/InventoryResource.java` file:
@@ -305,12 +305,19 @@ hostname, when `system` service is avialable. Then, it puts the `system` service
 it makes a second request to `inventory` service to return the system properties for that hostname.
 Lastly, it asserts if the system properties returned from the first request were more than the second time.
 
-** In the second request, the fallback method from `inventory` service was called to return the cached properties. However for the first request, the `inventory` service returned the properties from making a connection to `system` service.
+** In the second request, the fallback method from `inventory` service was called to return the cached properties. 
+However for the first request, the `inventory` service returned the properties from making a connection to `system` 
+service.
 
-* `testRetryGettingSystemProperties()` sends a request to `inventory` service to try to get the system properties even though
-`system` service is still in maintenanace from previous test case. Then, it reads the retry counter in `/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from `inventory` service.
+* `testRetryGettingSystemProperties()` sends a request to `inventory` service to try to get the system properties 
+even though
+`system` service is still in maintenanace from previous test case. Then, it reads the retry counter in 
+`/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from 
+`inventory` service.
 
-** The `inventory` service should retry the same number of times as stated by the `maxRetries` attribute in the `@Retry` annotation to get the system properties. However, it makes a first call on the annotated method assuming that `system` service is avialable. As a result, the total calls on this method are four.
+** The `inventory` service should retry the same number of times as stated by the `maxRetries` attribute in the 
+`@Retry` annotation to get the system properties. However, it makes a first call on the annotated method assuming 
+that `system` service is avialable. As a result, the total calls on this method are four.
 
 To force these test cases to execute in a particular order, put them in a testSuite() method and label it with
 a `@Test` annotation so that it automatically executes when your test class run.
@@ -357,6 +364,9 @@ the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test 
 == Great work! You're done!
 
 You just built and tested a micorservice application with MicroProfile Fault Tolerance and Open Liberty.
+
+Feel free to try one of the related MicroProfile guides. They demonstrate new technologies that you can 
+learn and expand on top what you built here.
 
 //include::{common-includes}/finish.adoc[]
 == Contribute to this guide
