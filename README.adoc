@@ -114,8 +114,8 @@ Now navigate to the `CustomConfigProperties.json` file in the `finish/resource` 
 `io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need to
 restart the server. Now return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from
-systems for this localhost due to the system service now being in maintenance.
-You will now see the cached properties for this localhost due to the system service being in maintenance.
+systems for this localhost due to the `system` service now being in maintenance.
+You will now see the cached properties for this localhost due to the `system` service being in maintenance.
 For simplicity, only the OS name and username are stored in cache for each host.
 
 Once you are done checking out the application, go to the `CustomConfigProperties.json` file again and change the
@@ -167,7 +167,7 @@ properties is returned. However, if this config property is assigned a value of 
 response is returned to the browser and a message is returned to the terminal to let the developer
 know that the service is down.
 
-This 503 HTTP response needs to be recognised and acted upon by the inventory microservice.
+This 503 HTTP response needs to be recognised and acted upon by the `inventory` microservice.
 To do this, create the `system` client class in the
 `start/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
 
@@ -175,11 +175,11 @@ To do this, create the `system` client class in the
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=throw_IOException;!copyright;!javadoc]
 ----
-This class is a Client for the system service.
+This class is a Client for the `system` service.
 
 In this class there is a method called `getPropertiesHelper()`. This method returns a response based on whether a 200
-HTTP response is returned by the system service. If a 200 is returned, the method returns the system properties
-returned from the system service. However if the response is anything other than 200, then a message is printed in
+HTTP response is returned by the `system` service. If a 200 is returned, the method returns the system properties
+returned from the `system` service. However if the response is anything other than 200, then a message is printed in
 the terminal to explain that the response status was not Ok. In this guide, a new if statement has been added to the
 method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the
 server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which
@@ -194,7 +194,7 @@ This `getPropertiesHelper()` method is called by the public `getProperties()` me
 // =================================================================================================
 === Adding the @Retry and @Fallback annotations
 
-Now that our inventory microservice is able to recognise that the system microservice has been taken
+Now that our `inventory` microservice is able to recognise that the `system` microservice has been taken
 down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException
 as a result of this microservice being in maintanence, a fallback method needs to be set out.
 Create the inventory manager class in the `start/src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
@@ -205,13 +205,13 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 ----
 
 The `@Retry` annotation specified here dictates on what conditions to retry establishing the connection
-to the system service and how many times it should be retried, in this case three times.
+to the `system` service and how many times it should be retried, in this case three times.
 The `@Fallback` annotation specified dictates which method to call when the reties are unsuccessful
 (in this case use the fallbackForGet method).
 
 The `fallbackForGet()` method that has been added as the designated fallback method for the original `get()`
 method, checks to see if the properties variable is null. If the properties variable is null, this suggests
-that the application has not been able to successfully reach the system service to get the system's
+that the application has not been able to successfully reach the `system` service to get the system's
 properties previously, thus the method simply prints out a json warning message in the browser. However, if
 the properties variable is not null, this method returns a json of the cached property values to the browser.
 
@@ -223,8 +223,8 @@ Next create the `inventory` resource class in `start/src/main/java/io/openlibert
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerance]
 ----
 
-The if statement in this class now returns an error message when the inventory service is down for maintenance
-and calls the `get()` method in the InventoryManager.java class when the inventory service is up and running
+The if statement in this class now returns an error message when the `inventory` service is down for maintenance
+and calls the `get()` method in the InventoryManager.java class when the `inventory` service is up and running
 as normal.
 All references to the email configuration property have been removed from this file.
 
@@ -298,7 +298,7 @@ that is used throughout the tests.
 
 The `@Before` and `@After` annotations are placed on methods that execute before and after every test case. These
 methods are generally used to perform any setup and teardown tasks. In this case, the setup method creates a
-JAX-RS client which makes HTTP requests to the inventory service. This client must also be registered with a
+JAX-RS client which makes HTTP requests to the `inventory` service. This client must also be registered with a
 JSON-P provider (JsrJsonpProvider) to process JSON resources. The teardown method simply destroys this client
 instance as well as the HTTP responses, resets the changed configuration file and the retry counter.
 
