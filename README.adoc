@@ -133,7 +133,7 @@ Now, navigate back to the `start` directory to begin.
 
 == Enabling Fault Tolerance in the application
 
-The MicroProfile Fault Tolerance API is added as a dependency in your `pom.xml` file. Look for the
+The MicroProfile Fault Tolerance API has been added as a dependency to your `pom.xml` file. Look for the
 dependancy with the groupID `org.eclipse.microprofile.fault-tolerance`.
 This feature allows you to use the MicroProfile
 Fault Tolerance API to build fault tolerant microservices.
