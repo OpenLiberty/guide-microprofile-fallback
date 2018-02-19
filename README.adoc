@@ -190,9 +190,9 @@ This `getPropertiesHelper()` method is called by the public `getProperties()` me
 // =================================================================================================
 === Adding the @Retry and @Fallback annotations
 
-Now that our `inventory` microservice is able to recognise that the `system` microservice has been taken
-down for maintenance through the 503 HTTP response retruned as a result and has thrown an IOException
-as a result of this microservice being in maintanence, a fallback method needs to be set out.
+Our `inventory` microservice is now able to recognise that the `system` microservice has been taken
+down for maintenance through the 503 HTTP response retruned. As a result, it has thrown an IOException.
+A fallback method now needs to be set out to deal with this failure.
 Create the inventory manager class in the `start/src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
 [source, java, indent=0]
