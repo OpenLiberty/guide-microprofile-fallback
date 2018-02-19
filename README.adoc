@@ -139,8 +139,6 @@ This feature allows you to use the MicroProfile
 Fault Tolerance API to build fault tolerant microservices.
 The `mpFaultTolerance-1.0` feature has also been enabled in the `start/src/main/liberty/config/server.xml` file.
 
-Now that the MicroProfile Fault Tolerance feature has been enabled, the application's fallback mechanism needs
-to be set up.
 
 For ease of use, the two microservices being run in this application are being "served up"
 by the same server.
