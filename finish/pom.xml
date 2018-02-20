@@ -101,6 +101,7 @@
       <groupId>org.eclipse.microprofile.config</groupId>
       <artifactId>microprofile-config-api</artifactId>
       <version>1.1</version>
+      <scope>provided</scope>
     </dependency>
     <!-- end::config[] -->
     <!-- tag::fault_tolerance[] -->
@@ -108,6 +109,7 @@
       <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
       <artifactId>microprofile-fault-tolerance-api</artifactId>
       <version>1.0</version>
+      <scope>provided</scope>
     </dependency>
     <!-- end::fault_tolerance[] -->
   </dependencies>
@@ -150,7 +152,7 @@
           <assemblyArtifact>
             <groupId>io.openliberty</groupId>
             <artifactId>openliberty-runtime</artifactId>
-            <version>17.0.0.3</version>
+            <version>LATEST</version>
             <type>zip</type>
           </assemblyArtifact>
           <configFile>src/main/liberty/config/server.xml</configFile>

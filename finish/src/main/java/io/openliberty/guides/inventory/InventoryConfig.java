@@ -26,6 +26,12 @@ public class InventoryConfig {
     private Provider<Boolean> inMaintenance;
 
     public boolean isInvInMaintenance() {
+      try{
+        Thread.sleep(10000);
+      }
+      catch(Exception e) {
+        e.printStackTrace();
+      }
         return inMaintenance.get();
     }
 }

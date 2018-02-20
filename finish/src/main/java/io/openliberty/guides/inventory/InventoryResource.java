@@ -31,7 +31,6 @@ import io.openliberty.guides.inventory.model.InventoryList;
 public class InventoryResource {
 
     @Inject InventoryManager manager;
-    @Inject InventoryConfig config;
   
     @GET
     @Path("{hostname}")
