@@ -42,14 +42,12 @@ public class InventoryManager {
         if (systemConfig.isInMaintenance()) {
             retryCounter++;
         }
-    
         systemClient.init(hostname);
         Properties properties = systemClient.getProperties();
         if (properties != null) {
             invList.addToInventoryList(hostname, properties);
-            return properties;
         }
-        return null;
+        return properties;
     }
 
     public Properties fallbackForGet(String hostname) {

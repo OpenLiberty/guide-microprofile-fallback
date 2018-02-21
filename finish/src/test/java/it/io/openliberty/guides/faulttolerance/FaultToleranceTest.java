@@ -96,7 +96,7 @@ public class FaultToleranceTest {
     assertResponse(baseUrl, response);
     obj = response.readEntity(JsonObject.class);
     int propertiesSizeFallBack = obj.size();
-    assertTrue(propertiesSize > propertiesSizeFallBack);
+    assertTrue("The total number of properties from the @Fallback method is not smaller than the number from the system service, as expected.", propertiesSize > propertiesSizeFallBack);
   }
 
   public void testRetryGettingSystemProperties() {
@@ -108,7 +108,7 @@ public class FaultToleranceTest {
     JsonObject obj = response.readEntity(JsonObject.class);
     int getCounterValue = obj.getJsonObject("Inventory").getInt("getRetryCounter");
     int expectedHits = 4;
-    assertEquals(getCounterValue, expectedHits);
+    assertEquals("The total number of properties returned from @Retry does not match the expected number", getCounterValue, expectedHits);
     resetRetryCounter();
   }
 
