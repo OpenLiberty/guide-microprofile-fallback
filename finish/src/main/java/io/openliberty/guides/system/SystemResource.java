@@ -40,8 +40,8 @@ public class SystemResource {
             Properties props = new Properties();
             Iterable<String> names = config.getPropertyNames();
             for (String name:names){
-              String value = config.getValue(name, String.class);
-              props.put(name, value);
+                String value = config.getValue(name, String.class);
+                props.put(name, value);
             }
             return Response.ok(props).build();
         }
