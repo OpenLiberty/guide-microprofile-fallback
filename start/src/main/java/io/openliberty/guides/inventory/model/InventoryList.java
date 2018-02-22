@@ -18,9 +18,9 @@ import java.util.Properties;
 
 public class InventoryList {
 
-  private List<System> systems = new ArrayList<System>();
+  private List<SystemEntry> systems = new ArrayList<SystemEntry>();
 
-  public List<System> getSystems() {
+  public List<SystemEntry> getSystems() {
     return systems;
   }
 
@@ -33,13 +33,13 @@ public class InventoryList {
     props.setProperty("os.name", systemProps.getProperty("os.name"));
     props.setProperty("user.name", systemProps.getProperty("user.name"));
 
-    System host = new System(hostname, props);
+    SystemEntry host = new SystemEntry(hostname, props);
     if (!systems.contains(host))
       systems.add(host);
   }
   
   public Properties findHost(String hostname) {
-    for (System system : systems) {
+    for (SystemEntry system : systems) {
       if (system.getHostname().equals(hostname)) {
         return system.getProperties();
       }
@@ -47,12 +47,12 @@ public class InventoryList {
     return null;
   }
 
-  class System {
+  class SystemEntry {
 
     private final String hostname;
     private final Properties properties;
 
-    public System(String hostname, Properties properties) {
+    public SystemEntry(String hostname, Properties properties) {
       this.hostname = hostname;
       this.properties = properties;
     }
@@ -67,8 +67,8 @@ public class InventoryList {
 
     @Override
     public boolean equals(Object host) {
-      if (host instanceof System) {
-        return hostname.equals(((System) host).getHostname());
+      if (host instanceof SystemEntry) {
+        return hostname.equals(((SystemEntry) host).getHostname());
       }
       return false;
     }
