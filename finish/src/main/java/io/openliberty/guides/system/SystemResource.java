@@ -21,20 +21,31 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.Properties;
+import org.eclipse.microprofile.config.Config;
+
 @RequestScoped
 @Path("properties")
 public class SystemResource {
+    @Inject
+    Config config;
 
-  @Inject
-  SystemConfig systemConfig;
+    @Inject
+    SystemConfig systemConfig;
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getProperties() {
-    if (!systemConfig.isInMaintenance()) {
-      return Response.ok(System.getProperties()).build();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProperties() {
+        if (!systemConfig.isInMaintenance()) {
+            Properties props = new Properties();
+            Iterable<String> names = config.getPropertyNames();
+            for (String name:names){
+                String value = config.getValue(name, String.class);
+                props.put(name, value);
+            }
+            return Response.ok(props).build();
+        }
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
-    return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
-  }
 }
 // end::503_response[]

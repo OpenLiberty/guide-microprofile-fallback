@@ -1,12 +1,19 @@
+# Maven generated
 target/
+
+# Eclipse generated
+.apt_generated/
+.settings/
+.project
 .classpath
 .factorypath
-.project
-.settings/
-finish/src/main/webapp/META-INF/
-finish/.gitignore
-.apt_generated/
-start/src/main/webapp/META-INF/
-start/.gitignore
-temp/
+MANIFEST.MF
+
+# MacOS system files
 .DS_Store
+
+# Asciidoc rendered
+README.html
+
+# Zip files
+*.zip

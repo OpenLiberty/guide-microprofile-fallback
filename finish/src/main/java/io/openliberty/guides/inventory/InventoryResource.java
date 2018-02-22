@@ -30,26 +30,25 @@ import io.openliberty.guides.inventory.model.InventoryList;
 @Path("systems")
 public class InventoryResource {
 
-  @Inject InventoryManager manager;
-  @Inject InventoryConfig config;
+    @Inject InventoryManager manager;
   
-  @GET
-  @Path("{hostname}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws Exception {
-    Properties props = manager.get(hostname);
-    if (props == null) {
-      return Response.status(Response.Status.NOT_FOUND)
-                     .entity("ERROR: Unknown hostname or the resource may not be running on the host machine")
-                     .build();
+    @GET
+    @Path("{hostname}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws Exception {
+        Properties props = manager.get(hostname);
+        if (props == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity("ERROR: Unknown hostname or the resource may not be running on the host machine")
+                .build();
+        }
+        return Response.ok(props).build();
     }
-    return Response.ok(props).build();
-  }
   
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public InventoryList listContents() {
-    return manager.list();
-  }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public InventoryList listContents() {
+        return manager.list();
+    }
 }
 // tag::fault_tolerance[]
