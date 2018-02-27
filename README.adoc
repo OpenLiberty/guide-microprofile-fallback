@@ -312,7 +312,7 @@ service.
 
 * `testRetryGettingSystemProperties()` sends a request to `inventory` service to try to get the system properties
 even though
-`system` service is still in maintenanace from previous test case. Then, it reads the retry counter in
+`system` service is still in maintenance from previous test case. Then, it reads the retry counter in
 `/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from
 `inventory` service.
 
