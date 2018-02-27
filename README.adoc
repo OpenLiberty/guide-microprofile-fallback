@@ -7,7 +7,7 @@
 //   IBM Corporation
 :projectid: microprofile-faulttolerance-intro
 :page-layout: guide
-:page-duration: 15 minutes
+:page-duration: 20 minutes
 :page-releasedate: 2018-02-12
 :page-description: Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 :page-tags: ['REST', 'MicroProfile', 'microservices', 'Fault Tolerance', '@Retry', '@Fallback']
@@ -24,20 +24,19 @@ Learn how to add retry and fallback behavior to microservice dependencies to man
 
 == What you'll learn
 
-You will learn how to build fault tolerant microservices so that you can reduce the impact from failure and
-ensure continued operation of services.
+You will learn how to build fault tolerant microservices in an inventory management application so that you can reduce the impact from failure and ensure continued operation of services.
 
 The application that you will be working with is an `inventory` service, which stores the information about
 various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve
 the JVM system properties of a particular host, the `inventory` service communicates with the `system` service on
 that host to get these system properties. The system properties are then stored and returned.
 
-You will use the `@Retry` and `@Fallback` Fault Tolerance annotations to define a criteria on when to retry and when to
+You will use the `@Retry` and `@Fallback` Fault Tolerance annotations, from the MicroProfile (MP) Fault Tolerance specification, to define a criteria on when to retry and when to
 provide an alternative solution for a failed execution.
 Fault Tolerance enables the application to function even when one of it's services is unavailable,
 making service invocation more resilient.
 
-The implementation of the application and its services are provided for you in the `src` directory.
+The implementation of the application and its services are provided for you.
 The `system` service can be found in `src/main/java/io/openliberty/guides/system`, and the `inventory`
 service can be found in `src/main/java/io/openliberty/guides/inventory`. If you want to learn how to
 create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
@@ -142,12 +141,11 @@ Fault Tolerance API to build fault tolerant microservices.
 The `mpFaultTolerance-1.0` feature has also been enabled in the `src/main/liberty/config/server.xml` file.
 
 
-For ease of use, the two microservices being run in this application are being "served up"
-by the same server.
+For ease of use, the two microservices in this application are being "served up" by the same server.
 This means that one cannot be taken down without the other.
 To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be
 executed when a server cannot be reached due to the server being taken down for maintenance. Taking the server
-up and down dynamically using dynamic configuration with MP config. If you want
+up and down dynamically using dynamic configuration with MicroProfile configuration. If you want
 to learn more about setting up dynamic configuration,
 see https://github.com/OpenLiberty/draft-guide-microprofile-config[Configuring microservices].
 
@@ -165,15 +163,14 @@ properties is returned. However, if this config property is assigned a value of 
 response is returned to the browser and a message is returned to the terminal to let the developer
 know that the service is down.
 
-This 503 HTTP response needs to be recognised and acted upon by the `inventory` microservice.
-To do this, create the `system` client class in the
+This 503 HTTP response needs to be recognised and acted upon by the inventory microservice. To do this, first create the system client class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=throw_IOException;!copyright;!javadoc]
 ----
-This class is a Client for the `system` service.
+This class is a client for the `system` service.
 
 In this class there is a method called `getPropertiesHelper()`. This method returns a response based on whether a 200
 HTTP response is returned by the `system` service. If a 200 is returned, the method returns the system properties
@@ -185,7 +182,7 @@ would likely be alleviated after some delay. If the response is 503, an IOExcept
 exception is thrown when an input or output operation is failed or interpreted.
 
 This `getPropertiesHelper()` method is called by the public `getProperties()` method which is used in
-`InventoryManager.java`.
+`InventoryManager.java`. You will look into this class in more detail in the next section.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
@@ -194,7 +191,7 @@ This `getPropertiesHelper()` method is called by the public `getProperties()` me
 === Adding the @Retry and @Fallback annotations
 
 Our `inventory` microservice is now able to recognise that the `system` microservice has been taken
-down for maintenance through the 503 HTTP response retruned. As a result, it has thrown an IOException.
+down for maintenance through the 503 HTTP response returned. As a result, it has thrown an IOException.
 A fallback method now needs to be set out to deal with this failure.
 Create the inventory manager class in the `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
@@ -203,19 +200,18 @@ Create the inventory manager class in the `src/main/java/io/openliberty/guides/i
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
 ----
 
-The `@Retry` annotation dictates on on what conditions we should reattempt to establish a connection
+The `@Retry` annotation dictates on what conditions we should reattempt to establish a connection
 to the `system` service and how many times it should be retried, in this case three times.
 The `@Fallback` annotation dictates which method to call when the reties are unsuccessful
 (in this case use the fallbackForGet method).
 
-The `fallbackForGet()` method that has been added as the designated fallback method for the original `get()`
-method, checks to see if the properties variable is null. If the properties variable is null, this suggests
+The fallbackForGet() method that has been added as the designated fallback method for the original get() method, checks to see if the properties variable exists in the inventory. If the properties variable is null, this suggests
 that the application has not been able to successfully reach the `system` service to get the system's
 properties previously, thus the method simply prints out a json warning message in the browser. However, if
 the properties variable is not null, this method returns a json of the cached property values instead.
 
 
-Next create the `inventory` resource class in `src/main/java/io/openliberty/guides/inventory/InventoryResource.java` file:
+Next create the inventory resource class in the src/main/java/io/openliberty/guides/inventory/InventoryResource.java file:
 
 [source, java, indent=0]
 ----
@@ -225,7 +221,7 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.
 The if statement in this class now returns an error message when the `inventory` service is down for maintenance
 and calls the `get()` method in the InventoryManager.java class when the `inventory` service is up and running
 as normal.
-All references to the email configuration property have been removed from this file.
+
 
 The application has now been successfully set up to be fault tolerant.
 
