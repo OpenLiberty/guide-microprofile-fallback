@@ -94,8 +94,6 @@ public class InventoryEndpointTest {
     assertEquals("The inventory should have one entry for localhost", expected,
                  actual);
 
-    System.out.println(obj.getJsonArray("systems").getJsonObject(0)
-                          .get("hostname").toString());
     boolean localhostExists = obj.getJsonArray("systems").getJsonObject(0)
                                  .get("hostname").toString()
                                  .contains("localhost");
@@ -162,7 +160,7 @@ public class InventoryEndpointTest {
    * <p>
    * Returns response information from the specified URL.
    * </p>
-   * 
+   *
    * @param url
    *          - target URL.
    * @return Response object with the response from the specified URL.
@@ -177,7 +175,7 @@ public class InventoryEndpointTest {
    * <p>
    * Asserts that the given URL has the correct response code of 200.
    * </p>
-   * 
+   *
    * @param url
    *          - target URL.
    * @param response
@@ -193,7 +191,7 @@ public class InventoryEndpointTest {
   /**
    * Asserts that the specified JVM system property is equivalent in both the
    * system and inventory services.
-   * 
+   *
    * @param propertyName
    *          - name of the system property to check.
    * @param hostname

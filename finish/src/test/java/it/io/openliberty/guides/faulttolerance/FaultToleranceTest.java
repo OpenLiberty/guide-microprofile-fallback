@@ -72,19 +72,19 @@ public class FaultToleranceTest {
         testFallbackForGet();
         testRetryGettingSystemProperties();
     }
-  
+
     //tag::javadoc[]
-    /**  
+    /**
      * testFallbackForGet - test for checking if the fallback is being called correctly
      * 1. Return system properties for a hostname when inventory service is available.
-     * 2. Make System service down and get the system properties from inventory service 
+     * 2. Make System service down and get the system properties from inventory service
      *    when it is down.
      * 3. Check if system properties for the specific host was returned when the inventory
      *    service was down by:
      *    Asserting if the total number of the system properties, when service is up, is
      *    greater than the total number of the system properties when service is down.
      * @return {void}
-     */ 
+     */
     //end::javadoc[]
     public void testFallbackForGet() {
         response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
@@ -97,9 +97,11 @@ public class FaultToleranceTest {
         obj = response.readEntity(JsonObject.class);
         int propertiesSizeFallBack = obj.size();
         assertTrue("The total number of properties from the @Fallback method is not smaller than the number from the system service, as expected.", propertiesSize > propertiesSizeFallBack);
+        changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
     }
 
     public void testRetryGettingSystemProperties() {
+        changeSystemProperty(SYSTEM_MAINTENANCE_FALSE, SYSTEM_MAINTENANCE_TRUE);
         resetRetryCounter();
         response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
         assertResponse(baseUrl, response);
