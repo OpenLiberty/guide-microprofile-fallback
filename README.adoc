@@ -28,8 +28,8 @@ You will learn how to build fault tolerant microservices in an inventory managem
 
 The application that you will be working with is an `inventory` service, which stores the information about
 various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve
-the JVM system properties of a particular host, the `inventory` service communicates with the `system` service on
-that host to get these system properties. The system properties are then stored and returned.
+the MP Config properties of a particular host, the `inventory` service communicates with the `system` service on
+that host to get these properties. The system properties are then stored and returned.
 
 You will use the `@Retry` and `@Fallback` Fault Tolerance annotations, from the MicroProfile (MP) Fault Tolerance specification, to define a criteria on when to retry and when to
 provide an alternative solution for a failed execution.
