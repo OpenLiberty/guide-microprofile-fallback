@@ -13,13 +13,10 @@
 // tag::503_response[]
 package io.openliberty.guides.system;
 
-// CDI
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
-
-// JAX-RS
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -40,6 +37,5 @@ public class SystemResource {
       return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
   }
-
 }
 // end::503_response[]
