@@ -12,6 +12,7 @@
 :page-description: Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 :page-tags: ['REST', 'MicroProfile', 'microservices', 'Fault Tolerance', '@Retry', '@Fallback']
 :page-permalink: /guides/{projectid}
+:page-related-guides: ['cdi-intro', 'Configuring microservices', 'Building fault-tolerant microservices with the @CircuitBreaker annotation', 'Using @Bulkhead']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 = Handling failures with Fault Tolerance
