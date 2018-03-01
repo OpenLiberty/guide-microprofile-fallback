@@ -15,7 +15,7 @@
 :page-related-guides: ['cdi-intro', 'Configuring microservices', 'Building fault-tolerant microservices with the @CircuitBreaker annotation', 'Using @Bulkhead']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-= Handling failures with Fault Tolerance
+= Building fault tolerant microservices with the @Retry annotation
 
 Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 
@@ -211,7 +211,7 @@ properties previously, thus the method simply prints out a json warning message 
 the properties variable is not null, this method returns a json of the cached property values instead.
 
 
-Next create the inventory resource class in the src/main/java/io/openliberty/guides/inventory/InventoryResource.java file:
+Next create the inventory resource class in the `src/main/java/io/openliberty/guides/inventory/InventoryResource.java` file:
 
 [source, java, indent=0]
 ----
