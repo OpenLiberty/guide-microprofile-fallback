@@ -141,21 +141,7 @@ up and down dynamically using dynamic configuration with MicroProfile configurat
 to learn more about setting up dynamic configuration,
 see https://github.com/OpenLiberty/draft-guide-microprofile-config[Configuring microservices].
 
-Create the `system` resource class in the `src/main/java/io/openliberty/guides/system/SystemResource.java` file:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
-----
-This file retrieves all of the system properties and returns them as a JSON Object.
-The `getProperties()` method in this class has been modified for this fault tolerance guide so that
-if the config property `io_openliberty_guides_system_inMaintenance` from the
-`CustomConfigSource.json` file is assigned the value of false, a json object containing the system
-properties is returned. However, if this config property is assigned a value of true, then a 503 HTTP
-response is returned to the browser and a message is returned to the terminal to let the developer
-know that the service is down.
-
-This 503 HTTP response needs to be recognised and acted upon by the inventory microservice. To do this, first create the system client class in the
+To enable fault tolerance in the application, create the system client class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
 
 [source, java, indent=0]
