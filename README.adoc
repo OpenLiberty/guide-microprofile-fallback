@@ -76,8 +76,6 @@ In this guide we will be focusing on `@Retry` and `@Fallback`.
 // Getting Started
 // =================================================================================================
 
-== Getting started
-
 include::{common-includes}/gitclone.adoc[]
 
 
