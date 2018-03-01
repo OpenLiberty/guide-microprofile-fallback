@@ -76,17 +76,9 @@ In this guide we will be focusing on `@Retry` and `@Fallback`.
 // Getting Started
 // =================================================================================================
 
-// include::{common-includes}/gitclone.adoc[]
-
 == Getting started
 
-The fastest way to work through this guide is to clone the Git repository and use the starting project that is provided in the `start` directory. To do this, run the following commands:
-
-[subs="attributes"]
-----
-git clone https://github.com/openliberty/draft-guide-{projectid}.git
-cd draft-guide-{projectid}/start
-----
+include::{common-includes}/gitclone.adoc[]
 
 
 // =================================================================================================
@@ -310,9 +302,8 @@ Lastly, it asserts if the system properties returned from the first request were
 However for the first request, the `inventory` service returned the properties from making a connection to `system`
 service.
 
-* `testRetryGettingSystemProperties()` sends a request to `inventory` service to try to get the system properties
-even though
-`system` service is still in maintenance from previous test case. Then, it reads the retry counter in
+* `testRetryGettingSystemProperties()` also sends a request to inventory service to try to get the system properties.
+Then, it reads the retry counter in
 `/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from
 `inventory` service.
 
