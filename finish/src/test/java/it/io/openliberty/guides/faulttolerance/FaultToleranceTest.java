@@ -68,7 +68,7 @@ public class FaultToleranceTest {
     }
 
     @Test
-    public void testSuite() {
+    public void testSuite() throws InterruptedException {
         testFallbackForGet();
         testRetryGettingSystemProperties();
     }
@@ -84,14 +84,16 @@ public class FaultToleranceTest {
      *    Asserting if the total number of the system properties, when service is up, is
      *    greater than the total number of the system properties when service is down.
      * @return {void}
+     * @throws InterruptedException 
      */
     //end::javadoc[]
-    public void testFallbackForGet() {
+    public void testFallbackForGet() throws InterruptedException {
         response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
         assertResponse(baseUrl, response);
         JsonObject obj = response.readEntity(JsonObject.class);
         int propertiesSize = obj.size();
         changeSystemProperty(SYSTEM_MAINTENANCE_FALSE, SYSTEM_MAINTENANCE_TRUE);
+        Thread.sleep(3000);
         response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
         assertResponse(baseUrl, response);
         obj = response.readEntity(JsonObject.class);
