@@ -43,10 +43,10 @@ service can be found in `src/main/java/io/openliberty/guides/inventory`. If you 
 create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
 
 // =================================================================================================
-// Why use MP Fault Tolerance?
+// Why use MicroProfile Fault Tolerance?
 // =================================================================================================
 
-=== Why use MP Fault Tolerance?
+=== Why use MicroProfile Fault Tolerance?
 
 It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP)
 Fault Tolerance provides a simple and flexible solution.
