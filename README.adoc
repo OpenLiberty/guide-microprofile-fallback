@@ -69,7 +69,6 @@ overloading and indefinite wait or timeout by the clients
 * Bulkhead: isolate failures in part of the system while the rest part of the system can still function
 
 In this guide we will be focusing on `@Retry` and `@Fallback`.
-[source, java, indent=0, role="no_copy"]
 
 
 // =================================================================================================
