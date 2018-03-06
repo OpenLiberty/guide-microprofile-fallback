@@ -204,8 +204,6 @@ The application has now been successfully set up to be fault tolerant.
 // Building and running the application
 // =================================================================================================
 
-== Building and running the application
-
 include::{common-includes}/mvnbuild.adoc[]
 
 Once the server is running, point your browser to the `http://localhost:9080/inventory/systems/localhost` URL.
