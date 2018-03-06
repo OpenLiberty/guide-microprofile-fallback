@@ -276,7 +276,8 @@ If a test failure occurs, then you must have introduced a bug into the code.
 
 include::{common-includes}/mvnverify.adoc[]
 
-```
+[source, role="no_copy"]
+----
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
@@ -290,7 +291,7 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.517 sec - in i
 Results :
 
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
-```
+----
 
 To see whether the tests detect a failure, remove the reset retries method of
 the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test failure occur for the
