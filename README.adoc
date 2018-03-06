@@ -310,5 +310,3 @@ Feel free to try one of the related MicroProfile guides. They demonstrate new te
 learn and expand on top what you built here.
 
 include::{common-includes}/finish.adoc[]
-
-https://github.com/OpenLiberty/guide-{projectId}[View this guide on github].
