@@ -15,9 +15,9 @@
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-= Building fault tolerant microservices with the @Retry annotation
+= Building fault-tolerant microservices with the @Retry annotation
 
-Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
+You’ll explore how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
 
 // =================================================================================================
 // What you'll learn
@@ -25,21 +25,21 @@ Learn how to add retry and fallback behavior to microservice dependencies to man
 
 == What you'll learn
 
-You will learn how to build fault tolerant microservices in an inventory management application so that you can reduce the impact from failure and ensure continued operation of services.
+You will learn how to build fault-tolerant microservices in an inventory management application so that you can reduce the impact from failure and ensure continued operation of services.
 
-The application that you will be working with is an `inventory` service, which stores the information about
-various JVMs that run on different systems. Whenever a request is made to the `inventory` service to retrieve
+You will work with an `inventory` service application, which stores information about
+various JVMs that run on different systems. Whenever you make a request to the `inventory` service to retrieve
 the MP Config properties of a particular host, the `inventory` service communicates with the `system` service on
-that host to get these properties. The system properties are then stored and returned.
+that host to retrieve these properties. The `system` service then stores and returns the system properties.
 
-You will use the `@Retry` and `@Fallback` Fault Tolerance annotations, from the MicroProfile (MP) Fault Tolerance specification, to define a criteria on when to retry and when to
+You will use the `@Retry` and `@Fallback` fault tolerance annotations from the MicroProfile (MP) Fault Tolerance specification to define criteria for when to retry and when to
 provide an alternative solution for a failed execution.
-Fault Tolerance enables the application to function even when one of it's services is unavailable,
-making service invocation more resilient.
+Fault tolerance enables the application to function even when one of its services is unavailable and makes
+service invocation more resilient.
 
 The implementation of the application and its services are provided for you.
-The `system` service can be found in `src/main/java/io/openliberty/guides/system`, and the `inventory`
-service can be found in `src/main/java/io/openliberty/guides/inventory`. If you want to learn how to
+You can find the `system` service in the `src/main/java/io/openliberty/guides/system` directory, and you can find the `inventory`
+service in the `src/main/java/io/openliberty/guides/inventory` directory. If you want to learn how to
 create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
 
 // =================================================================================================
@@ -48,27 +48,26 @@ create a RESTful application, see https://openliberty.io/guides/rest-intro.html[
 
 === Why use MicroProfile Fault Tolerance?
 
-It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP)
-Fault Tolerance provides a simple and flexible solution.
-Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
-Retry policies, bulkheads, and circuit breakers are popular concepts in this area.
-They dictate whether and when executions should take place, and fallbacks offer an alternative result
+MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
+Fault tolerance leverages different strategies to guide the execution and result of logic.
+Retry policies, bulkheads, and circuit breakers are popular fault tolerance concepts.
+They dictate whether and when executions take place, and fallbacks offer an alternative result
 when an execution does not complete successfully.
 
-MP Fault Tolerance offers the following Fault Tolerance policies:
+MP Fault Tolerance offers the following fault tolerance policies:
 
-* Timeout: Define a duration for timeout
+* Timeout: This policy defines a duration for timeout.
 
-* Retry: Define a criteria on when to retry
+* Retry: This policy defines criteria for when to retry.
 
-* Fallback: provide an alternative solution for a failed execution
+* Fallback: This policy provides an alternative solution for a failed execution.
 
-* CircuitBreaker: offer a way of fail fast by automatically failing execution to prevent the system
-overloading and indefinite wait or timeout by the clients
+* CircuitBreaker: This policy offers a way to fail fast by automatically failing execution. It also prevents the system from
+overloading and creating an indefinite wait or timeout by the clients.
 
-* Bulkhead: isolate failures in part of the system while the rest part of the system can still function
+* Bulkhead: This policy isolates failures in a part of the system while the rest of the system can still function.
 
-In this guide we will be focusing on `@Retry` and `@Fallback`.
+In this guide, you will learn about the `@Retry` and `@Fallback` policies.
 
 
 // =================================================================================================
@@ -84,10 +83,10 @@ include::{common-includes}/gitclone.adoc[]
 === Try what you'll build
 
 The `finish` directory in the root of this guide contains the finished fault tolerance implementation
-for the application. Feel free to give it a try before you proceed with building your own.
+for the application. You can try the finished application before you build your own.
 
-To try out the application, first navigate to the `finish` directory and then execute the following
-Maven goals to build the application and run it inside Open Liberty:
+To try the application, first navigate to the `finish` directory and then execute the following
+Maven goals to build the application and run it inside of Open Liberty:
 
 ```
 mvn clean install liberty:start-server
@@ -98,42 +97,40 @@ Point your browser to the `http://localhost:9080/inventory/systems/localhost` UR
 JSON format with the system properties of your local JVM. When you visit this URL, these system properties
 are automatically stored in the inventory.
 
-Now open the `finish/resource/CustomConfigSource.json file` and change the property `io_openliberty_guides_system_inMaintenance` from false to true and save the file. There is no need to
-restart the server. Now return to your browser and point back to the
-`http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from
-systems for this localhost due to the `system` service now being in maintenance.
-For simplicity, only the OS name and username are stored in cache for each host.
+Open the `finish/resource/CustomConfigSource.json` file and change the `io_openliberty_guides_system_inMaintenance` property from `false` to `true`. Then, save the file. You do not need to
+restart the server. Return to your browser and point back to the
+`http://localhost:9080/inventory/systems/localhost` URL. Because the `system` service is now in maintenance, you see the cached properties from the systems for this localhost.
+For simplicity, only the OS name and username are stored in the cache for each host.
 
-Once you are done checking out the application, go to the `CustomConfigSource.json` file again and change the
-property `io_openliberty_guides_system_inMaintenance` from `true` to `false` to set this condition back to its original value.
+When you are done checking out the application, go to the `CustomConfigSource.json` file again and change the
+`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this condition back to its original value.
 
-Stop the Open Liberty server:
+Run the following command to stop the Open Liberty server:
 
 ```
 mvn liberty:stop-server
 ```
 
-Now, navigate back to the `start` directory to begin.
+Navigate back to the `start` directory to begin.
 
 
 // =================================================================================================
-// Enabling Fault Tolerance in the application
+// Enabling fault tolerance in the application
 // =================================================================================================
 
-== Enabling Fault Tolerance in the application
+== Enabling fault tolerance in the application
 
-The MicroProfile Fault Tolerance API has been added as a dependency to your `pom.xml` file. Look for the
-dependancy with the groupID `org.eclipse.microprofile.fault-tolerance`.
-This feature allows you to use the MicroProfile
-Fault Tolerance API to build fault tolerant microservices.
-The `mpFaultTolerance-1.0` feature has also been enabled in the `src/main/liberty/config/server.xml` file.
+You can find the MicroProfile Fault Tolerance API as a dependency to your `pom.xml` file. Look for the
+dependancy with the `org.eclipse.microprofile.fault-tolerance` group ID.
+Use this feature to build fault-tolerant microservices with the MicroProfile
+Fault Tolerance API.
+Also, the `mpFaultTolerance-1.0` feature is enabled in the `src/main/liberty/config/server.xml` file.
 
 
-For ease of use, the two microservices in this application are being "served up" by the same server.
-This means that one cannot be taken down without the other.
-To overcome this challenge, we will imitate the HTTP responses and Exceptions that would normally be
-executed when a server cannot be reached due to the server being taken down for maintenance. Taking the server
-up and down dynamically using dynamic configuration with MicroProfile configuration. If you want
+The two microservices in this application are delivered by the same server, which means that you cannot take one microservice down without the other.
+To avoid taking both microservices down together, imitate the HTTP responses and exceptions that you would normally
+execute when a server is down for maintenance and cannot be reached. Use MicroProfile configuration to take the server
+up and down with dynamic configuration. If you want
 to learn more about setting up dynamic configuration,
 see https://github.com/OpenLiberty/draft-guide-microprofile-config[Configuring microservices].
 
@@ -146,17 +143,16 @@ include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClien
 ----
 This class is a client for the `system` service.
 
-In this class there is a method called `getPropertiesHelper()`. This method returns a response based on whether a 200
-HTTP response is returned by the `system` service. If a 200 is returned, the method returns the system properties
-returned from the `system` service. However if the response is anything other than 200, then a message is printed in
-the terminal to explain that the response status was not Ok. In this guide, a new if statement has been added to the
-method that checks to see if the response is specifically a 503 response. A 503 HTTP response is returned if the
-server being called is unable to handle the request due to a temporary overload or scheduled maintenance, which
-would likely be alleviated after some delay. If the response is 503, an IOException is thrown. This type of
-exception is thrown when an input or output operation is failed or interpreted.
+This class contains the `getPropertiesHelper()` method. This method returns a response based on whether the `system` service returns a 200 HTTP response. If the service returns a 200 HTTP response, the method returns the system properties that were
+returned from the `system` service. However, if the response is anything other than 200, then a message is printed in
+the terminal to explain that the response status was not acceptable. In this guide, a new `if` statement is added to the
+method that checks to see if the response is a 503 response. A 503 HTTP response is returned if the
+server that is called is unable to handle the request because of a temporary overload or scheduled maintenance, which
+will likely be alleviated after a delay. If the response is 503, an `IOException` is thrown. This type of
+exception is thrown when an input or output operation fails or is interpreted.
 
-This `getPropertiesHelper()` method is called by the public `getProperties()` method which is used in
-`InventoryManager.java`. You will look into this class in more detail in the next section.
+The public `getProperties()` method, which is used in the
+`InventoryManager.java` class, calls the `getPropertiesHelper()` method. You will look into this class in more detail in the next section.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
@@ -164,9 +160,9 @@ This `getPropertiesHelper()` method is called by the public `getProperties()` me
 
 === Adding the @Retry and @Fallback annotations
 
-Our `inventory` microservice is now able to recognise that the `system` microservice has been taken
-down for maintenance through the 503 HTTP response returned. As a result, it has thrown an IOException.
-A fallback method now needs to be set out to deal with this failure.
+Through the returned 503 HTTP response, the `inventory` microservice is able to recognise that the `system` microservice is
+down for maintenance. As a result, the `inventory` microservice throws an IOException.
+Next, set a fallback method to deal with this failure.
 Create the inventory manager class in the `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
 [source, java, indent=0]
@@ -174,30 +170,28 @@ Create the inventory manager class in the `src/main/java/io/openliberty/guides/i
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
 ----
 
-The `@Retry` annotation dictates on what conditions we should reattempt to establish a connection
-to the `system` service and how many times it should be retried, in this case three times.
-The `@Fallback` annotation dictates which method to call when the reties are unsuccessful
-(in this case use the fallbackForGet method).
+The `@Retry` annotation dictates when and how many times the application reattempts to establish a connection
+to the `system` service. In this example, the server reattempts three times.
+The `@Fallback` annotation dictates which method to call when the retries are unsuccessful.
+In this example, use the `fallbackForGet` method.
 
-The fallbackForGet() method that has been added as the designated fallback method for the original get() method, checks to see if the properties variable exists in the inventory. If the properties variable is null, this suggests
-that the application has not been able to successfully reach the `system` service to get the system's
-properties previously, thus the method simply prints out a json warning message in the browser. However, if
-the properties variable is not null, this method returns a json of the cached property values instead.
+The `fallbackForGet()` method is the designated fallback method for the original `get()` method and checks to see if the properties variable exists in the inventory. If the properties variable is null, the application is unable to reach the `system` service to retrieve the system's properties, and the method prints out a JSON warning message in the browser. However, if
+the properties variable is not null, this method returns a JSON message of the cached property values instead.
 
 
-Next create the inventory resource class in the `src/main/java/io/openliberty/guides/inventory/InventoryResource.java` file:
+Next, create the inventory resource class in the `src/main/java/io/openliberty/guides/inventory/InventoryResource.java` file:
 
 [source, java, indent=0]
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=fault_tolerance]
 ----
 
-The if statement in this class now returns an error message when the `inventory` service is down for maintenance
-and calls the `get()` method in the InventoryManager.java class when the `inventory` service is up and running
+The if statement in this class now returns an error message when the `inventory` service is down for maintenance.
+The if statement also calls the `get()` method in the `InventoryManager.java` class when the `inventory` service runs
 as normal.
 
 
-The application has now been successfully set up to be fault tolerant.
+You set the application to be fault tolerant.
 
 
 // =================================================================================================
@@ -206,12 +200,12 @@ The application has now been successfully set up to be fault tolerant.
 
 include::{common-includes}/mvnbuild.adoc[]
 
-Once the server is running, point your browser to the `http://localhost:9080/inventory/systems/localhost` URL.
+When the server is running, point your browser to the `http://localhost:9080/inventory/systems/localhost` URL.
 You see a result in JSON format with the system properties of your local JVM.
-You can test the fault tolerance mechanism of your application by dynamically changing
+To test the fault tolerance mechanism of your application, dynamically change
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the `resource/CustomConfigSource.json` file.
-After saving the file, go back to your browser and click refresh to see the cached version of the properties.
-The cached system properties only have the OS name and username key and value pairs.
+Save the file, go back to your browser, and click refresh to see the cached version of the properties.
+The cached system properties only have the OS name, user name key, and value pairs.
 
 include::{common-includes}/mvnpackage.adoc[]
 
@@ -222,10 +216,10 @@ include::{common-includes}/mvnpackage.adoc[]
 
 == Testing the application
 
-While you can test your application manually, you should rely on automated tests since they will trigger a
+Although you can test your application manually, use automated tests instead because they trigger a
 failure whenever a code change introduces a defect. Since the application is a RESTful web service application,
-you can use JUnit and the RESTful web service Client API to write tests. In testing the functionality of the
-application, the scopes and dependencies are being tested.
+you can use JUnit and the RESTful web service client API to write tests. When you test the functionality of the
+application, you test the scopes and dependencies.
 
 Create the `FaultToleranceTest` class in the `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
 
@@ -234,41 +228,41 @@ Create the `FaultToleranceTest` class in the `src/test/java/it/io/openliberty/gu
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
 ----
 
-The `@BeforeClass` annotation is placed on a method that executes before any of the test cases. In this case,
+Place the `@BeforeClass` annotation on a method that executes before any of the test cases. In this case,
 the `oneTimeSetup()` method retrieves the port number for the Open Liberty server and builds a base URL string
 that is used throughout the tests.
 
-The `@Before` and `@After` annotations are placed on methods that execute before and after every test case. These
+Place the `@Before` and `@After` annotations on methods that execute before and after every test case. These
 methods are generally used to perform any setup and teardown tasks. In this case, the setup method creates a
-JAX-RS client which makes HTTP requests to the `inventory` service. This client must also be registered with a
-JSON-P provider (JsrJsonpProvider) to process JSON resources. The teardown method simply destroys this client
-instance as well as the HTTP responses, resets the changed configuration file and the retry counter.
+JAX-RS client, which makes HTTP requests to the `inventory` service. Register this client with a
+JSON-P provider (`JsrJsonpProvider`) to process JSON resources. The teardown method destroys this client
+instance as well as the HTTP responses and resets the changed configuration file and the retry counter.
 
-Let’s break down the test cases:
+Break down the test cases:
 
-* `testFallbackForGet()` sends a request to `inventory` service to get the systems properties for a
-hostname, when `system` service is avialable. Then, it puts the `system` service on maintenance. After that,
-it makes a second request to `inventory` service to return the system properties for that hostname.
-Lastly, it asserts if the system properties returned from the first request were more than the second time.
+* The`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
+host name when the `system` service is avialable. Then, this test case puts the `system` service on maintenance. Next,
+it makes a second request to the `inventory` service to return the system properties for that host name.
+Lastly, it asserts whether the system properties returned from the first request were greater than the properties returned from the second time.
 
-** In the second request, the fallback method from `inventory` service was called to return the cached properties.
-However for the first request, the `inventory` service returned the properties from making a connection to `system`
+** In the second request, the fallback method from the `inventory` service was called to return the cached properties.
+However, for the first request, the `inventory` service returned the properties from making a connection to the `system`
 service.
 
-* `testRetryGettingSystemProperties()` also sends a request to inventory service to try to get the system properties.
-Then, it reads the retry counter in
-`/inventory/retries` endpoint to assert it with the number of retries happened to get the system properties from
+* The `testRetryGettingSystemProperties()` test case also sends a request to the inventory service to get the system properties.
+Then, it reads the retry counter in the
+`/inventory/retries` endpoint to assert the endpoint with the number of retries that the test case happened to get from the
 `inventory` service.
 
-** The `inventory` service should retry the same number of times as stated by the `maxRetries` attribute in the
-`@Retry` annotation to get the system properties. However, it makes a first call on the annotated method assuming
-that `system` service is avialable. As a result, the total calls on this method are four.
+** To get the system properties, the `inventory` service retries the same number of times as stated by the `maxRetries` attribute in the
+`@Retry` annotation. However, the `inventory` service makes a first call on the annotated method assuming
+that the `system` service is avialable. As a result, the total calls on this method are four.
 
-To force these test cases to execute in a particular order, put them in a testSuite() method and label it with
-a `@Test` annotation so that it automatically executes when your test class run.
+To force these test cases to execute in a particular order, put them in a `testSuite()` method and label it with
+a `@Test` annotation so that it automatically executes when your test class runs.
 
-In addition, a few endpoint tests have been included for you to test the basic functionality of the `inventory` and `system` services. 
-If a test failure occurs, then you must have introduced a bug into the code.
+In addition, a few endpoint tests are included for you to test the basic functionality of the `inventory` and `system` services. 
+If a test failure occurs, then you might have introduced a bug into the code.
 
 // =================================================================================================
 // Running the tests
@@ -293,8 +287,8 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see whether the tests detect a failure, remove the reset retries method of
-the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test failure occur for the
+To see whether the tests detect a failure, remove the reset retries method in
+the `FaultToleranceTest.java` file. Rerun the Maven build. You see a test failure occur for the
 `testRetryGettingSystemProperties()` test case.
 
 // =================================================================================================
@@ -303,9 +297,9 @@ the `FaultToleranceTest.java` file. Re-run the Maven build. You will see a test 
 
 == Great work! You're done!
 
-You just built and tested a micorservice application with MicroProfile Fault Tolerance and Open Liberty.
+You built and tested a microservice application with MicroProfile fault tolerance and Open Liberty.
 
-Feel free to try one of the related MicroProfile guides. They demonstrate new technologies that you can
-learn and expand on top what you built here.
+You can try one of the related MicroProfile guides. They demonstrate technologies that you can
+learn and expand on top of what you built here.
 
 include::{common-includes}/finish.adoc[]
