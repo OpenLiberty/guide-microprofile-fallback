@@ -29,6 +29,7 @@ You will learn how to build fault tolerant microservices in an inventory managem
 that you can reduce the impact from failure and ensure continued operation of services.
 
 The application that you will be working with is an `inventory` service, which stores the information 
+
 about various JVMs that run on different systems. Whenever a request is made to the `inventory` service
 to retrieve the JVM system properties of a particular host, the `inventory` service communicates with 
 the `system` service on that host to get these system properties. The system properties are then stored 
@@ -101,6 +102,7 @@ in JSON format with the system properties of your local JVM. When you visit this
 properties are automatically stored in the inventory.
 
 Now open the `finish/resource/CustomConfigSource.json` and change the property 
+
 `io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need
 to restart the server. Now return to your browser and point back to the 
 `http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from
@@ -182,6 +184,7 @@ in `InventoryManager.java`. You will look into this class in more detail in the 
 Our `inventory` microservice is now able to recognise that the `system` microservice has been taken
 down for maintenance through the 503 HTTP response returned. As a result, it has thrown an IOException.
 A fallback method now needs to be set out to deal with this failure.
+
 Create the `InventoryManager` class in the 
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
@@ -224,7 +227,6 @@ username key and value pairs. Once you're done, change the `io_openliberty_guide
 property value back to `false` in the `resource/CustomConfigSource.json` file.
 
 include::{common-includes}/mvnpackage.adoc[]
-
 
 // =================================================================================================
 // Testing the application
