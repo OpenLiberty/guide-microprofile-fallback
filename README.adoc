@@ -29,9 +29,10 @@ You will learn how to build fault tolerant microservices in an inventory managem
 that you can reduce the impact from failure and ensure continued operation of services.
 
 The application that you will be working with is an `inventory` service, which stores the information 
-about various JVMs that run on different systems. Whenever a request is made to the inventory service
-to retrieve the JVM system properties of a particular host, the inventory service communicates with 
-the system service on that host to get these system properties. The system properties are then stored 
+
+about various JVMs that run on different systems. Whenever a request is made to the `inventory` service
+to retrieve the JVM system properties of a particular host, the `inventory` service communicates with 
+the `system` service on that host to get these system properties. The system properties are then stored 
 and returned.
 
 You will use the `@Retry` and `@Fallback` annotations, from the MicroProfile (MP) Fault Tolerance 
@@ -101,7 +102,8 @@ in JSON format with the system properties of your local JVM. When you visit this
 properties are automatically stored in the inventory.
 
 Now open the `finish/resource/CustomConfigSource.json` and change the property 
-`io_openliberty_guides_system_inMaintenance` from false to true and save the file. There is no need
+
+`io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need
 to restart the server. Now return to your browser and point back to the 
 `http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from
 systems for this localhost due to the `system` service now being in maintenance. For simplicity, only
@@ -139,7 +141,20 @@ dynamic configuration using MicroProfile Configuration is used to allow you to e
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
 
-To enable fault tolerance in the application, create the system client class in the
+To enable fault tolerance in the application, create the `SystemResource` class in the 
+`src/main/java/io/openliberty/guides/system/SystemResource.java` file:
+
+[source, java]
+----
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
+----
+
+The service invokes the `getProperties()` method to display the system properties for a specific
+host. The host displays only if you set the `io_openliberty_guides_system_inMaintenance` configuration 
+to `false` in the `finish/resource/CustomConfigSource.json` file. Otherwise, the service throws an 
+exception which makes it unavailable.
+
+Next, create the `SystemClient` class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
 
 [source, java, indent=0]
@@ -149,15 +164,16 @@ include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClien
 This class is a client for the `system` service.
 
 In this class there is a method called `getPropertiesHelper()`. This method makes a request to the
-system service, and checks for the response. If a Status.OK response which is corresponding to the
-200 status code is found, the method returns the system properties from the system service request.
+`system` service, and checks for the response. If a `Status.OK`` response which is corresponding to the
+200 status code is found, the method returns the system properties from the `system` service request.
 In this guide, a new if statement has been added to the method to check if the response is specifically
-a Status.SERVICE_UNAVAILABLE that is a 503 status code. When this happens, the server being called
+a `Status.SERVICE_UNAVAILABLE` that is a 503 status code. When this happens, the server being called
 is unable to handle the request due to a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate system being unavailable, an IOException is thrown.
 
 This `getPropertiesHelper()` method is called by the public `getProperties()` method which is used 
 in `InventoryManager.java`. You will look into this class in more detail in the next section.
+
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
@@ -168,7 +184,8 @@ in `InventoryManager.java`. You will look into this class in more detail in the 
 Our `inventory` microservice is now able to recognise that the `system` microservice has been taken
 down for maintenance through the 503 HTTP response returned. As a result, it has thrown an IOException.
 A fallback method now needs to be set out to deal with this failure.
-Create the inventory manager class in the 
+
+Create the `InventoryManager` class in the 
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
 [source, java, indent=0]
@@ -183,7 +200,7 @@ case the fallbackForGet method can be used.
 
 The `fallbackForGet()` method that has been added as the designated fallback method for the original
 get() method, checks to see if the system's properties exist in the inventory. If the properties do 
-not exist, this suggests that the application has not been able to successfully reach the system 
+not exist, this suggests that the application has not been able to successfully reach the `system`
 service to get the system’s properties previously, thus the method simply prints out a json warning 
 message in the browser. Otherwise, this method returns the cached property values.
 
@@ -203,14 +220,13 @@ browser to the `http://localhost:9080/system/properties` URL which retrieves the
 specific host. You can test the fault tolerance mechanism of your application by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the 
 `resource/CustomConfigSource.json` file. After saving the file, go back to your browser and click 
-refresh to see the cached version of the properties. Point your browser again to the 
-`http://localhost:9080/system/properties` URL and you will notice that it is no longer available.
-The cached system properties only have the OS name and username key and value pairs. Once you're done, 
-change the `io_openliberty_guides_system_inMaintenance` property value back to `false` in the 
-`resource/CustomConfigSource.json` file.
+refresh to the `http://localhost:9080/inventory/systems/localhost` URL to see the cached version of 
+the properties. Point your browser again to the `http://localhost:9080/system/properties` URL and you
+will notice that it is no longer available. The cached system properties only have the OS name and 
+username key and value pairs. Once you're done, change the `io_openliberty_guides_system_inMaintenance` 
+property value back to `false` in the `resource/CustomConfigSource.json` file.
 
 include::{common-includes}/mvnpackage.adoc[]
-
 
 // =================================================================================================
 // Testing the application
@@ -251,7 +267,7 @@ hostname. The fallback method from `inventory` service is called to return the c
 Lastly, it asserts if the system properties returned from the first request were more than the second
 request.
 
-* `testRetryGettingSystemProperties()` also sends a request to inventory service to try to get the
+* `testRetryGettingSystemProperties()` also sends a request to `inventory` service to try to get the
 system properties. Then, it reads the retry counter in `/inventory/retries` endpoint to assert it 
 with the number of retries happened to get the system properties from `inventory` service. The 
 `inventory` service should retry the same number of times as stated by the `maxRetries` attribute
