@@ -139,7 +139,20 @@ dynamic configuration using MicroProfile Configuration is used to allow you to e
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
 
-To enable fault tolerance in the application, create the `SystemClient` class in the
+To enable fault tolerance in the application, create the `SystemResource` class in the 
+`src/main/java/io/openliberty/guides/system/SystemResource.java` file:
+
+[source, java]
+----
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
+----
+
+The service invokes the `getProperties()` method to display the system properties for a specific
+host. The host displays only if you set the `io_openliberty_guides_system_inMaintenance` configuration 
+to `false` in the `finish/resource/CustomConfigSource.json` file. Otherwise, the service throws an 
+exception which makes it unavailable.
+
+Next, create the `SystemClient` class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
 
 [source, java, indent=0]
@@ -159,25 +172,6 @@ likely be alleviated after some delay. To simulate system being unavailable, an 
 This `getPropertiesHelper()` method is called by the public `getProperties()` method which is used 
 in `InventoryManager.java`. You will look into this class in more detail in the next section.
 
-
-// =================================================================================================
-// Getting the System Properties
-// =================================================================================================
-
-=== Getting the System Properties 
-
-Create the `SystemResource` class in the 
-`src/main/java/io/openliberty/guides/system/SystemResource.java` file:
-
-[source, java]
-----
-include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
-----
-
-The service invokes the `getProperties()` method to display the system properties for a specific
-host. The host displays only if you set the `io_openliberty_guides_system_inMaintenance` configuration 
-to `false` in the `finish/resource/CustomConfigSource.json` file. Otherwise, the service throws an 
-exception which makes it unavailable.
 
 // =================================================================================================
 // Adding the @Retry and @Fallback annotations
