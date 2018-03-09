@@ -224,7 +224,7 @@
             <configuration>
               <runOrder>reversealphabetical</runOrder>
               <includes>
-                <include>**/it/**</include>
+                <include>**/it/**/*.java</include>
               </includes>
               <!-- tag::system-props[] -->
               <systemPropertyVariables>
