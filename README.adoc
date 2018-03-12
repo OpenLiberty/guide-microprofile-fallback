@@ -15,9 +15,9 @@
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-= Building fault tolerant microservices with the @Retry and @Fallback annotations
+= Building fault-tolerant microservices with the @Retry and @Fallback annotations
 
-Learn how to add retry and fallback behavior to microservice dependencies to manage the impact of failures.
+You'll explore how to manage the impact of failures by adding retry and fallback behaviors to microservice dependencies.
 
 // =================================================================================================
 // What you'll learn
@@ -25,7 +25,7 @@ Learn how to add retry and fallback behavior to microservice dependencies to man
 
 == What you'll learn
 
-You will learn how to build fault tolerant microservices in an inventory management application so 
+You will learn how to build fault-tolerant microservices in an inventory management application so 
 that you can reduce the impact from failure and ensure continued operation of services.
 
 The application that you will be working with is an `inventory` service, which stores the information 
@@ -35,13 +35,13 @@ the `system` service on that host to get these system properties. The system pro
 and returned.
 
 You will use the `@Retry` and `@Fallback` annotations from the MicroProfile (MP) Fault Tolerance 
-specification to define a criteria on when to retry and when to provide an alternative solution for 
-a failed execution. Fault Tolerance enables the application to function even when one of it's services
+specification to define criteria for when to retry and when to provide an alternative solution for 
+a failed execution. Fault Tolerance enables the application to function even when one of its services
 is unavailable, making service invocation more resilient.
 
 The implementation of the application and its services are provided for you.
-The `system` service can be found in `src/main/java/io/openliberty/guides/system`, and the `inventory`
-service can be found in `src/main/java/io/openliberty/guides/inventory`. If you want to learn how to
+You can find the `system` service in the `src/main/java/io/openliberty/guides/system` directory, and you can find the `inventory`
+service in the `src/main/java/io/openliberty/guides/inventory` directory. If you want to learn how to
 create a RESTful application, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
 
 // =================================================================================================
@@ -50,27 +50,26 @@ create a RESTful application, see https://openliberty.io/guides/rest-intro.html[
 
 === Why use MicroProfile Fault Tolerance?
 
-It is becoming increasingly important to build fault tolerant microservices and MicroProfile (MP)
-Fault Tolerance provides a simple and flexible solution.
-Fault tolerance is about leveraging different strategies to guide the execution and result of some logic.
+MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
+Fault tolerance leverages different strategies to guide the execution and result of logic.
 Retry policies, bulkheads, and circuit breakers are popular concepts in this area.
-They dictate whether and when executions should take place, and fallbacks offer an alternative result
+They dictate whether and when executions take place, and fallbacks offer an alternative result
 when an execution does not complete successfully.
 
-MP Fault Tolerance offers the following Fault Tolerance policies:
+MP Fault Tolerance offers the following fault tolerance policies:
 
-* Timeout: Define a duration for timeout
+* Timeout: Defines a duration for timeout
 
-* Retry: Define a criteria on when to retry
+* Retry: Defines a criteria for when to retry
 
-* Fallback: provide an alternative solution for a failed execution
+* Fallback: Provides an alternative solution for a failed execution
 
-* CircuitBreaker: offer a way of fail fast by automatically failing execution to prevent the system
-overloading and indefinite wait or timeout by the clients
+* CircuitBreaker: Offers a way to fail fast by automatically failing execution and also prevents the system from
+overloading and creating an indefinite wait or timeout by the clients
 
-* Bulkhead: isolate failures in part of the system while the rest part of the system can still function
+* Bulkhead: Isolates failures in part of the system while the rest of the system can still function
 
-In this guide we will be focusing on `@Retry` and `@Fallback`.
+In this guide, you will focus on the `@Retry` and `@Fallback` policies.
 
 
 // =================================================================================================
@@ -86,9 +85,9 @@ include::{common-includes}/gitclone.adoc[]
 === Try what you'll build
 
 The `finish` directory in the root of this guide contains the finished fault tolerance implementation
-for the application. Feel free to give it a try before you proceed with building your own.
+for the application. You can give it a try before you proceed with building your own.
 
-To try out the application, first navigate to the `finish` directory and then execute the following
+To try out the application, first navigate to the `finish` directory. Then, execute the following
 Maven goals to build the application and run it inside Open Liberty:
 
 ```
@@ -100,16 +99,13 @@ Point your browser to the `http://localhost:9080/inventory/systems/localhost` UR
 in JSON format with the system properties of your local JVM. When you visit this URL, these system 
 properties are automatically stored in the inventory.
 
-Now open the `finish/resource/CustomConfigSource.json` and change the property 
+Now, open the `finish/resource/CustomConfigSource.json` file and change the
+`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
+to restart the server. Next, return to your browser and point back to the 
+`http://localhost:9080/inventory/systems/localhost` URL. Because the system service is now in maintenance, you see the cached properties from the systems for this localhost. For simplicity, only the OS name and user name are stored in the cache for each host.
 
-`io_openliberty_guides_system_inMaintenance` from `false` to `true` and save the file. There is no need
-to restart the server. Now return to your browser and point back to the 
-`http://localhost:9080/inventory/systems/localhost` URL. You will now see the cached properties from
-systems for this localhost due to the `system` service now being in maintenance. For simplicity, only
-the OS name and username are stored in cache for each host. 
-
-Once you are done checking out the application, go to the `CustomConfigSource.json` file again and
-change the property `io_openliberty_guides_system_inMaintenance` from `true` to `false` to set this
+When you are done checking out the application, go to the `CustomConfigSource.json` file again and
+change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
 
 Stop the Open Liberty server:
