@@ -137,7 +137,7 @@ dynamic configuration with MicroProfile Configuration is used so that you can ea
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
 
-To enable fault tolerance in the application, create the `SystemResource` class in the
+First, create the `SystemResource` class in the
 `src/main/java/io/openliberty/guides/system/SystemResource.java` file:
 
 [source, java]
@@ -145,10 +145,11 @@ To enable fault tolerance in the application, create the `SystemResource` class 
 include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
 ----
 
-The service invokes the `getProperties()` method to display the system properties for a specific
-host. The host displays only if you set the `io_openliberty_guides_system_inMaintenance` configuration
-to `false` in the `finish/resource/CustomConfigSource.json` file. Otherwise, the service throws an
-exception, which makes it unavailable.
+The service displays the system properties for a specific host.
+The `inMaintenance()` condition determines that the system properties are returned only if you
+set the `io_openliberty_guides_system_inMaintenance` configuration property
+to `false` in the `start/resource/CustomConfigSource.json` file.
+Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, create the `SystemClient` class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
@@ -167,8 +168,9 @@ a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code in
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
 
-The public `getProperties()` method, which is in the `InventoryManager.java` class,
-calls the `getPropertiesHelper()` method. You will look into this class in more detail in the next section.
+The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
+The `InventoryManager` class calls this public method.
+You will look into `InventoryManager` class in more detail in the next section.
 
 
 // =================================================================================================
@@ -194,7 +196,7 @@ to the `system` service and how many times it should retry. In this example, the
 The `@Fallback` annotation dictates which method to call when the retries are unsuccessful. In this
 example, use the `fallbackForGet` method.
 
-The `fallbackForGet()` method, which is added as the designated fallback method for the original
+The `fallbackForGet()` method, which is the designated fallback method for the original
 `get()` method, checks to see if the system's properties exist in the inventory. If the properties
 variable is null, the system properties entry is not found in the inventory.
 Thus, the method prints out a JSON warning
@@ -213,9 +215,11 @@ When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 You receive a result in JSON format with the system properties of your local JVM. Next, point your
 browser to the `http://localhost:9080/system/properties` URL, which retrieves the information for a
-specific host. You can test the fault tolerance mechanism of your application by dynamically changing
+specific host. Notice that the results from the two URLs are identical.
+
+You can test the fault tolerance mechanism of your application by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
-`resource/CustomConfigSource.json` file. After saving the file, go back to your browser and
+`start/resource/CustomConfigSource.json` file. After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
 the properties. Point your browser to the `http://localhost:9080/system/properties` URL again, and
 notice that it is no longer available. The cached system properties contain only the OS name and
@@ -256,11 +260,10 @@ changed configuration file and the retry counter.
 Let’s define the test cases:
 
 * The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
-host name when the `system` service is available. Then, it puts the `system` service on maintenance. The
-`inventory` service returns the properties after making a connection to the `system` service.
+host name when the `system` service is available. Then, it puts the `system` service on maintenance.
 Afterward, it makes a second request to the `inventory` service to return the system properties for that
 host name. This time the `inventory` service calls the fallback method to return the cached properties.
-Lastly, this test case asserts whether the system properties that returned from the first request were more than the second.
+The test case then asserts whether the system properties that returned from the first request were more than the second.
 
 * The `testRetryGettingSystemProperties()` test case prepares the test by setting the `system` service on maintenance.
 Then, it sends a request to the `inventory` service to get the system properties.
