@@ -235,7 +235,7 @@ include::{common-includes}/mvnpackage.adoc[]
 
 Although you can test your application manually, automated tests have the advantage of
 triggering a failure whenever a code change introduces a defect. Because the application is a RESTful 
-web service application, you can use JUnit and the RESTful Web Service Client API to write tests. 
+web service application, you can use JUnit and the REST Client API to write tests. 
 
 Create the `FaultToleranceTest` class in the 
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
@@ -245,14 +245,14 @@ Create the `FaultToleranceTest` class in the
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
 ----
 
-The `@BeforeClass` annotation is placed on a method that executes before any of the other test cases. In
+The `@BeforeClass` annotation indicates that this method executes before any of the other test cases. In
 this case, the `oneTimeSetup()` method retrieves the port number for the Open Liberty server and 
 builds a base URL string that is used throughout the tests.
 
-The `@Before` and `@After` annotations are placed on methods that execute before and after any 
-other test case. These methods are generally used to perform any setup and teardown tasks. In this case,
+The `@Before` and `@After` annotations indicate that this method executes before or after the other test case.
+These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
-client must also be registered with a `JsrJsonpProvider` JSON-P provider to process JSON resources. 
+client must also be registered with a JSON-P provider to process JSON resources. 
 The teardown method simply destroys this client instance as well as the HTTP responses and resets the
 changed configuration file and the retry counter.
 
@@ -262,16 +262,15 @@ Let’s define the test cases:
 host name when the `system` service is available. Then, it puts the `system` service on maintenance. The
 `inventory` service returns the properties after making a connection to the `system` service.
 Afterward, it makes a second request to the `inventory` service to return the system properties for that
-host name. The fallback method from the `inventory` service is called to return the cached properties. 
-Lastly, this test case asserts whether the system properties that are returned from the first request were more than the second
-request.
+host name. This time the `inventory` service calls the fallback method to return the cached properties.  
+Lastly, this test case asserts whether the system properties that returned from the first request were more than the second.
 
-* The `testRetryGettingSystemProperties()` test case also sends a request to  the `inventory` service to try to retrieve the
-system properties. Then, it reads the retry counter in the `/inventory/retries` endpoint to assert the endpoint 
-with the number of retries that happened to get the system properties from the `inventory` service. To get the system properties, the 
-`inventory` service retries the same number of times as stated by the `maxRetries` attribute
-in the `@Retry` annotation. However, the service first calls on the 
-annotated method and assumes that the `system` service is available. As a result, this method has four total calls.
+* The `testRetryGettingSystemProperties()` test case prepares the test by setting the `system` service on maintenance.
+Then, it sends a request to the `inventory` service to get the system properties.
+Next, the test case reads the number of retries from the retry counter by calling the `http://localhost:9080/inventory/retries` URL.
+An assertion checks the number of retries to get the system properties from the `inventory` service with the expected hits.
+The `inventory` service retries the same number of times as stated by the `maxRetries` attribute in the `@Retry` annotation.
+However, the service always makes the first call on the annotated method. As a result, this method has four total calls.
 
 To force these test cases to execute in a particular order, put them in a `testSuite()` method and label
 it with a `@Test` annotation so that the method automatically executes when your test class runs.
@@ -313,7 +312,7 @@ the `FaultToleranceTest.java` file. Rerun the Maven build. You see a test failur
 
 == Great work! You're done!
 
-You built and tested a micorservice application with MicroProfile Fault Tolerance and Open Liberty.
+You have just completed building and testing a microservice application with MicroProfile Fault Tolerance and Open Liberty.
 
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
