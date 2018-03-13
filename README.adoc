@@ -145,11 +145,11 @@ First, create the `SystemResource` class in the
 include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
 ----
 
-The service displays the system properties for a specifichost.
-The `inMaintenance()` condition determines returning the system properties only if you
+The service displays the system properties for a specific host.
+The `inMaintenance()` condition determines the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the `start/resource/CustomConfigSource.json` file.
-Otherwise, the service returns an `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, create the `SystemClient` class in the
 `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
@@ -215,7 +215,7 @@ When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 You receive a result in JSON format with the system properties of your local JVM. Next, point your
 browser to the `http://localhost:9080/system/properties` URL, which retrieves the information for a
-specific host. Notice the results from the two URLs are identical.
+specific host. Notice that the results from the two URLs are identical.
 
 You can test the fault tolerance mechanism of your application by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
