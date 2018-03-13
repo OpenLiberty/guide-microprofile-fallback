@@ -162,16 +162,16 @@ include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClien
 ----
 This class is a client for the `system` service.
 
-A method called `getPropertiesHelper()` is included in this class. This method makes a request to the
-`system` service and checks for the response. If a `Status.OK` response that corresponds to the
-200 status code is found, the method returns the system properties from the `system` service request.
+This class includes the `getPropertiesHelper()` method. This method makes a request to the
+`system` service and checks for the response. If the request response is a `Status.OK` message
+that corresponds to the 200 status code, the method returns the system properties from the `system` service request.
 In this guide, a new `if` statement is added to the method to check if the response is specifically
 a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
 
-The public `getProperties()` method, which is used 
-in the `InventoryManager.java` class, calls the `getPropertiesHelper()` method. You will look into this class in more detail in the next section.
+The public `getProperties()` method, which is in the `InventoryManager.java` class, 
+calls the `getPropertiesHelper()` method. You will look into this class in more detail in the next section.
 
 
 // =================================================================================================
@@ -180,9 +180,8 @@ in the `InventoryManager.java` class, calls the `getPropertiesHelper()` method. 
 
 === Adding the @Retry and @Fallback annotations
 
-Because of the 503 HTTP response that was returned,
-the `inventory` microservice is now able to recognise that the `system` microservice was taken
-down for maintenance. As a result, the response throws an IOException.
+The `inventory` microservice is now able to recognize that the `system` microservice
+was taken down for maintenance because of the 503 HTTP response. This method throws an IOException to simulate the system being unavailable.
 Now, set a fallback method to deal with this failure.
 
 Create the `InventoryManager` class in the 
@@ -193,15 +192,15 @@ Create the `InventoryManager` class in the
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_retry_fallback]
 ----
 
-The `@Retry` annotation dictates the conditions that determine if the microservice should reattempt to establish a connection
-to the `system` service and how many times it should retry. In this example, the microservice retries three times.
+The `@Retry` annotation dictates the conditions that determine if the `inventory` service should reattempt to establish a connection
+to the `system` service and how many times it should retry. In this example, the `inventory` service retries three times.
 The `@Fallback` annotation dictates which method to call when the retries are unsuccessful. In this
-example, you can use the `fallbackForGet` method.
+example, use the `fallbackForGet` method.
 
 The `fallbackForGet()` method, which is added as the designated fallback method for the original
-`get()` method, checks to see if the system's properties exist in the inventory. If the properties do 
-not exist, the application has likely been unsuccessful in reachig the `system`
-service to get the system’s properties. Thus, the method prints out a JSON warning 
+`get()` method, checks to see if the system's properties exist in the inventory. If the properties 
+variable is null, the system properties entry is not found in the inventory.
+Thus, the method prints out a JSON warning 
 message in the browser. Otherwise, this method returns the cached property values.
 
 You have now successfully set up the application to be fault tolerant.
@@ -259,7 +258,7 @@ changed configuration file and the retry counter.
 
 Let’s break down the test cases:
 
-* `testFallbackForGet()` sends a request to `inventory` service to get the systems properties for a
+* The `testFallbackForGet()` test case sends a request to `inventory` service to get the systems properties for a
 hostname, when `system` service is available. Then, it puts the `system` service on maintenance. The
 `inventory` service returns the properties from making a connection to `system` service.
 After that, it makes a second request to `inventory` service to return the system properties for that
@@ -267,7 +266,7 @@ hostname. The fallback method from `inventory` service is called to return the c
 Lastly, it asserts if the system properties returned from the first request were more than the second
 request.
 
-* `testRetryGettingSystemProperties()` also sends a request to `inventory` service to try to get the
+* The `testRetryGettingSystemProperties()` test case also sends a request to `inventory` service to try to get the
 system properties. Then, it reads the retry counter in `/inventory/retries` endpoint to assert it 
 with the number of retries happened to get the system properties from `inventory` service. The 
 `inventory` service should retry the same number of times as stated by the `maxRetries` attribute
