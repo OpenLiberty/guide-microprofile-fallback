@@ -146,7 +146,7 @@ include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[t
 ----
 
 The service displays the system properties for a specific host.
-The `inMaintenance()` condition determines the system properties are returned only if you
+The `inMaintenance()` condition determines that the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the `start/resource/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
