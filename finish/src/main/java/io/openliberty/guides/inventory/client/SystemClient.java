@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018 IBM Corporation and others.
+ * Copyright (c) 2017, 2018 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,9 +13,6 @@
 // tag::throw_IOException[]
 package io.openliberty.guides.inventory.client;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Properties;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation.Builder;
@@ -23,6 +20,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.Properties;
+import java.io.IOException;
+import java.net.URI;
 
 public class SystemClient {
 
@@ -35,7 +35,7 @@ public class SystemClient {
     private final String SYSTEM_PROPERTIES = "/system/properties";
     private final String PROTOCOL = "http";
 
-    private String url;
+    private URI uri;
     private Builder clientBuilder;
 
     public void init(String hostname) {
@@ -49,20 +49,20 @@ public class SystemClient {
     // tag::javadoc[]
     /**
      * Helper method to set the attributes.
-     * 
+     *
      * @param hostname
      * @param port
      */
     // end::javadoc[]
     private void initHelper(String hostname, int port) {
-        this.url = buildUrl(PROTOCOL, hostname, port, SYSTEM_PROPERTIES);
-        this.clientBuilder = buildClientBuilder(this.url);
+        this.uri = buildUri(PROTOCOL, hostname, port, SYSTEM_PROPERTIES);
+        this.clientBuilder = buildClientBuilder();
     }
 
     // tag::javadoc[]
     /**
      * Wrapper function that gets properties
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -83,15 +83,13 @@ public class SystemClient {
      *            - port number.
      * @param path
      *            - Note that the path needs to start with a slash!!!
-     * @return String representation of the URI to the system properties
-     *         service.
+     * @return URI of the system properties service.
      */
     // end::javadoc[]
-    protected String buildUrl(String protocol, String host, int port,
+    protected URI buildUri(String protocol, String host, int port,
             String path) {
         try {
-            URI uri = new URI(protocol, null, host, port, path, null, null);
-            return uri.toString();
+            return new URI(protocol, null, host, port, path, null, null);
         } catch (Exception e) {
             System.err.println("Exception thrown while building the URL: "
                     + e.getMessage());
@@ -102,15 +100,15 @@ public class SystemClient {
     // tag::javadoc[]
     /**
      * Method that creates the client builder
-     * 
+     *
      * @param urlString
      * @return
      */
     // end::javadoc[]
-    protected Builder buildClientBuilder(String urlString) {
+    protected Builder buildClientBuilder() {
         try {
             Client client = ClientBuilder.newClient();
-            Builder builder = client.target(urlString).request();
+            Builder builder = client.target(this.uri).request();
             return builder.header(HttpHeaders.CONTENT_TYPE,
                                   MediaType.APPLICATION_JSON);
         } catch (Exception e) {
@@ -123,7 +121,7 @@ public class SystemClient {
     // tag::javadoc[]
     /**
      * Helper method that processes the request
-     * 
+     *
      * @param builder
      * @return
      * @throws IOException
