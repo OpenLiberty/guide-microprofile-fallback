@@ -24,9 +24,7 @@ import java.io.IOException;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.MediaType;
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.After;
 import org.junit.Before;
@@ -38,15 +36,11 @@ public class FaultToleranceTest {
     private static String port;
     private static String baseUrl;
     private Response response;
-
     private Client client;
 
-    private final String INVENTORY = "inventory/";
     private final String INVENTORY_LOCALHOST = "inventory/systems/localhost/";
     private final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
     private final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
-    private final String RETRIES = "retries";
-    private final String RESET = "/reset";
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -64,13 +58,12 @@ public class FaultToleranceTest {
     public void teardown() {
         client.close();
         response.close();
-        changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
+        //changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
     }
 
     @Test
     public void testSuite() throws InterruptedException {
         testFallbackForGet();
-        testRetryGettingSystemProperties();
     }
 
     //tag::javadoc[]
@@ -101,29 +94,36 @@ public class FaultToleranceTest {
         assertTrue("The total number of properties from the @Fallback method is not smaller than the number from the system service, as expected.", propertiesSize > propertiesSizeFallBack);
         changeSystemProperty(SYSTEM_MAINTENANCE_TRUE, SYSTEM_MAINTENANCE_FALSE);
     }
-
-    public void testRetryGettingSystemProperties() {
-        changeSystemProperty(SYSTEM_MAINTENANCE_FALSE, SYSTEM_MAINTENANCE_TRUE);
-        resetRetryCounter();
-        response = this.getResponse(baseUrl + INVENTORY_LOCALHOST);
-        assertResponse(baseUrl, response);
-        response = this.getResponse(baseUrl + INVENTORY + RETRIES);
-        assertResponse(baseUrl, response);
-        JsonObject obj = response.readEntity(JsonObject.class);
-        int getCounterValue = obj.getJsonObject("Inventory").getInt("getRetryCounter");
-        int expectedHits = 4;
-        assertEquals("The total number of properties returned from @Retry does not match the expected number", getCounterValue, expectedHits);
-        resetRetryCounter();
-    }
-
+    
+    // tag::javadoc[]
+    /**
+     * Returns response information from the specified URL.
+     * @param url
+     * @return
+     */
+    // end::javadoc[]
     private Response getResponse(String url) {
         return client.target(url).request().get();
     }
-
+    
+    // tag::javadoc[]
+    /**
+     * Asserts that the given URL has the correct response code of 200.
+     * @param url
+     * @param response
+     */
+    // end::javadoc[]
     private void assertResponse(String url, Response response) {
         assertEquals("Incorrect response code from " + url, 200, response.getStatus());
     }
-
+    
+    // tag::javadoc[]
+    /**
+     * Changes the system property from old value to new value.
+     * @param oldValue
+     * @param newValue
+     */
+    // end::javadoc[]
     private void changeSystemProperty(String oldValue, String newValue) {
         try {
             String fileName = System.getProperty("user.dir").split("target")[0]
@@ -143,13 +143,5 @@ public class FaultToleranceTest {
             e.printStackTrace();
         }
     }
-
-    public void resetRetryCounter() {
-        WebTarget target = client.target(baseUrl + INVENTORY + RETRIES + RESET);
-        Response retryRsp = target.request(MediaType.TEXT_PLAIN).get();
-        assertResponse(baseUrl, retryRsp);
-        retryRsp.close();
-    }
-
 }
 // end::ft_testing[]

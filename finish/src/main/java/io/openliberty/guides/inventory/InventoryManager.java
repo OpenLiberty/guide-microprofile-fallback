@@ -17,31 +17,18 @@ package io.openliberty.guides.inventory;
 import java.io.IOException;
 import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import org.eclipse.microprofile.faulttolerance.Fallback;
-import org.eclipse.microprofile.faulttolerance.Retry;
 import io.openliberty.guides.inventory.client.SystemClient;
 import io.openliberty.guides.inventory.model.InventoryList;
-import io.openliberty.guides.system.SystemConfig;
 
 @ApplicationScoped
 public class InventoryManager {
 
     private InventoryList invList = new InventoryList();
     private SystemClient systemClient = new SystemClient();
-    private static int retryCounter = 0;
-  
-    @Inject SystemConfig systemConfig;
 
-    @Retry(retryOn = IOException.class, maxRetries = 3)
     @Fallback(fallbackMethod = "fallbackForGet")
     public Properties get(String hostname) throws IOException {
-        if (systemConfig.isInMaintenance()) {
-            retryCounter++;
-        }
         systemClient.init(hostname);
         Properties properties = systemClient.getProperties();
         if (properties != null) {
@@ -62,18 +49,6 @@ public class InventoryManager {
 
     public InventoryList list() {
         return invList;
-    }
-
-    public static JsonObject getRetryCounter() {
-        JsonObjectBuilder methods = Json.createObjectBuilder();
-        methods.add("getRetryCounter", retryCounter);
-        JsonObjectBuilder retries = Json.createObjectBuilder();
-        retries.add("Inventory", methods.build());
-        return retries.build();
-    }
-    
-    public static void resetRetryCounter() {
-        retryCounter = 0;
     }
 }
 // tag::add_retry_fallback[]
