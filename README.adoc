@@ -28,11 +28,11 @@ You'll explore how to manage the impact of failures using MicroProfile Fault Tol
 You will learn how to build fault-tolerant microservices in an inventory management application so
 that you can reduce the impact from failure and ensure continued operation of services.
 
-The application that you will be working with is an `inventory` service, which stores the information
-about various JVMs that run on different systems. When you make a request to the `inventory` service
-to retrieve the JVM system properties of a particular host, the `inventory` service communicates with
-the `system` service on that host to get these system properties.
-The `inventory` service then stores and returns the system properties.
+The application that you will be working with is an `inventory` service, which collects,
+stores and returns the system properties.
+It uses the `system` service to retrieve the system properties for a particular host.
+You will add fault tolerance to the `inventory` service so that it reacts accordingly with the `system`
+service being unavailable.
 
 You will use the `@Fallback` annotations from the MicroProfile (MP) Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
@@ -40,7 +40,8 @@ a failed execution. Fault Tolerance enables the application to function even whe
 is unavailable, making service invocation more resilient.
 
 The implementation of the application and its services are provided for you.
-You can find the `system` service in the `src/main/java/io/openliberty/guides/system` directory, and you can find the `inventory`
+You can find the `system` service in the `src/main/java/io/openliberty/guides/system` directory,
+and you can find the `inventory`
 service in the `src/main/java/io/openliberty/guides/inventory` directory.
 These two services are RESTful web services, if you want to learn how to
 create one, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
@@ -70,7 +71,7 @@ overloading and creating an indefinite wait or timeout by the clients
 
 * Bulkhead: Isolates failures in part of the system while the rest of the system can still function
 
-In this guide, you will focus on the `@Fallback` policies.
+In this guide, you will focus on the `@Fallback` policy.
 
 
 // =================================================================================================
@@ -133,47 +134,30 @@ to build fault-tolerant microservices with the MicroProfile Fault Tolerance API.
 The `mpFaultTolerance-1.0` feature is also enabled in the `src/main/liberty/config/server.xml`
 file.
 
-
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
 dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
 
-First, create the `SystemResource` class in the
-`src/main/java/io/openliberty/guides/system/SystemResource.java` file:
-
-[source, java]
-----
-include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
-----
-
-The service displays the system properties for a specific host.
-The `inMaintenance()` condition determines that the system properties are returned only if you
+First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
+the `inMaintenance()` condition, which determines the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the `start/resource/CustomConfigSource.json` file.
+to `false` in the `resource/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, create the `SystemClient` class in the
-`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=throw_IOException;!copyright;!javadoc]
-----
-This class is a client for the `system` service.
-
-This class includes the `getPropertiesHelper()` method. This method makes a request to the
-`system` service and checks for the response. If the request response is a `Status.OK` message
-that corresponds to the 200 status code, the method returns the system properties from the `system` service request.
-In this guide, a new `if` statement is added to the method to check if the response is specifically
+Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
+includes the `getPropertiesHelper()` method to make a request to the
+`system` service and check for the response.
+A condition is added in this method to stage fault tolerance in the application.
+This condition checks if the response is specifically
 a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
 
 The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.
-You will look into `InventoryManager` class in more detail in the next section.
+You will look into the `InventoryManager` class in more detail in the next section.
 
 
 // =================================================================================================
@@ -247,17 +231,13 @@ Create the `FaultToleranceTest` class in the
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
 ----
 
-The `@BeforeClass` annotation indicates that this method executes before any of the other test cases. In
-this case, the `oneTimeSetup()` method retrieves the port number for the Open Liberty server and
-builds a base URL string that is used throughout the tests.
-
 The `@Before` and `@After` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
 The teardown method simply destroys this client instance as well as the HTTP responses.
 
-Let’s define the test cases:
+Let’s define the test case:
 
 * The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
 host name when the `system` service is available. Then, it puts the `system` service on maintenance.
@@ -265,8 +245,7 @@ Afterward, it makes a second request to the `inventory` service to return the sy
 host name. This time the `inventory` service calls the fallback method to return the cached properties.
 The test case then asserts whether the system properties that returned from the first request were more than the second.
 
-To force these test cases to execute in a particular order, put them in a `testSuite()` method and label
-it with a `@Test` annotation so that the method automatically executes when your test class runs.
+The `@Test` annotation indicates that the method automatically executes when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
@@ -295,7 +274,7 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, remove the change system property method on
+To see if the tests detect a failure, remove the change system property utility call on
 the `FaultToleranceTest.java` file. Rerun the Maven build. You see a test failure occur for the
 `testFallbackForGet()` test case.
 
