@@ -24,7 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import it.io.openliberty.guides.util.TestUtils;
+import it.io.openliberty.guides.utils.TestUtils;
 
 public class FaultToleranceTest {
 

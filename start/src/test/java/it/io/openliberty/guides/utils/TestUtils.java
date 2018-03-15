@@ -10,7 +10,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-package it.io.openliberty.guides.util;
+package it.io.openliberty.guides.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
