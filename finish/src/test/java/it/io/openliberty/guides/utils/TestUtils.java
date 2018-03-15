@@ -10,7 +10,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-package it.io.openliberty.guides.util;
+package it.io.openliberty.guides.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,7 +42,7 @@ public class TestUtils {
     public static void changeSystemProperty(String oldValue, String newValue) {
         try {
             String fileName = System.getProperty("user.dir").split("target")[0]
-                    + "/resource/CustomConfigSource.json";
+                    + "/resources/CustomConfigSource.json";
             BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
             String line = "";
             String oldContent = "", newContent = "";
