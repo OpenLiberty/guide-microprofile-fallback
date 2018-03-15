@@ -102,7 +102,7 @@ Point your browser to the `http://localhost:9080/inventory/systems/localhost` UR
 in JSON format with the system properties of your local JVM. When you visit this URL, some of these system
 properties, such as the OS name and user name are automatically stored in the inventory.
 
-Now, open the `finish/resource/CustomConfigSource.json` file and change the
+Now, open the `resources/CustomConfigSource.json` file and change the
 `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
@@ -142,7 +142,7 @@ see https://openliberty.io/guides/microprofile-config.html[Configuring microserv
 First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
 the `inMaintenance()` condition, which determines that the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the `resource/CustomConfigSource.json` file.
+to `false` in the `resources/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
@@ -204,12 +204,12 @@ specific host. Notice that the results from the two URLs are identical.
 
 You can test the fault tolerance mechanism of your application by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
-`start/resource/CustomConfigSource.json` file. After saving the file, go back to your browser and
+`resources/CustomConfigSource.json` file. After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
 the properties. Point your browser to the `http://localhost:9080/system/properties` URL again, and
 notice that it is no longer available. The cached system properties contain only the OS name and
 user name key and value pairs. When you're done, change the `io_openliberty_guides_system_inMaintenance`
-property value back to `false` in the `resource/CustomConfigSource.json` file.
+property value back to `false` in the `resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvnpackage.adoc[]
 
