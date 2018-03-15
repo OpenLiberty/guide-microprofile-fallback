@@ -29,12 +29,12 @@ You will learn how to build fault-tolerant microservices in an inventory managem
 that you can reduce the impact from failure and ensure continued operation of services.
 
 The application that you will be working with is an `inventory` service, which collects,
-stores and returns the system properties.
+stores, and returns the system properties.
 It uses the `system` service to retrieve the system properties for a particular host.
-You will add fault tolerance to the `inventory` service so that it reacts accordingly with the `system`
-service being unavailable.
+You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
+service is unavailable.
 
-You will use the `@Fallback` annotations from the MicroProfile (MP) Fault Tolerance
+You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
 a failed execution. Fault Tolerance enables the application to function even when one of its services
 is unavailable, making service invocation more resilient.
@@ -99,15 +99,14 @@ mvn clean install liberty:start-server
 ```
 
 Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL. You see a result
-in JSON format with the system properties of your local JVM. When you visit this URL, these system
-properties are automatically stored in the inventory.
+in JSON format with the system properties of your local JVM. When you visit this URL, some of these system
+properties, ie, the OS name and user name are automatically stored in the inventory.
 
 Now, open the `finish/resource/CustomConfigSource.json` file and change the
 `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
-Because the system service is now in maintenance, you see the cached properties from the systems for this localhost.
-For simplicity, only the OS name and user name are stored in the cache for each host.
+Because the `system` service is now in maintenance, you see the cached properties for this localhost.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
@@ -129,7 +128,7 @@ Now, navigate back to the `start` directory to begin.
 == Enabling fault tolerance in the application
 
 The MicroProfile Fault Tolerance API is added as a dependency to your `pom.xml` file. Look for
-the dependancy with the `org.eclipse.microprofile.fault-tolerance` group ID. Use this feature
+the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID. Use this feature
 to build fault-tolerant microservices with the MicroProfile Fault Tolerance API.
 The `mpFaultTolerance-1.0` feature is also enabled in the `src/main/liberty/config/server.xml`
 file.
@@ -141,7 +140,7 @@ or the other down for maintenance. If you want to learn more about setting up dy
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
 
 First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
-the `inMaintenance()` condition, which determines the system properties are returned only if you
+the `inMaintenance()` condition, which determines that the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the `resource/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
@@ -167,7 +166,8 @@ You will look into the `InventoryManager` class in more detail in the next secti
 === Adding the @Fallback annotation
 
 The `inventory` microservice is now able to recognize that the `system` microservice
-was taken down for maintenance because of the 503 HTTP response. This method throws an IOException to simulate the system being unavailable.
+was taken down for maintenance because of the 503 HTTP response.
+This method throws an IOException to simulate the system being unavailable.
 Now, set a fallback method to deal with this failure.
 
 Create the `InventoryManager` class in the
@@ -178,7 +178,7 @@ Create the `InventoryManager` class in the
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-The `@Fallback` annotation dictates which method to call when the retries are unsuccessful. In this
+The `@Fallback` annotation dictates which method to call when the automated retries are unsuccessful. In this
 example, use the `fallbackForGet` method.
 
 The `fallbackForGet()` method, which is the designated fallback method for the original
