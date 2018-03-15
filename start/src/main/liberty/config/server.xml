@@ -4,15 +4,11 @@
     <feature>jaxrs-2.0</feature>
     <feature>jsonp-1.0</feature>
     <feature>cdi-1.2</feature>
-    <!-- tag::config[] -->
     <feature>mpConfig-1.1</feature>
-    <!-- end::config[] -->
-    <!-- tag::fault_tolerance[] -->
     <feature>mpFaultTolerance-1.0</feature>
-    <!-- end::fault_tolerance[] -->
   </featureManager>
 
   <httpEndpoint host="*" httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
 
-  <webApplication location="microprofile-retry-fallback.war" contextRoot="/"/>
+  <webApplication location="microprofile-fallback.war" contextRoot="/"/>
 </server>

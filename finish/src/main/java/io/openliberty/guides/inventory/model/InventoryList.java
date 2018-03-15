@@ -18,59 +18,59 @@ import java.util.Properties;
 
 public class InventoryList {
 
-  private List<SystemEntry> systems = new ArrayList<SystemEntry>();
+    private List<SystemEntry> systems = new ArrayList<SystemEntry>();
 
-  public List<SystemEntry> getSystems() {
-    return systems;
-  }
-
-  public int getTotal() {
-    return systems.size();
-  }
-
-  public void addToInventoryList(String hostname, Properties systemProps) {
-    Properties props = new Properties();
-    props.setProperty("os.name", systemProps.getProperty("os.name"));
-    props.setProperty("user.name", systemProps.getProperty("user.name"));
-
-    SystemEntry host = new SystemEntry(hostname, props);
-    if (!systems.contains(host))
-      systems.add(host);
-  }
-  
-  public Properties findHost(String hostname) {
-    for (SystemEntry system : systems) {
-      if (system.getHostname().equals(hostname)) {
-        return system.getProperties();
-      }
-    }
-    return null;
-  }
-
-  class SystemEntry {
-
-    private final String hostname;
-    private final Properties properties;
-
-    public SystemEntry(String hostname, Properties properties) {
-      this.hostname = hostname;
-      this.properties = properties;
+    public List<SystemEntry> getSystems() {
+        return systems;
     }
 
-    public String getHostname() {
-      return hostname;
+    public int getTotal() {
+        return systems.size();
     }
 
-    public Properties getProperties() {
-      return properties;
+    public void addToInventoryList(String hostname, Properties systemProps) {
+        Properties props = new Properties();
+        props.setProperty("os.name", systemProps.getProperty("os.name"));
+        props.setProperty("user.name", systemProps.getProperty("user.name"));
+
+        SystemEntry host = new SystemEntry(hostname, props);
+        if (!systems.contains(host))
+            systems.add(host);
     }
 
-    @Override
-    public boolean equals(Object host) {
-      if (host instanceof SystemEntry) {
-        return hostname.equals(((SystemEntry) host).getHostname());
-      }
-      return false;
+    public Properties findHost(String hostname) {
+        for (SystemEntry system : systems) {
+            if (system.getHostname().equals(hostname)) {
+                return system.getProperties();
+            }
+        }
+        return null;
     }
-  }
+
+    class SystemEntry {
+
+        private final String hostname;
+        private final Properties properties;
+
+        public SystemEntry(String hostname, Properties properties) {
+            this.hostname = hostname;
+            this.properties = properties;
+        }
+
+        public String getHostname() {
+            return hostname;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        @Override
+        public boolean equals(Object host) {
+            if (host instanceof SystemEntry) {
+                return hostname.equals(((SystemEntry) host).getHostname());
+            }
+            return false;
+        }
+    }
 }
