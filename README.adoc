@@ -25,8 +25,14 @@ You'll explore how to manage the impact of failures using MicroProfile Fault Tol
 
 == What you'll learn
 
-You will learn how to build fault-tolerant microservices in an inventory management application so
-that you can reduce the impact from failure and ensure continued operation of services.
+You will learn how to use MicroProfile Fault Tolerance to build resilient microservices
+that reduce the impact from failure and ensure continued operation of services.
+
+MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
+Fault tolerance leverages different strategies to guide the execution and result of logic.
+Retry policies, bulkheads, and circuit breakers are popular concepts in this area.
+They dictate whether and when executions take place, and fallbacks offer an alternative result
+when an execution does not complete successfully.
 
 The application that you will be working with is an `inventory` service, which collects,
 stores, and returns the system properties.
@@ -36,42 +42,7 @@ service is unavailable.
 
 You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
-a failed execution. Fault Tolerance enables the application to function even when one of its services
-is unavailable, making service invocation more resilient.
-
-The implementation of the application and its services are provided for you.
-You can find the `system` service in the `src/main/java/io/openliberty/guides/system` directory,
-and you can find the `inventory`
-service in the `src/main/java/io/openliberty/guides/inventory` directory.
-These two services are RESTful web services, if you want to learn how to
-create one, see https://openliberty.io/guides/rest-intro.html[Creating a RESTful web service].
-
-// =================================================================================================
-// Why use MicroProfile Fault Tolerance?
-// =================================================================================================
-
-=== Why use MicroProfile Fault Tolerance?
-
-MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
-Fault tolerance leverages different strategies to guide the execution and result of logic.
-Retry policies, bulkheads, and circuit breakers are popular concepts in this area.
-They dictate whether and when executions take place, and fallbacks offer an alternative result
-when an execution does not complete successfully.
-
-MP Fault Tolerance offers the following fault tolerance policies:
-
-* Timeout: Defines a duration for timeout
-
-* Retry: Defines a criteria for when to retry
-
-* Fallback: Provides an alternative solution for a failed execution
-
-* CircuitBreaker: Offers a way to fail fast by automatically failing execution and also prevents the system from
-overloading and creating an indefinite wait or timeout by the clients
-
-* Bulkhead: Isolates failures in part of the system while the rest of the system can still function
-
-In this guide, you will focus on the `@Fallback` policy.
+a failed execution.
 
 
 // =================================================================================================
@@ -86,27 +57,27 @@ include::{common-includes}/gitclone.adoc[]
 
 === Try what you'll build
 
-The `finish` directory in the root of this guide contains the finished fault tolerance implementation
+The `finish` directory in the root of this guide contains the finished implementation
 for the application. You can give it a try before you proceed with building your own.
 
-To try out the application, first navigate to the `finish` directory. Then, execute the following
-Maven goals to build the application and run it inside Open Liberty:
+To try out the application, navigate to the `finish` directory and run the following command:
 
 ```
-cd finish
 mvn clean install liberty:start-server
 
 ```
 
-Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL. You see a result
-in JSON format with the system properties of your local JVM. When you visit this URL, some of these system
+Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
+`inventory` service with a `localhost` host name. You see the system properties for this host.
+When you visit this URL, some of these system
 properties, such as the OS name and user name are automatically stored in the inventory.
 
 Now, open the `resources/CustomConfigSource.json` file and change the
 `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
-Because the `system` service is now in maintenance, you see the cached properties for this localhost.
+The fallback mechanism is triggered because the `system` service is now in maintenance.
+You see the cached properties for this `localhost`.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
@@ -122,16 +93,18 @@ Now, navigate back to the `start` directory to begin.
 
 
 // =================================================================================================
-// Enabling fault tolerance in the application
+// Enabling fault tolerance
 // =================================================================================================
 
-== Enabling fault tolerance in the application
+== Enabling fault tolerance
 
 The MicroProfile Fault Tolerance API is added as a dependency to your `pom.xml` file. Look for
-the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID. Use this feature
-to build fault-tolerant microservices with the MicroProfile Fault Tolerance API.
+the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID.
+Add this dependency to use MicroProfile Fault Tolerance API in your code to use the
+fault tolerance policies in your microservices.
+
 The `mpFaultTolerance-1.0` feature is also enabled in the `src/main/liberty/config/server.xml`
-file.
+file to enables MicroProfile Fault Tolerance support in Open Liberty
 
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
@@ -148,7 +121,7 @@ Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which mak
 Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
 includes the `getPropertiesHelper()` method to make a request to the
 `system` service and check for the response.
-A condition is added in this method to stage fault tolerance in the application.
+A condition is added in this method to stage the fault tolerance in the application.
 This condition checks if the response is specifically
 a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
@@ -184,10 +157,10 @@ example, use the `fallbackForGet` method.
 The `fallbackForGet()` method, which is the designated fallback method for the original
 `get()` method, checks to see if the system's properties exist in the inventory. If the properties
 variable is null, the system properties entry is not found in the inventory.
-Thus, the method prints out a JSON warning
+Thus, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values.
 
-You have now successfully set up the application to be fault tolerant.
+You have now successfully set up your fault tolerant microservices.
 
 
 // =================================================================================================
@@ -198,17 +171,23 @@ include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
-You receive a result in JSON format with the system properties of your local JVM. Next, point your
-browser to the `http://localhost:9080/system/properties` URL, which retrieves the information for a
-specific host. Notice that the results from the two URLs are identical.
+You receive the system properties of your local JVM from the `inventory` service. Next, point your
+browser to the `http://localhost:9080/system/properties` URL for the `system` service,
+which retrieves the system properties for the specific `localhost`.
+Notice that the results from the two URLs are identical because `inventory` service gets its results from
+calling the `system` service.
 
-You can test the fault tolerance mechanism of your application by dynamically changing
+You can test the fault tolerance mechanism of your microservices by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file. After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. Point your browser to the `http://localhost:9080/system/properties` URL again, and
-notice that it is no longer available. The cached system properties contain only the OS name and
-user name key and value pairs. When you're done, change the `io_openliberty_guides_system_inMaintenance`
+the properties. The `fallbackForGet()` method is being called when the `system` service is not available.
+The cached system properties contain only the OS name and user name key and value pairs.
+
+To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
+You see the service displays a 503 HTTP response code.
+
+When you're done, change the `io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvnpackage.adoc[]
@@ -219,9 +198,8 @@ include::{common-includes}/mvnpackage.adoc[]
 
 == Testing the application
 
-Although you can test your application manually, automated tests have the advantage of
-triggering a failure whenever a code change introduces a defect. Because the application is a RESTful
-web service application, you can use JUnit and the REST Client API to write tests.
+You can test your application manually, but automated tests ensure code quality because they trigger a failure
+whenever a code change introduces a defect. JUnit and the JAX-RS Client API provide a simple environment for you to write tests.
 
 Create the `FaultToleranceTest` class in the
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
@@ -239,11 +217,9 @@ The teardown method simply destroys this client instance as well as the HTTP res
 
 Let’s define the test case:
 
-* The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
-host name when the `system` service is available. Then, it puts the `system` service on maintenance.
-Afterward, it makes a second request to the `inventory` service to return the system properties for that
-host name. This time the `inventory` service calls the fallback method to return the cached properties.
-The test case then asserts whether the system properties that returned from the first request were more than the second.
+The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
+host name before and after the `system` service becomes unavailable. Then it asserts outputs from the two requests
+that they are different from each other.
 
 The `@Test` annotation indicates that the method automatically executes when your test class runs.
 
@@ -274,9 +250,10 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, remove the change system property utility call on
-the `FaultToleranceTest.java` file. Rerun the Maven build. You see a test failure occur for the
-`testFallbackForGet()` test case.
+To see if the tests detect a failure, comment out the `changeSystemProperty()` methods
+in the `FaultToleranceTest.java` file. Rerun the Maven build.
+You see a test failure occur for the `testFallbackForGet()` test case.
+
 
 // =================================================================================================
 // Great work! You're done!
@@ -284,7 +261,7 @@ the `FaultToleranceTest.java` file. Rerun the Maven build. You see a test failur
 
 == Great work! You're done!
 
-You have just completed building and testing a microservice application with MicroProfile Fault Tolerance and Open Liberty.
+You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
 
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
