@@ -25,7 +25,7 @@ You'll explore how to manage the impact of failures using MicroProfile Fault Tol
 
 == What you'll learn
 
-You will learn how to use MicroProfile Fault Tolerance to build resilient microservices
+You will learn how to use MicroProfile (MP) Fault Tolerance to build resilient microservices
 that reduce the impact from failure and ensure continued operation of services.
 
 MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
@@ -70,7 +70,7 @@ mvn clean install liberty:start-server
 Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
 `inventory` service with a `localhost` host name. You see the system properties for this host.
 When you visit this URL, some of these system
-properties, such as the OS name and user name are automatically stored in the inventory.
+properties, such as the OS name and user name, are automatically stored in the inventory.
 
 Now, open the `resources/CustomConfigSource.json` file and change the
 `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
@@ -103,8 +103,8 @@ the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID.
 Add this dependency to use MicroProfile Fault Tolerance API in your code to use the
 fault tolerance policies in your microservices.
 
-The `mpFaultTolerance-1.0` feature is also enabled in the `src/main/liberty/config/server.xml`
-file to enables MicroProfile Fault Tolerance support in Open Liberty
+Enable the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration
+to turn on MicroProfile Fault Tolerance in Open Liberty, which has been done for you.
 
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
@@ -181,7 +181,8 @@ You can test the fault tolerance mechanism of your microservices by dynamically 
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file. After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. The `fallbackForGet()` method is being called when the `system` service is not available.
+the properties. The `fallbackForGet()` method, which is the fallback designated method is being called
+when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
 To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
