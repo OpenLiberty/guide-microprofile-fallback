@@ -16,7 +16,9 @@ package io.openliberty.guides.inventory;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.enterprise.context.ApplicationScoped;
+
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import io.openliberty.guides.inventory.client.SystemClient;
 import io.openliberty.guides.inventory.model.InventoryList;
@@ -25,12 +27,13 @@ import io.openliberty.guides.inventory.model.InventoryList;
 public class InventoryManager {
 
     private InventoryList invList = new InventoryList();
-    private SystemClient systemClient = new SystemClient();
 
     @Fallback(fallbackMethod = "fallbackForGet")
     public Properties get(String hostname) throws IOException {
+        SystemClient systemClient = new SystemClient();
         systemClient.init(hostname);
         Properties properties = systemClient.getProperties();
+
         if (properties != null) {
             invList.addToInventoryList(hostname, properties);
         }
@@ -41,7 +44,8 @@ public class InventoryManager {
         Properties properties = invList.findHost(hostname);
         if (properties == null) {
             Properties msgProp = new Properties();
-            msgProp.setProperty(hostname, "System is not found in the inventory");
+            msgProp.setProperty(hostname,
+                                "System is not found in the inventory");
             return msgProp;
         }
         return properties;
