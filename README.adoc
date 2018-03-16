@@ -68,7 +68,7 @@ mvn clean install liberty:start-server
 ```
 
 Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
-`inventory` service with a `localhost` host name. You see the system properties for this host.
+`inventory` service with a localhost host name. You see the system properties for this host.
 When you visit this URL, some of these system
 properties, such as the OS name and user name, are automatically stored in the inventory.
 
@@ -77,7 +77,7 @@ Now, open the `resources/CustomConfigSource.json` file and change the
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
-You see the cached properties for this `localhost`.
+You see the cached properties for this localhost.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
@@ -98,19 +98,21 @@ Now, navigate back to the `start` directory to begin.
 
 == Enabling fault tolerance
 
-The MicroProfile Fault Tolerance API is added as a dependency to your `pom.xml` file. Look for
+The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
 the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID.
-Add this dependency to use MicroProfile Fault Tolerance API in your code to use the
-fault tolerance policies in your microservices.
+Adding this dependency allows you to use the fault tolerance policies in your microservices.
 
-Enable the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration
-to turn on MicroProfile Fault Tolerance in Open Liberty, which has been done for you.
+You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
+which turn on MicroProfile Fault Tolerance in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
 dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
+
+The following two steps are setting up the dynamic configuration on the `system` service and its client.
+You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
 First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
 the `inMaintenance()` condition, which determines that the system properties are returned only if you
@@ -138,9 +140,9 @@ You will look into the `InventoryManager` class in more detail in the next secti
 
 === Adding the @Fallback annotation
 
-The `inventory` microservice is now able to recognize that the `system` microservice
-was taken down for maintenance because of the 503 HTTP response.
-This method throws an IOException to simulate the system being unavailable.
+The `inventory` service is now able to recognize that the `system` service
+was taken down for maintenance.
+An IOException is thrown to simulate the `system` service being unavailable.
 Now, set a fallback method to deal with this failure.
 
 Create the `InventoryManager` class in the
@@ -151,14 +153,13 @@ Create the `InventoryManager` class in the
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-The `@Fallback` annotation dictates which method to call when the automated retries are unsuccessful. In this
+The `@Fallback` annotation dictates a method to call when encounters a failed execution. In this
 example, use the `fallbackForGet` method.
 
 The `fallbackForGet()` method, which is the designated fallback method for the original
-`get()` method, checks to see if the system's properties exist in the inventory. If the properties
-variable is null, the system properties entry is not found in the inventory.
-Thus, the method prints out a warning
-message in the browser. Otherwise, this method returns the cached property values.
+`get()` method, checks to see if the system's properties exist in the inventory.
+If the system properties entry is not found in the inventory, the method prints out a warning
+message in the browser. Otherwise, this method returns the cached property values from the inventory.
 
 You have now successfully set up your fault tolerant microservices.
 
@@ -172,14 +173,15 @@ include::{common-includes}/mvnbuild.adoc[]
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 You receive the system properties of your local JVM from the `inventory` service. Next, point your
-browser to the `http://localhost:9080/system/properties` URL for the `system` service,
-which retrieves the system properties for the specific `localhost`.
+browser to the the `system` service URL, which is `http://localhost:9080/system/properties`,
+to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because `inventory` service gets its results from
 calling the `system` service.
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
 the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
-`resources/CustomConfigSource.json` file. After saving the file, go back to your browser and
+`resources/CustomConfigSource.json` file. This turns the `system` service down in maintenance.
+After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
 the properties. The `fallbackForGet()` method, which is the fallback designated method is being called
 when the `system` service is not available.
@@ -215,8 +217,6 @@ These methods are generally used to perform any setup and teardown tasks. In thi
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
 The teardown method simply destroys this client instance as well as the HTTP responses.
-
-Let’s define the test case:
 
 The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
 host name before and after the `system` service becomes unavailable. Then it asserts outputs from the two requests
