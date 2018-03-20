@@ -59,7 +59,7 @@ public class FaultToleranceTest {
     public void testFallbackForGet() throws InterruptedException {
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
-        assertResponse(TestUtils.baseUrl, response);
+        assertResponse(TestUtils.BASE_URL, response);
         JsonObject obj = response.readEntity(JsonObject.class);
         int propertiesSize = obj.size();
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_FALSE,
@@ -67,11 +67,11 @@ public class FaultToleranceTest {
         Thread.sleep(3000);
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
-        assertResponse(TestUtils.baseUrl, response);
+        assertResponse(TestUtils.BASE_URL, response);
         obj = response.readEntity(JsonObject.class);
         int propertiesSizeFallBack = obj.size();
         assertTrue("The total number of properties from the @Fallback method "
-                + "is not smaller than the number from the system service, as expected.",
+                + "should be smaller than the number from the system service.",
                    propertiesSize > propertiesSizeFallBack);
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);

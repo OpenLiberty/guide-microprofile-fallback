@@ -36,7 +36,7 @@ They dictate whether and when executions take place, and fallbacks offer an alte
 when an execution does not complete successfully.
 
 The application that you will be working with is an `inventory` service, which collects,
-stores, and returns the system properties.
+stores, and returns system properties.
 It uses the `system` service to retrieve the system properties for a particular host.
 You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
 service is unavailable.
@@ -69,16 +69,15 @@ mvn clean install liberty:start-server
 ```
 
 Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
-`inventory` service with a localhost host name. You see the system properties for this host.
-When you visit this URL, some of these system
-properties, such as the OS name and user name, are automatically stored in the inventory.
+`inventory` service with a localhost host name. You see all of the system properties for this host from the `system` service.
+When you visit this URL, only the OS name and user name properties are stored in the inventory.
 
 Now, open the `resources/CustomConfigSource.json` file and change the
 `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
-You see the cached properties for this localhost.
+You see the cached properties that were stored in the inventory.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
@@ -106,7 +105,7 @@ Adding this dependency allows you to use the fault tolerance policies in your mi
 You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
-Now, you need a failure to occur in order for fault tolerance fallback mechanism to take place and ensure the continuity of the microservice.
+You need a failure to occur in order for fault tolerance fallback mechanism to take place and ensure the continuity of the microservice.
 In this guide, the failure is to throw an exception when the `system` service is not available, or down for maintenance.
 First, dynamic configuration from MicroProfile Configuration is used to easily manage the availability of the `system` service.
 A configuration is injected into the `system` service to dynamically read a system property that you can set to bring the service up or down.
@@ -130,7 +129,7 @@ the service client class in the `src/main/java/io/openliberty/guides/inventory/c
 
 The `inventory` service is now able to recognize that the `system` service
 was taken down for maintenance.
-An IOException is thrown to simulate the `system` service is unavailable.
+An IOException is thrown to simulate that the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
 Create the `InventoryManager` class in the
@@ -160,7 +159,8 @@ include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
-You receive the system properties of your local JVM from the `inventory` service. Next, point your
+You receive all of the system properties in your local JVM.
+When you visit this URL, only the OS name and user name properties are stored in the inventory. Next, point your
 browser to the `system` service URL, which is located at `http://localhost:9080/system/properties`,
 to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
@@ -171,9 +171,9 @@ the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. The `fallbackForGet()` method, which is the designated fallback method, is called
+the properties, which contain only the OS name and user name key and value pairs.
+The `fallbackForGet()` method, which is the designated fallback method, was called
 when the `system` service is not available.
-The cached system properties contain only the OS name and user name key and value pairs.
 
 To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
 You see that the service displays a 503 HTTP response code.
@@ -212,6 +212,8 @@ to ensure that they are different from each other.
 
 The `@Test` annotation indicates that the method automatically executes when your test class runs.
 
+The TestUtils class includes utility methods to make connects to the services and automate property changes.
+
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
 the code.
@@ -239,9 +241,11 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, comment out the `changeSystemProperty()` methods
-in the `FaultToleranceTest.java` file. Rerun the Maven build.
+To see if the tests detect a failure, comment out the `@Fallback` annotation
+in the `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file. Rerun the Maven build.
 You see a test failure occur for the `testFallbackForGet()` test case.
+The test failure indicates a 500 HTTP response code because the fallback mechanism was not in place to action
+when the IOException was thrown.
 
 
 // =================================================================================================
