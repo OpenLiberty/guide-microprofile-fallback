@@ -106,33 +106,20 @@ Adding this dependency allows you to use the fault tolerance policies in your mi
 You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
-To easily work through this guide, the two provided microservices are set up to run
-on the same server. To simulate the availability of the services and then to enable fault tolerance,
-dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
-or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
-see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
+Now, you need a failure to occur in order for fault tolerance fallback mechanism to take place and ensure the continuity of the microservice.
+In this guide, the failure is to throw an exception when the `system` service is not available, or down for maintenance.
+First, dynamic configuration from MicroProfile Configuration is used to easily manage the availability of the `system` service.
+A configuration is injected into the `system` service to dynamically read a system property that you can set to bring the service up or down.
+With this configuration set in place, the next step is to have the service client to react with a failure when the service is down.
+The failure is to throw an IOException.
 
-The following two steps set up the dynamic configuration on the `system` service and its client.
-You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
-
-First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
-the `inMaintenance()` condition, which determines that the system properties are returned only if you
-set the `io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the `resources/CustomConfigSource.json` file.
-Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
-
-Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
-includes the `getPropertiesHelper()` method to make a request to the
-`system` service and check for the response.
-A condition is added in this method to stage the fault tolerance in the application.
-This condition checks if the response is specifically
-a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called
-is unable to handle the request because of a temporary overload or scheduled maintenance, which would
-likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
-
-The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
-The `InventoryManager` class calls this public method.
-You will look into the `InventoryManager` class in more detail in the next section.
+The simulation for the `system` service being in maintenance is provided for you.
+To learn more about dynamic configuration and how it’s enabled in a microservice, see
+https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
+The `system` client that handles the service being in maintenance and then throws an exception is also provided for you.
+If you want to see the simulation and setup,
+refer to the `system` service class in the `src/main/java/io/openliberty/guides/system/SystemResource.java` file, and
+the service client class in the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file.
 
 
 // =================================================================================================
