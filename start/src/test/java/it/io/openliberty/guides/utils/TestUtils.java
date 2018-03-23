@@ -24,8 +24,8 @@ public class TestUtils {
 
     private static String port = System.getProperty("liberty.test.port");
 
-    public static String baseUrl = "http://localhost:" + port + "/";
-    public static final String INVENTORY_LOCALHOST_URL = baseUrl + "inventory/systems/localhost/";
+    public static String BASE_URL = "http://localhost:" + port + "/";
+    public static final String INVENTORY_LOCALHOST_URL = BASE_URL + "inventory/systems/localhost/";
     public static final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
     public static final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
 
