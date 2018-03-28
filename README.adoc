@@ -29,21 +29,16 @@ You will learn how to use MicroProfile (MP) Fault Tolerance to build resilient m
 that reduce the impact from failure and ensure continued operation of services.
 
 MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
-Fault tolerance leverages different strategies to guide the execution and result of logic.
-As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website],
-retry policies, bulkheads, and circuit breakers are popular concepts in this area.
-They dictate whether and when executions take place, and fallbacks offer an alternative result
-when an execution does not complete successfully.
-
-The application that you will be working with is an `inventory` service, which collects,
-stores, and returns system properties.
-It uses the `system` service to retrieve the system properties for a particular host.
-You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
-service is unavailable.
-
-You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
+You will build the fault-tolerance microserivce with the
+`@Fallback` annotation from the MP Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
 a failed execution.
+
+The microservice that you will be working with is an `inventory` service, which collects,
+stores, and returns system properties.
+It uses the `system` service to retrieve the system properties for a particular host.
+You will add fallback mechanism to the `inventory` service so that it reacts accordingly when the `system`
+service is unavailable.
 
 
 // =================================================================================================
@@ -77,7 +72,7 @@ Now, open the `resources/CustomConfigSource.json` file and change the
 to restart the server. Next, return to your browser and point back to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
-You see the cached properties that were stored in the inventory.
+You see the cached properties that were previously stored in the inventory.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
@@ -105,20 +100,15 @@ Adding this dependency allows you to use the fault tolerance policies in your mi
 You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
-You need a failure to occur in order for fault tolerance fallback mechanism to take place and ensure the continuity of the microservice.
-In this guide, the failure is to throw an exception when the `system` service is not available, or down for maintenance.
-First, dynamic configuration from MicroProfile Configuration is used to easily manage the availability of the `system` service.
-A configuration is injected into the `system` service to dynamically read a system property that you can set to bring the service up or down.
-With this configuration set in place, the next step is to have the service client to react with a failure when the service is down.
-The failure is to throw an IOException.
+To demonstrate the `@Fallback` mechanism, the microservice simulates the `system` service is in maintenance.
+The `system` service is injected with a dynamic configuration property by using MicroProfile Configuration.
+The configuration enables you to take it down or bring it up easily. By changing this property,
+the `system` service can be taken down quickly, simulating a failure that results in an exception,
+which triggers the `@Fallback` mechanism.
 
-The simulation for the `system` service being in maintenance is provided for you.
+The configuration for the `system` service being in maintenance is provided for you.
 To learn more about dynamic configuration and how it’s enabled in a microservice, see
 https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
-The `system` client that handles the service being in maintenance and then throws an exception is also provided for you.
-If you want to see the simulation and setup,
-refer to the `system` service class in the `src/main/java/io/openliberty/guides/system/SystemResource.java` file, and
-the service client class in the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file.
 
 
 // =================================================================================================
