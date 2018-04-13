@@ -149,7 +149,7 @@ include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
-You receive all of the system properties in your local JVM.
+You see all of the system properties in your local JVM.
 When you visit this URL, only the OS name and user name properties are stored in the inventory. Next, point your
 browser to the `system` service URL, which is located at `http://localhost:9080/system/properties`,
 to retrieve the system properties for the specific localhost.
@@ -202,7 +202,7 @@ to ensure that they are different from each other.
 
 The `@Test` annotation indicates that the method automatically executes when your test class runs.
 
-The TestUtils class includes utility methods to make connects to the services and automate property changes.
+The TestUtils class includes utility methods to make connection to the services and automate property changes.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
