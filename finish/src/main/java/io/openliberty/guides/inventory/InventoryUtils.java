@@ -26,50 +26,46 @@ import io.openliberty.guides.inventory.client.ExceptionMapper;
 
 public class InventoryUtils {
 
-  private final String DEFAULT_PORT = System.getProperty("default.http.port");
+	private final String DEFAULT_PORT = System.getProperty("default.http.port");
 
-  public Properties getPropertiesWithDefaultHostName(
-      SystemClient defaultRestClient) throws IOException{
-    try {
-      return defaultRestClient.getProperties();
-    } catch (UnknownUrlException e) {
-      System.err.println("The given URL is unreachable.");
-    } catch (ProcessingException ex) {
-      handleProcessingException(ex);
-    }
-    return null;
-  }
+	public Properties getPropertiesWithDefaultHostName(SystemClient defaultRestClient) throws IOException {
+		try {
+			return defaultRestClient.getProperties();
+		} catch (UnknownUrlException e) {
+			System.err.println("The given URL is unreachable.");
+		} catch (ProcessingException ex) {
+			handleProcessingException(ex);
+		}
+		return null;
+	}
 
-  // tag::builder[]
-  public Properties getPropertiesWithGivenHostName(String hostname) throws IOException {
-    String customURLString = "http://" + hostname + ":" + DEFAULT_PORT + "/system";
-    URL customURL = null;
-    try {
-      customURL = new URL(customURLString);
-      SystemClient customRestClient = RestClientBuilder.newBuilder()
-                                                       .baseUrl(customURL)
-                                                       .register(
-                                                           ExceptionMapper.class)
-                                                       .build(SystemClient.class);
-      return customRestClient.getProperties();
-    } catch (ProcessingException ex) {
-      handleProcessingException(ex);
-    } catch (UnknownUrlException e) {
-      System.err.println("The given URL is unreachable.");
-    } catch (MalformedURLException e) {
-      System.err.println("The given URL is not formatted correctly.");
-    }
-    return null;
-  }
-  // end::builder[]
+	// tag::builder[]
+	public Properties getPropertiesWithGivenHostName(String hostname) throws IOException {
+		String customURLString = "http://" + hostname + ":" + DEFAULT_PORT + "/system";
+		URL customURL = null;
+		try {
+			customURL = new URL(customURLString);
+			SystemClient customRestClient = RestClientBuilder.newBuilder().baseUrl(customURL)
+					.register(ExceptionMapper.class).build(SystemClient.class);
+			return customRestClient.getProperties();
+		} catch (ProcessingException ex) {
+			handleProcessingException(ex);
+		} catch (UnknownUrlException e) {
+			System.err.println("The given URL is unreachable.");
+		} catch (MalformedURLException e) {
+			System.err.println("The given URL is not formatted correctly.");
+		}
+		return null;
+	}
+	// end::builder[]
 
-  public void handleProcessingException(ProcessingException ex) {
-    Throwable rootEx = ExceptionUtils.getRootCause(ex);
-    if (rootEx != null && rootEx instanceof UnknownHostException) {
-      System.err.println("The specified host is unknown.");
-    } else {
-      throw ex;
-    }
-  }
+	public void handleProcessingException(ProcessingException ex) {
+		Throwable rootEx = ExceptionUtils.getRootCause(ex);
+		if (rootEx != null && rootEx instanceof UnknownHostException) {
+			System.err.println("The specified host is unknown.");
+		} else {
+			throw ex;
+		}
+	}
 
 }

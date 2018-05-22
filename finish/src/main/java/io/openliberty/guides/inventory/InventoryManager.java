@@ -28,44 +28,43 @@ import io.openliberty.guides.inventory.model.InventoryList;
 @ApplicationScoped
 public class InventoryManager {
 
-    private InventoryList invList = new InventoryList();
-    private InventoryUtils invUtils = new InventoryUtils();
+	private InventoryList invList = new InventoryList();
+	private InventoryUtils invUtils = new InventoryUtils();
 
-    @Inject
-    @RestClient
-    private SystemClient defaultRestClient;
+	@Inject
+	@RestClient
+	private SystemClient defaultRestClient;
 
-    @Fallback(fallbackMethod = "fallbackForGet")
-    public Properties get(String hostname) throws IOException {
-        // SystemClient systemClient = new SystemClient();
-        // systemClient.init(hostname);
-        // Properties properties = systemClient.getProperties();
-        Properties properties = null;
-        if (hostname.equals("localhost")) {
-          properties = invUtils.getPropertiesWithDefaultHostName(defaultRestClient);
-        } else {
-          properties = invUtils.getPropertiesWithGivenHostName(hostname);
-        }
+	@Fallback(fallbackMethod = "fallbackForGet")
+	public Properties get(String hostname) throws IOException {
+		// SystemClient systemClient = new SystemClient();
+		// systemClient.init(hostname);
+		// Properties properties = systemClient.getProperties();
+		Properties properties = null;
+		if (hostname.equals("localhost")) {
+			properties = invUtils.getPropertiesWithDefaultHostName(defaultRestClient);
+		} else {
+			properties = invUtils.getPropertiesWithGivenHostName(hostname);
+		}
 
-        if (properties != null) {
-          invList.addToInventoryList(hostname, properties);
-        }
-        return properties;
-        }
+		if (properties != null) {
+			invList.addToInventoryList(hostname, properties);
+		}
+		return properties;
+	}
 
-    public Properties fallbackForGet(String hostname) {
-        Properties properties = invList.findHost(hostname);
-        if (properties == null) {
-            Properties msgProp = new Properties();
-            msgProp.setProperty(hostname,
-                                "System is not found in the inventory");
-            return msgProp;
-        }
-        return properties;
-    }
+	public Properties fallbackForGet(String hostname) {
+		Properties properties = invList.findHost(hostname);
+		if (properties == null) {
+			Properties msgProp = new Properties();
+			msgProp.setProperty(hostname, "System is not found in the inventory");
+			return msgProp;
+		}
+		return properties;
+	}
 
-    public InventoryList list() {
-        return invList;
-    }
+	public InventoryList list() {
+		return invList;
+	}
 }
 // tag::add_fallback[]

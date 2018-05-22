@@ -14,31 +14,29 @@
 package io.openliberty.guides.inventory.client;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 
 @Provider
-public class ExceptionMapper
-    implements ResponseExceptionMapper<Exception> {
-  // Logger LOG = Logger.getLogger(UnknownUrlExceptionMapper.class.getName());
+public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
 
-  @Override
-  public boolean handles(int status, MultivaluedMap<String, Object> headers) {
-    // LOG.info("status = " + status);
-    return status == 404 //UnknownURLException
-      || status == 503; //Fallback Exception
-  }
+	@Override
+	public boolean handles(int status, MultivaluedMap<String, Object> headers) {
+		return status == 404 // UnknownURLException
+				|| status == 503; // Fallback Exception
+	}
 
-  @Override
-  public Exception toThrowable(Response response) {
-    switch(response.getStatus()) {
-      case 404: return new UnknownUrlException();
-      case 503: return new IOException();
-    }
-    return null;
-  }
+	@Override
+	public Exception toThrowable(Response response) {
+		switch (response.getStatus()) {
+		case 404:
+			return new UnknownUrlException();
+		case 503:
+			return new IOException();
+		}
+		return null;
+	}
 }
 // end::mapper[]
