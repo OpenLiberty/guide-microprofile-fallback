@@ -34,7 +34,7 @@ public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
 		switch (response.getStatus()) {
 		case 404:
 			return new UnknownUrlException();
-		case Status.SERVICE_UNAVAILABLE.getStatusCode():
+		case 503:
 			return new IOException();
 		}
 		return null;
