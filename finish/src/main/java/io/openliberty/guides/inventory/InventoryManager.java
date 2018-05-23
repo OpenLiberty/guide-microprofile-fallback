@@ -37,9 +37,6 @@ public class InventoryManager {
 
 	@Fallback(fallbackMethod = "fallbackForGet")
 	public Properties get(String hostname) throws IOException {
-		// SystemClient systemClient = new SystemClient();
-		// systemClient.init(hostname);
-		// Properties properties = systemClient.getProperties();
 		Properties properties = null;
 		if (hostname.equals("localhost")) {
 			properties = invUtils.getPropertiesWithDefaultHostName(defaultRestClient);
