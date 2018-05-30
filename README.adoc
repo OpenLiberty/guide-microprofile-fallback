@@ -194,7 +194,7 @@ You see that the service displays a 503 HTTP response code.
 When you're done, change the `io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
-include::{common-includes}/mvnpackage.adoc[]
+include::{common-includes}/mvncompile.adoc[]
 
 // =================================================================================================
 // Testing the application
