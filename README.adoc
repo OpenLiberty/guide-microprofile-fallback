@@ -100,7 +100,7 @@ Now, navigate back to the `start` directory to begin.
 == Enabling fault tolerance
 
 The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
-the dependency with the `org.eclipse.microprofile.fault-tolerance` group ID.
+the dependency with the `org.eclipse.microprofile.fault-tolerance` artifact ID.
 Adding this dependency allows you to use the fault tolerance policies in your microservices.
 
 You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
@@ -194,7 +194,7 @@ You see that the service displays a 503 HTTP response code.
 When you're done, change the `io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
-include::{common-includes}/mvnpackage.adoc[]
+include::{common-includes}/mvncompile.adoc[]
 
 // =================================================================================================
 // Testing the application
