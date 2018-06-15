@@ -148,7 +148,6 @@
         <artifactId>liberty-maven-plugin</artifactId>
           liberty-maven-plugin-2.4-1528141700
         <version>2.4</version>
-      
         <configuration>
           <assemblyArtifact>
             <groupId>io.openliberty</groupId>
