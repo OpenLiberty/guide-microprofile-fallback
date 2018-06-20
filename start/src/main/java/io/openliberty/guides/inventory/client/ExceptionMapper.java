@@ -22,21 +22,21 @@ import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 @Provider
 public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
 
-	@Override
-	public boolean handles(int status, MultivaluedMap<String, Object> headers) {
-		return status == 404 // UnknownURLException
-				|| status == 503; // Fallback Exception
-	}
+  @Override
+  public boolean handles(int status, MultivaluedMap<String, Object> headers) {
+    return status == 404 // UnknownURLException
+        || status == 503; // Fallback Exception
+  }
 
-	@Override
-	public Exception toThrowable(Response response) {
-		switch (response.getStatus()) {
-		case 404:
-			return new UnknownUrlException();
-		case 503:
-			return new IOException();
-		}
-		return null;
-	}
+  @Override
+  public Exception toThrowable(Response response) {
+    switch (response.getStatus()) {
+    case 404:
+      return new UnknownUrlException();
+    case 503:
+      return new IOException();
+    }
+    return null;
+  }
 }
 // end::mapper[]
