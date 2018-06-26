@@ -15,12 +15,14 @@ package io.openliberty.guides.inventory.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InventoryList {
 
-    private List<SystemEntry> systems = new ArrayList<SystemEntry>();
+    private HashMap<String, Properties> systems = new HashMap<String, Properties>();
 
-    public List<SystemEntry> getSystems() {
+    public HashMap<String, Properties> getSystems() {
         return systems;
     }
 
@@ -32,45 +34,14 @@ public class InventoryList {
         Properties props = new Properties();
         props.setProperty("os.name", systemProps.getProperty("os.name"));
         props.setProperty("user.name", systemProps.getProperty("user.name"));
-
-        SystemEntry host = new SystemEntry(hostname, props);
-        if (!systems.contains(host))
-            systems.add(host);
+        systems.put(hostname, props);
     }
 
     public Properties findHost(String hostname) {
-        for (SystemEntry system : systems) {
-            if (system.getHostname().equals(hostname)) {
-                return system.getProperties();
-            }
-        }
-        return null;
+    	if (systems.containsKey(hostname)){
+    		return systems.get(hostname);
+    	}
+    	return null;
     }
 
-    class SystemEntry {
-
-        private final String hostname;
-        private final Properties properties;
-
-        public SystemEntry(String hostname, Properties properties) {
-            this.hostname = hostname;
-            this.properties = properties;
-        }
-
-        public String getHostname() {
-            return hostname;
-        }
-
-        public Properties getProperties() {
-            return properties;
-        }
-
-        @Override
-        public boolean equals(Object host) {
-            if (host instanceof SystemEntry) {
-                return hostname.equals(((SystemEntry) host).getHostname());
-            }
-            return false;
-        }
-    }
 }
