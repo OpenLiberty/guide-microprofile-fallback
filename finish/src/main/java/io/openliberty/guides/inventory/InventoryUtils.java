@@ -28,20 +28,8 @@ public class InventoryUtils {
 
   private final String DEFAULT_PORT = System.getProperty("default.http.port");
 
-  public Properties getPropertiesWithDefaultHostName(SystemClient defaultRestClient)
-      throws IOException {
-    try {
-      return defaultRestClient.getProperties();
-    } catch (UnknownUrlException e) {
-      System.err.println("The given URL is unreachable.");
-    } catch (ProcessingException ex) {
-      handleProcessingException(ex);
-    }
-    return null;
-  }
-
   // tag::builder[]
-  public Properties getPropertiesWithGivenHostName(String hostname)
+  public Properties getProperties(String hostname)
       throws IOException {
     String customURLString = "http://" + hostname + ":" + DEFAULT_PORT + "/system";
     URL customURL = null;

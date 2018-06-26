@@ -28,7 +28,7 @@ public class InventoryManager {
 
   @Fallback(fallbackMethod = "fallbackForGet")
   public Properties get(String hostname) throws IOException {
-    Properties properties = invUtils.getPropertiesWithGivenHostName(hostname);
+    Properties properties = invUtils.getProperties(hostname);
 
     if (properties != null) {
       invList.addToInventoryList(hostname, properties);
