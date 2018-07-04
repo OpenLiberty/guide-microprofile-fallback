@@ -16,43 +16,38 @@ package io.openliberty.guides.inventory;
 
 import java.io.IOException;
 import java.util.Properties;
-
 import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.faulttolerance.Fallback;
-import io.openliberty.guides.inventory.client.SystemClient;
 import io.openliberty.guides.inventory.model.InventoryList;
 
 @ApplicationScoped
 public class InventoryManager {
 
-    private InventoryList invList = new InventoryList();
+  private InventoryList invList = new InventoryList();
+  private InventoryUtils invUtils = new InventoryUtils();
 
-    @Fallback(fallbackMethod = "fallbackForGet")
-    public Properties get(String hostname) throws IOException {
-        SystemClient systemClient = new SystemClient();
-        systemClient.init(hostname);
-        Properties properties = systemClient.getProperties();
+  @Fallback(fallbackMethod = "fallbackForGet")
+  public Properties get(String hostname) throws IOException {
+    Properties properties = invUtils.getProperties(hostname);
 
-        if (properties != null) {
-            invList.addToInventoryList(hostname, properties);
-        }
-        return properties;
+    if (properties != null) {
+      invList.addToInventoryList(hostname, properties);
     }
+    return properties;
+  }
 
-    public Properties fallbackForGet(String hostname) {
-        Properties properties = invList.findHost(hostname);
-        if (properties == null) {
-            Properties msgProp = new Properties();
-            msgProp.setProperty(hostname,
-                                "System is not found in the inventory");
-            return msgProp;
-        }
-        return properties;
+  public Properties fallbackForGet(String hostname) {
+    Properties properties = invList.findHost(hostname);
+    if (properties == null) {
+      Properties msgProp = new Properties();
+      msgProp.setProperty(hostname, "System is not found in the inventory");
+      return msgProp;
     }
+    return properties;
+  }
 
-    public InventoryList list() {
-        return invList;
-    }
+  public InventoryList list() {
+    return invList;
+  }
 }
 // end::add_fallback[]

@@ -7,6 +7,8 @@ target/
 .project
 .classpath
 .factorypath
+.metadata
+RemoteSystemsTempFiles
 MANIFEST.MF
 
 # MacOS system files

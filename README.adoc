@@ -125,13 +125,12 @@ to `false` in the `resources/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
-includes the `getPropertiesHelper()` method to make a request to the
-`system` service and check for the response.
-A condition is added in this method to stage the fault tolerance in the application.
-This condition checks if the response is specifically
-a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called
+makes a request to the `system` service and checks for the response.
+The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
+This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
+
 
 The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.

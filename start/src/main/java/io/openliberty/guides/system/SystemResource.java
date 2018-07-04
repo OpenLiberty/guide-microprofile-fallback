@@ -25,17 +25,17 @@ import javax.ws.rs.core.MediaType;
 @Path("properties")
 public class SystemResource {
 
-    @Inject
-    SystemConfig systemConfig;
+  @Inject
+  SystemConfig systemConfig;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProperties() {
-        if (!systemConfig.isInMaintenance()) {
-            return Response.ok(System.getProperties()).build();
-        } else {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
-        }
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getProperties() {
+    if (!systemConfig.isInMaintenance()) {
+      return Response.ok(System.getProperties()).build();
+    } else {
+      return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
+  }
 }
 // end::503_response[]

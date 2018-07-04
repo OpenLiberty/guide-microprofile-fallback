@@ -10,22 +10,19 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
+// tag::exception[]
+package io.openliberty.guides.inventory.client;
 
-package io.openliberty.guides.system;
+public class UnknownUrlException extends Exception {
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+  private static final long serialVersionUID = 1L;
 
-@RequestScoped
-public class SystemConfig {
+  public UnknownUrlException() {
+    super();
+  }
 
-  @Inject
-  @ConfigProperty(name = "io_openliberty_guides_system_inMaintenance")
-  Provider<Boolean> inMaintenance;
-
-  public boolean isInMaintenance() {
-    return inMaintenance.get();
+  public UnknownUrlException(String message) {
+    super(message);
   }
 }
+// end::exception[]
