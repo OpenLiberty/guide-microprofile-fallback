@@ -38,6 +38,7 @@ public class InventoryResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getPropertiesForHost(@PathParam("hostname") String hostname)
       throws Exception {
+    // Get properties
     Properties props = manager.get(hostname);
     if (props == null) {
       return Response.status(Response.Status.NOT_FOUND)
@@ -45,6 +46,9 @@ public class InventoryResource {
                          "ERROR: Unknown hostname or the resource may not be running on the host machine")
                      .build();
     }
+
+    // Add properties to inventory
+    manager.add(hostname, props);
     return Response.ok(props).build();
   }
 
