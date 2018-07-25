@@ -119,7 +119,7 @@ The following two steps set up the dynamic configuration on the `system` service
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
 First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
-the `inMaintenance()` condition, which determines that the system properties are returned only if you
+the `isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the `io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the `resources/CustomConfigSource.json` file.
 Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
