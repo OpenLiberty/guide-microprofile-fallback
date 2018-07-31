@@ -93,14 +93,13 @@ Stop the Open Liberty server:
 mvn liberty:stop-server
 ```
 
-Now, navigate back to the `start` directory to begin.
-
-
 // =================================================================================================
 // Enabling fault tolerance
 // =================================================================================================
 
 == Enabling fault tolerance
+
+Navigate to the `start` directory to begin.
 
 The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
 the dependency with the `org.eclipse.microprofile.fault-tolerance` artifact ID.
