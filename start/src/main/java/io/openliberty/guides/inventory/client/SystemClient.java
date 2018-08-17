@@ -25,7 +25,7 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 // tag::annotations[]
-@Dependent
+
 @RegisterRestClient
 @RegisterProvider(ExceptionMapper.class)
 @Path("/properties")
