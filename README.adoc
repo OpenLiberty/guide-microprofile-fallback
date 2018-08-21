@@ -6,7 +6,7 @@
 // Contributors:
 //   IBM Corporation
 :projectid: microprofile-fallback
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 20 minutes
 :page-releasedate: 2018-03-16
 :page-description: Learn how to add fallback behavior to microservice dependencies to manage the impact of failures.
@@ -53,6 +53,7 @@ a failed execution.
 // Getting Started
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/gitclone.adoc[]
 
 // =================================================================================================
@@ -66,9 +67,9 @@ for the application. You can give it a try before you proceed with building your
 
 To try out the application, navigate to the `finish` directory and run the following command:
 
+[role='command']
 ```
 mvn clean install liberty:start-server
-
 ```
 
 Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
@@ -89,6 +90,7 @@ condition back to its original value.
 
 Stop the Open Liberty server:
 
+[role='command']
 ```
 mvn liberty:stop-server
 ```
@@ -150,7 +152,8 @@ Now, set a fallback method to deal with this failure.
 Create the `InventoryManager` class in the
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
-[source, java, indent=0]
+InventoryManager.java
+[source, java, indent=0, role='code_column']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
@@ -170,6 +173,7 @@ You successfully set up your microservice to have fault tolerance capability.
 // Building and running the application
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
@@ -209,7 +213,8 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 Create the `FaultToleranceTest` class in the
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
 
-[source, java]
+FaultToleranceTest.java
+[source, java, role='code_column']
 ----
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
 ----
@@ -234,6 +239,7 @@ the code.
 // Running the tests
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/mvnverify.adoc[]
 
 [source, role="no_copy"]
@@ -270,3 +276,16 @@ You can try one of the related MicroProfile guides. They demonstrate technologie
 learn and expand on what you built here.
 
 include::{common-includes}/finish.adoc[]
+
+include::https://raw.githubusercontent.com/OpenLiberty/guides-common/multipane/attribution.adoc[subs="attributes"]
+
+// =================================================================================================
+// Related links
+// =================================================================================================
+
+== Related Links
+Dive into the MicroProfile config.
+
+https://github.com/microprofile[See MicroProfile Config specs (GitHub)]
+
+https://openliberty.io/docs/ref/microprofile[Another link to MicroProfile specs (openliberty.io)]
