@@ -9,6 +9,8 @@
 :page-layout: guide
 :page-duration: 20 minutes
 :page-releasedate: 2018-03-16
+:page-guide-category: microprofile
+:page-essential: false
 :page-description: Learn how to add fallback behavior to microservice dependencies to manage the impact of failures.
 :page-tags: ['MicroProfile', 'microservices', 'Fault Tolerance', '@Fallback']
 :page-permalink: /guides/{projectid}
