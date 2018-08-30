@@ -22,12 +22,16 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import io.openliberty.guides.inventory.model.*;
+import javax.inject.Inject;
 
 @ApplicationScoped
 public class InventoryManager {
 
   private List<SystemData> systems = Collections.synchronizedList(new ArrayList<>());
   private InventoryUtils invUtils = new InventoryUtils();
+
+  @Inject
+  InventoryConfig inventoryConfig;
 
   @Fallback(fallbackMethod = "fallbackForGet")
   public Properties get(String hostname) throws IOException {
@@ -41,6 +45,10 @@ public class InventoryManager {
       msgProp.setProperty(hostname, "System is not found in the inventory");
       return msgProp;
     }
+
+    if(inventoryConfig.isFallbackBroken())
+      throw new RuntimeException("Fallback method is failed!");
+    
     return properties;
   }
 

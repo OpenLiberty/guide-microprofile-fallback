@@ -7,7 +7,7 @@
 //   IBM Corporation
 :projectid: microprofile-fallback
 :page-layout: guide
-:page-duration: 20 minutes
+:page-duration: 25 minutes
 :page-releasedate: 2018-03-16
 :page-guide-category: microprofile
 :page-essential: false
@@ -48,7 +48,8 @@ service is unavailable.
 
 You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
-a failed execution.
+a failed execution. You will also learn how to view metrics for any method or class annotated with
+the `@Fallback` annotation.
 
 
 // =================================================================================================
@@ -85,9 +86,33 @@ to restart the server. Next, return to your browser and point back to the
 The fallback mechanism is triggered because the `system` service is now in maintenance.
 You see the cached properties for this localhost.
 
+Next, point your browser to the `https://localhost/metrics/application` MicroProfile Metrics endpoint.
+Log in as the `admin` user with `adminpwd` as the password. You can see the application metrics in a
+text format.
+
+See the following sample outputs for the Fallback metrics:
+
+[role="no_copy"]
+----
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 2
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total 0
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 1
+----
+
+Now, open the `resources/CustomConfigSource.json` file and change the `io_openliberty_guides_inventory_fallbackBroken`
+from `false` to `true` and save the file. This simulates the fallback method being broken. When returning
+back to the `http://localhost:9080/inventory/systems/localhost` URL, notice how an error is displayed.
+Next, return back to the `https://localhost/metrics/application` URL. The
+`ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` has incremented
+since the last visit.
+
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
 change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
-condition back to its original value.
+condition back to its original value. In addition, change the `io_openliberty_guides_inventory_fallbackBroken`
+property from `true` to `false`.
 
 Stop the Open Liberty server:
 
@@ -107,7 +132,7 @@ The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml`
 the dependency with the `org.eclipse.microprofile.fault-tolerance` artifact ID.
 Adding this dependency allows you to use the fault tolerance policies in your microservices.
 
-You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
+You can also find the `mpFaultTolerance` feature in your `src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -167,6 +192,45 @@ message in the browser. Otherwise, this method returns the cached property value
 
 You successfully set up your microservice to have fault tolerance capability.
 
+// =================================================================================================
+// Using MP Metrics with MP Fault Tolerance
+// =================================================================================================
+
+== Using MP Metrics with MP Fault Tolerance
+
+When integrating MP Fault Tolerance with MP Metrics, all Fault Tolerance capabilities are monitored.
+This means that metrics are automatically added for any method annotated with the `@Fallback` annotation.
+For the purpose of this guide, MP Metrics has already been configured for you. To learn more about
+MP Metrics, check out the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice]
+guide. 
+
+Open the `src/main/liberty/config/server.xml` file. The `quickStartSecurity` and `keyStore` configuration
+elements provide basic security to secure the server. When you visit the `/metrics/application` endpoint,
+use the credentials defined in the server configuration to log in to view the data.
+
+MicroProfile Metrics provides three metrics when used in conjunction with fallback:
+
+* The `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total` metric counts the 
+number of times the method annotated with the `@Fallback` annotation is called.
+
+* The `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` metric counts
+the number of times the method annotated with the `@Fallback` annotation is called and threw a `Throwable`, 
+even after the fallback action was processed.
+
+* The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` metrics counts
+the number of times the fallback handler or method is called.
+
+Open the `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file. Notice that in
+the `fallbackForGet` method, if the `isFallbackBroken()` method returns `true`, a `RuntimeException`
+will be thrown. This if statement is strictly to simulate the fallback method being broken so that
+the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` metric can
+be demonstrated. 
+
+If you would like to disable MP Fault Tolerance metrics capabilities, you can do so through the 
+`MP_Fault_Tolerance_Metrics_Enabled` property in the `resources/CustomConfigSource.json` file. If you 
+change the value of the `MP_Fault_Tolerance_Metrics_Enabled` property, be sure to save the file and 
+restart the server in order for the change to take affect. 
+
 
 // =================================================================================================
 // Building and running the application
@@ -194,8 +258,18 @@ The cached system properties contain only the OS name and user name key and valu
 To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
 You see that the service displays a 503 HTTP response code.
 
-When you're done, change the `io_openliberty_guides_system_inMaintenance`
-property value back to `false` in the `resources/CustomConfigSource.json` file.
+You can see the fallback metrics by navigating to the `https://localhost/metrics/application` URL and 
+logging in as `admin` with the password `adminpwd`. If the `io_openliberty_guides_system_inMaintenance`
+property is set to `true` in the `resources/CustomConfigSource.json`, whenever the `http://localhost:9080/inventory/systems/localhost`
+URL is visited, the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total` and 
+`ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` properties should
+increment when viewing the metrics. Similarily, if the `io_openliberty_guides_inventory_fallbackBroken`
+property is set to `true`, the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total`
+should increment when the `http://localhost:9080/inventory/systems/localhost` is visited.
+
+When you're done, change the value of the `io_openliberty_guides_system_inMaintenance` and 
+`io_openliberty_guides_inventory_fallbackBroken` properties back to `false` in the `resources/CustomConfigSource.json` 
+file.
 
 include::{common-includes}/mvncompile.adoc[]
 
@@ -266,7 +340,9 @@ You see a test failure occur for the `testFallbackForGet()` test case.
 
 == Great work! You're done!
 
-You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
+You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance 
+and wrote a test to validate it. You also learned how to view the fallback metrics when using
+MicroProfile Fault Tolerance in conjunction with MicroProfile Metrics. 
 
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
