@@ -106,7 +106,7 @@ Now, open the `resources/CustomConfigSource.json` file and change the `io_openli
 from `false` to `true` and save the file. This simulates the fallback method being broken. When returning
 back to the `http://localhost:9080/inventory/systems/localhost` URL, notice how an error is displayed.
 Next, return back to the `https://localhost/metrics/application` URL. Notice how the
-`ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` has incremented
+`ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` metric has incremented
 since the last visit.
 
 When you are done checking out the application, go to the `CustomConfigSource.json` file again and
@@ -262,10 +262,10 @@ You can see the fallback metrics by navigating to the `https://localhost/metrics
 logging in as `admin` with the password `adminpwd`. If the `io_openliberty_guides_system_inMaintenance`
 property is set to `true` in the `resources/CustomConfigSource.json`, whenever the `http://localhost:9080/inventory/systems/localhost`
 URL is visited, the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total` and 
-`ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` properties should
-increment when viewing the metrics. Similarily, if the `io_openliberty_guides_inventory_fallbackBroken`
+`ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` metrics will
+increment. Similarily, if the `io_openliberty_guides_inventory_fallbackBroken`
 property is set to `true`, the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total`
-should increment when the `http://localhost:9080/inventory/systems/localhost` is visited.
+metric will increment when the `http://localhost:9080/inventory/systems/localhost` is visited.
 
 When you're done, change the value of the `io_openliberty_guides_system_inMaintenance` and 
 `io_openliberty_guides_inventory_fallbackBroken` properties back to `false` in the `resources/CustomConfigSource.json` 
