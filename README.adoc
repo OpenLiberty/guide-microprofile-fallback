@@ -48,7 +48,7 @@ service is unavailable.
 
 You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
-a failed execution. You will also learn how to view metrics for any method or class annotated with
+a failed execution. You will also learn how to view metrics for any method annotated with
 the `@Fallback` annotation.
 
 
@@ -92,7 +92,7 @@ text format.
 
 See the following sample outputs for the Fallback metrics:
 
-[role="no_copy"]
+[source, role="no_copy"]
 ----
 # TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
 application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 2
@@ -105,7 +105,7 @@ application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_ca
 Now, open the `resources/CustomConfigSource.json` file and change the `io_openliberty_guides_inventory_fallbackBroken`
 from `false` to `true` and save the file. This simulates the fallback method being broken. When returning
 back to the `http://localhost:9080/inventory/systems/localhost` URL, notice how an error is displayed.
-Next, return back to the `https://localhost/metrics/application` URL. The
+Next, return back to the `https://localhost/metrics/application` URL. Notice how the
 `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total` has incremented
 since the last visit.
 
@@ -217,7 +217,7 @@ number of times the method annotated with the `@Fallback` annotation is called.
 the number of times the method annotated with the `@Fallback` annotation is called and threw a `Throwable`, 
 even after the fallback action was processed.
 
-* The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` metrics counts
+* The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` metric counts
 the number of times the fallback handler or method is called.
 
 Open the `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file. Notice that in

@@ -22,15 +22,15 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class InventoryConfig {
 
   @Inject
-  @ConfigProperty(name = "io_openliberty_guides_inventory_inMaintenance")
-  private Provider<Boolean> inMaintenance;
+  @ConfigProperty(name = "io_openliberty_guides_inventory_fallbackBroken")
+  private Provider<Boolean> fallbackBroken;
 
-  public boolean isInvInMaintenance() {
+  public boolean isFallbackBroken() {
     try {
       Thread.sleep(3000);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return inMaintenance.get();
+    return fallbackBroken.get();
   }
 }

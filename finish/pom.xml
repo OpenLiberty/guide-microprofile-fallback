@@ -177,15 +177,12 @@
         <artifactId>liberty-maven-plugin</artifactId>
         <version>2.4</version>
         <configuration>
-          <!-- <assemblyArtifact>
+          <assemblyArtifact>
             <groupId>io.openliberty</groupId>
             <artifactId>openliberty-runtime</artifactId>
             <version>RELEASE</version>
             <type>zip</type>
-          </assemblyArtifact> -->
-          <install>
-            <runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2018-08-27_1413/openliberty-all-18.0.0.3-cl180320180827-1300.zip</runtimeUrl>
-          </install>
+          </assemblyArtifact>
           <configFile>src/main/liberty/config/server.xml</configFile>
           <packageFile>${package.file}</packageFile>
           <include>${packaging.type}</include>
