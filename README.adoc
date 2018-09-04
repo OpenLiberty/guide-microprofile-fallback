@@ -149,7 +149,8 @@ was taken down for maintenance.
 An IOException is thrown to simulate the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
-[role="code_command", subs="quotes"]
+highlight_lines=13-56
+[role="code_command hotspot", subs="quotes"]
 ----
 Create the `InventoryManager` class in the
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
@@ -213,7 +214,8 @@ include::{common-includes}/mvncompile.adoc[]
 You can test your application manually, but automated tests ensure code quality because they trigger a failure
 whenever a code change introduces a defect. JUnit and the JAX-RS Client API provide a simple environment for you to write tests.
 
-[role="code_command", subs="quotes"]
+highlight_lines=16-59
+[role="code_command hotspot", subs="quotes"]
 ----
 Create the `FaultToleranceTest` class in the
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
