@@ -157,7 +157,7 @@ Create the `InventoryManager` class in the
 ----
 
 InventoryManager.java
-[source, java, indent=0, role='code_column']
+[source, java, linenums, indent=0, role='code_column']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
@@ -222,7 +222,7 @@ Create the `FaultToleranceTest` class in the
 ----
 
 FaultToleranceTest.java
-[source, java, role='code_column']
+[source, java, linenums, role='code_column']
 ----
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
 ----
