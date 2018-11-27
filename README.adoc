@@ -152,8 +152,8 @@ Now, set a fallback method to deal with this failure.
 
 [role="code_command hotspot=1-56", subs="quotes"]
 ----
-Create the `InventoryManager` class in the
-`src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
+Create the `InventoryManager` class file.
+`src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
 ----
 
 InventoryManager.java
@@ -216,8 +216,8 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 
 [role="code_command hotspot=16-59", subs="quotes"]
 ----
-Create the `FaultToleranceTest` class in the
-`src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
+Create the `FaultToleranceTest` class file.
+`src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
 FaultToleranceTest.java
@@ -296,4 +296,3 @@ Dive into the MicroProfile config.
 https://github.com/microprofile[See MicroProfile Config specs (GitHub)]
 
 https://openliberty.io/docs/ref/microprofile[Another link to MicroProfile specs (openliberty.io)]
-
