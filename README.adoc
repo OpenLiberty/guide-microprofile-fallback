@@ -162,7 +162,7 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-The [hotspot=17-18]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
+The [hotspot=18]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
 example, use the [hotspot=23-31]`fallbackForGet()` method.
 
 The `fallbackForGet()` method, which is the designated fallback method for the original
