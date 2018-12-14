@@ -9,6 +9,8 @@
 :page-layout: guide-multipane
 :page-duration: 20 minutes
 :page-releasedate: 2018-03-16
+:page-guide-category: microprofile
+:page-essential: false
 :page-description: Learn how to add fallback behavior to microservice dependencies to manage the impact of failures.
 :page-tags: ['MicroProfile', 'microservices', 'Fault Tolerance', '@Fallback']
 :page-permalink: /guides/{projectid}
@@ -104,10 +106,10 @@ mvn liberty:stop-server
 Navigate to the `start` directory to begin.
 
 The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
-the dependency with the `org.eclipse.microprofile.fault-tolerance` artifact ID.
-Adding this dependency allows you to use the fault tolerance policies in your microservices.
+the dependency with the `mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
+fault tolerance policies in your microservices.
 
-You can also find the `mpFaultTolerance-1.0` feature in your `src/main/liberty/config/server.xml` server configuration,
+You can also find the `mpFaultTolerance` feature in your `src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
