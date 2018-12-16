@@ -241,7 +241,7 @@ Create the `FaultToleranceTest` class file.
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
-The [hotspot=21-25]`@Before` and [hotspot=27-31]`@After` annotations indicate that this method executes before or after the other test case.
+The [hotspot=21]`@Before` and [hotspot=27]`@After` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
@@ -251,7 +251,7 @@ The [hotspot=34-53]`testFallbackForGet()` test case sends a request to the `inve
 host name before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
-The `@Test` annotation indicates that the method automatically executes when your test class runs.
+The [hotspot=33]`@Test` annotation indicates that the method automatically executes when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
