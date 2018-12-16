@@ -213,14 +213,8 @@ The cached system properties contain only the OS name and user name key and valu
 To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
 You see that the service displays a 503 HTTP response code.
 
-When you're done, change the `io_openliberty_guides_system_inMaintenance`
+When you're done, change the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
-
-[role="code_command hotspot=2", subs="quotes"]
-----
-Edit the configuration file.
-`resources/CustomConfigSource.json`
-----
 
 include::{common-includes}/mvncompile.adoc[]
 
@@ -247,12 +241,6 @@ Create the `FaultToleranceTest` class file.
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
-FaultToleranceTest.java
-[source, java, linenums, role='code_column']
-----
-include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
-----
-
 The [hotspot=21-25]`@Before` and [hotspot=27-31]`@After` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
@@ -269,6 +257,11 @@ In addition, a few endpoint tests have been included for you to test the basic f
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
 the code.
 
+FaultToleranceTest.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
+----
 // =================================================================================================
 // Running the tests
 // =================================================================================================
