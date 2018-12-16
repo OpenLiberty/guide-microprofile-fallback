@@ -152,14 +152,14 @@ An IOException is thrown to simulate the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
 
-[role="code_command hotspot=1-56", subs="quotes"]
+[role="code_command hotspot=13-56", subs="quotes"]
 ----
 Create the `InventoryManager` class file.
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
 ----
 
 InventoryManager.java
-[source, java, linenums, indent=0, role='code_column']
+[source, java, linenums, role='code_column']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
@@ -167,7 +167,7 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 The [hotspot=18]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
 example, use the [hotspot=23-31]`fallbackForGet()` method.
 
-The `fallbackForGet()` method, which is the designated fallback method for the original
+The [hotspot=23-31]`fallbackForGet()` method, which is the designated fallback method for the original
 `get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values from the inventory.
@@ -190,12 +190,23 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json
+----
+
 You can test the fault tolerance mechanism of your microservices by dynamically changing
-the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
+the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. The `fallbackForGet()` method, which is the designated fallback method, is called
+the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
@@ -205,7 +216,21 @@ You see that the service displays a 503 HTTP response code.
 When you're done, change the `io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
+
 include::{common-includes}/mvncompile.adoc[]
+
+InventoryManager.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
+----
+
+
 
 // =================================================================================================
 // Testing the application
