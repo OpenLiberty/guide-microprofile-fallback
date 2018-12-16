@@ -46,6 +46,19 @@ It uses the `system` service to retrieve the system properties for a particular 
 You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
 service is unavailable.
 
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
+
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json
+----
+
+
 You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
 a failed execution.
@@ -195,6 +208,7 @@ calling the `system` service.
 Edit the configuration file.
 `resources/CustomConfigSource.json`
 ----
+
 CustomConfigSource.json
 [source, json, linenums, role='code_column']
 ----
