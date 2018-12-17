@@ -190,17 +190,17 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-//[role="code_command hotspot=2", subs="quotes"]
-//----
-//Edit the configuration file.
-//`resources/CustomConfigSource.json`
-//----
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
 
-//CustomConfigSource.json
-//[source, json, linenums, role='code_column']
-//----
-//include::finish/resources/CustomConfigSource.json
-//----
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json
+----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
 the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
@@ -308,17 +308,6 @@ You see a test failure occur for the `testFallbackForGet()` test case.
 // =================================================================================================
 
 == Great work! You're done!
-[role="code_command hotspot=2", subs="quotes"]
-----
-Edit the configuration file.
-`resources/CustomConfigSource.json`
-----
-
-CustomConfigSource.json
-[source, json, linenums, role='code_column']
-----
-include::finish/resources/CustomConfigSource.json
-----
 
 You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
 
