@@ -134,6 +134,18 @@ This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
 
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
+
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json
+----
+
 
 The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.
