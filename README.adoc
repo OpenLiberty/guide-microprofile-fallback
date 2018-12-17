@@ -308,6 +308,17 @@ You see a test failure occur for the `testFallbackForGet()` test case.
 // =================================================================================================
 
 == Great work! You're done!
+[role="code_command hotspot=2", subs="quotes"]
+----
+Edit the configuration file.
+`resources/CustomConfigSource.json`
+----
+
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json
+----
 
 You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
 
