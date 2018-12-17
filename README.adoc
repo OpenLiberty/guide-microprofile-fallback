@@ -203,27 +203,27 @@ include::finish/resources/CustomConfigSource.json
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
-the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
+the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
+the properties. The [hotspot=23-31]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
 To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
 You see that the service displays a 503 HTTP response code.
 
-When you're done, change the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance`
+When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvncompile.adoc[]
 
-InventoryManager.java
-[source, java, linenums, role='code_column']
-----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
-----
+//InventoryManager.java
+//[source, java, linenums, role='code_column']
+//----
+//include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
+//----
 
 
 
