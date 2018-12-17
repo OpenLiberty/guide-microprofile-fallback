@@ -140,10 +140,10 @@ Edit the configuration file.
 `resources/CustomConfigSource.json`
 ----
 
-CustomConfigSource.json
-[source, json, linenums, role='code_column']
+test.txt
+[source, text, linenums, role='code_column']
 ----
-include::finish/resources/CustomConfigSource.json
+include::finish/resources/test.txt
 ----
 
 
