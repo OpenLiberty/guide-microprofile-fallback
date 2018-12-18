@@ -202,7 +202,7 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-[role="code_command hotspot=2", subs="quotes"]
+[role="code_command hotspot=2-2", subs="quotes"]
 ----
 Edit the configuration file.
 `resources/CustomConfigSource.json`
