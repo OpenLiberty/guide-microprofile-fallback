@@ -134,19 +134,6 @@ This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
 
-[role="code_command hotspot=2", subs="quotes"]
-----
-Edit the configuration file.
-`resources/CustomConfigSource.json`
-----
-
-test.txt
-[source, text, linenums, role='code_column']
-----
-include::finish/resources/test.txt
-----
-
-
 The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.
 You will look into the `InventoryManager` class in more detail in the next section.
@@ -192,9 +179,9 @@ You successfully set up your microservice to have fault tolerance capability.
 // =================================================================================================
 
 [role='command']
-----
+
 include::{common-includes}/mvnbuild.adoc[]
-----
+
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 You receive the system properties of your local JVM from the `inventory` service. Next, point your
