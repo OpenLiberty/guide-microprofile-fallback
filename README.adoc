@@ -191,9 +191,10 @@ You successfully set up your microservice to have fault tolerance capability.
 // Building and running the application
 // =================================================================================================
 
-//[role='command']
+[role='command']
+----
 include::{common-includes}/mvnbuild.adoc[]
-
+----
 When the server is running, point your browser to the
 `http://localhost:9080/inventory/systems/localhost` URL.
 You receive the system properties of your local JVM from the `inventory` service. Next, point your
@@ -230,23 +231,6 @@ When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintena
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvncompile.adoc[]
-
-[role="code_command hotspot=2", subs="quotes"]
-----
-Edit the configuration file.
-`resources/CustomConfigSource.json`
-----
-
-CustomConfigSource.json
-[source, json, linenums, role='code_column']
-----
-include::finish/resources/CustomConfigSource.json
-----
-//InventoryManager.java
-//[source, java, linenums, role='code_column']
-//----
-//include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
-//----
 
 
 
