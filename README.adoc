@@ -153,7 +153,7 @@ Now, set a fallback method to deal with this failure.
 
 [role="code_command hotspot=13-56", subs="quotes"]
 ----
-Create the `InventoryManager` class file.
+Create the `InventoryManager` class.
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
 ----
 
@@ -231,7 +231,7 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 
 [role="code_command hotspot=16-59", subs="quotes"]
 ----
-Create the `FaultToleranceTest` class file.
+Create the `FaultToleranceTest` class.
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
@@ -291,7 +291,7 @@ You see a test failure occur for the `testFallbackForGet()` test case.
 
 == Great work! You're done!
 
-You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
+You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance in Open Liberty and wrote a test to validate it.
 
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
