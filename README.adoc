@@ -198,7 +198,7 @@ Edit the configuration file.
 CustomConfigSource.json
 [source, json, linenums, role='code_column']
 ----
-include::finish/resources/CustomConfigSource.json
+include::finish/resources/CustomConfigSource.json[tags=**]
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
