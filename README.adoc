@@ -109,7 +109,7 @@ The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml`
 the dependency with the `mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
 fault tolerance policies in your microservices.
 
-You can also find the `mpFaultTolerance` feature in your `src/main/liberty/config/server.xml` server configuration,
+You can also find the `mpFaultTolerance` feature in your [hotspot=9 file=3]`server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -154,6 +154,12 @@ SystemClient.java
 [source, java, linenums, role='code_column']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=client]
+----
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
 ----
 
 // =================================================================================================
