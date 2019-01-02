@@ -125,11 +125,11 @@ mvn liberty:stop-server
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
-the dependency with the `mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
+The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot=1-253 file=4]`pom.xml` file. Look for
+the dependency with the [hotspot=110-115 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
 fault tolerance policies in your microservices.
 
-You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot=1-15 file=3]`server.xml` server configuration,
+You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot=1-15 file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -180,6 +180,12 @@ server.xml
 [source, xml, linenums, role='code_column']
 ----
 include::finish/src/main/liberty/config/server.xml[]
+----
+
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/pom.xml[]
 ----
 
 // =================================================================================================
