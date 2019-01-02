@@ -121,23 +121,40 @@ see https://openliberty.io/guides/microprofile-config.html[Configuring microserv
 The following two steps set up the dynamic configuration on the `system` service and its client.
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
-First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
-the `isInMaintenance()` condition, which determines that the system properties are returned only if you
-set the `io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the `resources/CustomConfigSource.json` file.
-Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+First, the [hotspot=1-27 file=0]`SystemResource` class has
+the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
+set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
+to `false` in the [hotspot=1-2 file=1]`CustomConfigSource` file.
+Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
+Next, the [hotspot=1-25 file=2]`SystemClient` class
 makes a request to the `system` service and checks for the response.
 The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
 This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
-likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
+likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=24 file=2]`IOException` is thrown.
 
-The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
+The public [hotspot=23-25 file=2]`getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.
 You will look into the `InventoryManager` class in more detail in the next section.
 
+SystemResource.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
+----
+
+CustomConfigSource.json
+[source, JSON, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json[tags=[]]]
+----
+
+SystemClient.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=client]
+----
 
 // =================================================================================================
 // Adding the @Fallback annotation
@@ -198,7 +215,7 @@ Edit the configuration file.
 CustomConfigSource.json
 [source, json, linenums, role='code_column']
 ----
-include::finish/resources/CustomConfigSource.json[tags=**]
+include::finish/resources/CustomConfigSource.json[]
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
