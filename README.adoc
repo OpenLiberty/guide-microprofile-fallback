@@ -141,13 +141,13 @@ see https://openliberty.io/guides/microprofile-config.html[Configuring microserv
 The following two steps set up the dynamic configuration on the `system` service and its client.
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
-First, the [hotspot=1-27 file=0]`SystemResource` class has
+First, the [hotspot=1-27 file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` class has
 the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the [hotspot=1-2 file=1]`CustomConfigSource` file.
 Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, the [hotspot=1-25 file=2]`SystemClient` class
+Next, the [hotspot=1-25 file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
 makes a request to the `system` service and checks for the response.
 The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
 This code indicates that the server being called
