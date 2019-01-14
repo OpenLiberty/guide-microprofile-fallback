@@ -346,7 +346,6 @@ You just learned how to build a fallback mechanism for a microservice with Micro
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
 
-include::{common-includes}/finish.adoc[]
 
 include::https://raw.githubusercontent.com/OpenLiberty/guides-common/multipane/attribution.adoc[subs="attributes"]
 
