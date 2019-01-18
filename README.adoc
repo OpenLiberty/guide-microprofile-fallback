@@ -186,7 +186,7 @@ include::finish/src/main/liberty/config/server.xml[]
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml[]
+include::finish/pom.xml[tags=**]
 ----
 
 // =================================================================================================
