@@ -92,6 +92,7 @@ CustomConfigSource.json
 include::finish/resources/CustomConfigSource.json[]
 ----
 
+[role="edit_command_text"]
 Change the `io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. 
 
 You do not need
@@ -108,6 +109,7 @@ When you are done checking out the application, go to the `CustomConfigSource.js
 `resources/CustomConfigSource.json`
 ----
 
+[role="edit_command_text"]
 Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
 
@@ -126,7 +128,7 @@ mvn liberty:stop-server
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot=1-253 file=4]`pom.xml` file. Look for
+The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=4]`pom.xml` file. Look for
 the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
 fault tolerance policies in your microservices.
 
@@ -142,13 +144,13 @@ see https://openliberty.io/guides/microprofile-config.html[Configuring microserv
 The following two steps set up the dynamic configuration on the `system` service and its client.
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
-First, the [hotspot=1-27 file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
+First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
 the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the [hotspot=1-2 file=1]`CustomConfigSource` file.
 Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, the [hotspot=1-25 file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
+Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
 makes a request to the `system` service and checks for the response.
 The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
 This code indicates that the server being called
