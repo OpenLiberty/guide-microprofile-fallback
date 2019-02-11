@@ -132,7 +132,7 @@ The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot 
 the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
 fault tolerance policies in your microservices.
 
-You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot=1-15 file=3]`src/main/liberty/config/server.xml` server configuration,
+You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -147,7 +147,7 @@ You can move on to the next section, which adds the fallback mechanism on the `i
 First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
 the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the [hotspot=1-2 file=1]`CustomConfigSource` file.
+to `false` in the [hotspot file=1]`CustomConfigSource` file.
 Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
@@ -203,7 +203,7 @@ An IOException is thrown to simulate the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
 
-[role="code_command hotspot=13-56", subs="quotes"]
+[role="code_command", subs="quotes"]
 ----
 #Create the `InventoryManager` class.#
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
@@ -241,7 +241,7 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-[role="code_command hotspot=2-2", subs="quotes"]
+[role="code_command", subs="quotes"]
 ----
 #Update the configuration file.#
 `resources/CustomConfigSource.json`
