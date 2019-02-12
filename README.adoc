@@ -75,7 +75,7 @@ To try out the application, navigate to the `finish` directory and run the follo
 mvn clean install liberty:start-server
 ```
 
-Point your browser to the http://localhost:9080/inventory/systems/localhost` URL, which accesses the
+Point your browser to the `http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^]` URL, which accesses the
 `inventory` service with a localhost host name. You see the system properties for this host.
 When you visit this URL, some of these system
 properties, such as the OS name and user name, are automatically stored in the inventory.
@@ -97,7 +97,7 @@ Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from
 
 You do not need
 to restart the server. Next, return to your browser and point back to the
-http://localhost:9080/inventory/systems/localhost URL.
+http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
 You see the cached properties for this localhost.
 
@@ -234,9 +234,9 @@ You successfully set up your microservice to have fault tolerance capability.
 include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
-http://localhost:9080/inventory/systems/localhost URL.
+http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
 You receive the system properties of your local JVM from the `inventory` service. Next, point your
-browser to the `system` service URL, which is located at http://localhost:9080/system/properties,
+browser to the `system` service URL, which is located at http://localhost:9080/system/properties[http://localhost:9080/system/properties^],
 to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
@@ -263,12 +263,12 @@ You can test the fault tolerance mechanism of your microservices by dynamically 
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
-refresh to the http://localhost:9080/inventory/systems/localhost URL to view the cached version of
+refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
 the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
-To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties URL again.
+To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again.
 You see that the service displays a 503 HTTP response code.
 
 When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
