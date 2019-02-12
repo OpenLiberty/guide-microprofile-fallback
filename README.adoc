@@ -36,7 +36,7 @@ that reduce the impact from failure and ensure continued operation of services.
 
 MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
 Fault tolerance leverages different strategies to guide the execution and result of logic.
-As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website],
+As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website^],
 retry policies, bulkheads, and circuit breakers are popular concepts in this area.
 They dictate whether and when executions take place, and fallbacks offer an alternative result
 when an execution does not complete successfully.
@@ -139,7 +139,7 @@ To easily work through this guide, the two provided microservices are set up to 
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
 dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
-see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
+see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
 
 The following two steps set up the dynamic configuration on the `system` service and its client.
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
