@@ -72,7 +72,7 @@ To try out the application, navigate to the `finish` directory and run the follo
 
 [role='command']
 ```
-mvn clean install liberty:start-server
+mvn install liberty:start-server
 ```
 
 Point your browser to the `http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^]` URL, which accesses the
