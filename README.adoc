@@ -6,17 +6,18 @@
 // Contributors:
 //   IBM Corporation
 :projectid: microprofile-fallback
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 20 minutes
 :page-releasedate: 2018-03-16
 :page-guide-category: microprofile
 :page-essential: false
 :page-description: Learn how to add fallback behavior to microservice dependencies to manage the impact of failures.
-:page-tags: ['MicroProfile', 'microservices', 'Fault Tolerance', '@Fallback']
+:page-tags: ['MicroProfile']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
+:guide-author: Open Liberty
 = Building fault-tolerant microservices with the @Fallback annotation
 
 [.hidden]
@@ -35,7 +36,7 @@ that reduce the impact from failure and ensure continued operation of services.
 
 MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
 Fault tolerance leverages different strategies to guide the execution and result of logic.
-As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website],
+As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website^],
 retry policies, bulkheads, and circuit breakers are popular concepts in this area.
 They dictate whether and when executions take place, and fallbacks offer an alternative result
 when an execution does not complete successfully.
@@ -55,6 +56,7 @@ a failed execution.
 // Getting Started
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/gitclone.adoc[]
 
 // =================================================================================================
@@ -68,29 +70,52 @@ for the application. You can give it a try before you proceed with building your
 
 To try out the application, navigate to the `finish` directory and run the following command:
 
+[role='command']
 ```
-mvn clean install liberty:start-server
-
+mvn install liberty:start-server
 ```
 
-Point your browser to the `http://localhost:9080/inventory/systems/localhost` URL, which accesses the
+Point your browser to the `http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^]` URL, which accesses the
 `inventory` service with a localhost host name. You see the system properties for this host.
 When you visit this URL, some of these system
 properties, such as the OS name and user name, are automatically stored in the inventory.
 
-Now, open the `resources/CustomConfigSource.json` file and change the
-`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. You do not need
+[role="code_command hotspot=2", subs="quotes"]
+----
+#Update the `CustomConfigSource` configuration file.#
+`resources/CustomConfigSource.json`
+----
+
+CustomConfigSource.json
+[source, JSON, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json[]
+----
+
+[role="edit_command_text"]
+Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. 
+
+You do not need
 to restart the server. Next, return to your browser and point back to the
-`http://localhost:9080/inventory/systems/localhost` URL.
+http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
 You see the cached properties for this localhost.
 
-When you are done checking out the application, go to the `CustomConfigSource.json` file again and
-change the `io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
+When you are done checking out the application, go to the `CustomConfigSource.json` file again.
+
+[role="code_command hotspot=2", subs="quotes"]
+----
+#Update the `CustomConfigSource` configuration file.#
+`resources/CustomConfigSource.json`
+----
+
+[role="edit_command_text"]
+Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
 
 Stop the Open Liberty server:
 
+[role='command']
 ```
 mvn liberty:stop-server
 ```
@@ -103,40 +128,68 @@ mvn liberty:stop-server
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API was added as a dependency to your `pom.xml` file. Look for
-the dependency with the `mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
+The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=4]`pom.xml` file. Look for
+the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
 fault tolerance policies in your microservices.
 
-You can also find the `mpFaultTolerance` feature in your `src/main/liberty/config/server.xml` server configuration,
+You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
 dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
 or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
-see https://openliberty.io/guides/microprofile-config.html[Configuring microservices].
+see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
 
 The following two steps set up the dynamic configuration on the `system` service and its client.
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
-First, the `src/main/java/io/openliberty/guides/system/SystemResource.java` class has
-the `isInMaintenance()` condition, which determines that the system properties are returned only if you
-set the `io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the `resources/CustomConfigSource.json` file.
-Otherwise, the service returns a `Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
+the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
+set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
+to `false` in the [hotspot file=1]`CustomConfigSource` file.
+Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, the `src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` class
+Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
 makes a request to the `system` service and checks for the response.
 The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
 This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
-likely be alleviated after some delay. To simulate that the system is unavailable, an IOException is thrown.
+likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=22 file=2]`IOException` is thrown.
 
-
-The public `getProperties()` method in this class calls the `getPropertiesHelper()` method.
+The public [hotspot=21-23 file=2]`getProperties()` method in this class calls the `getPropertiesHelper()` method.
 The `InventoryManager` class calls this public method.
 You will look into the `InventoryManager` class in more detail in the next section.
 
+SystemResource.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
+----
+
+CustomConfigSource.json
+[source, JSON, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json[]
+----
+
+SystemClient.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=client]
+----
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
+----
+
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/pom.xml[tags=**]
+----
 
 // =================================================================================================
 // Adding the @Fallback annotation
@@ -149,18 +202,23 @@ was taken down for maintenance.
 An IOException is thrown to simulate the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
-Create the `InventoryManager` class in the
-`src/main/java/io/openliberty/guides/inventory/InventoryManager.java` file:
 
-[source, java, indent=0]
+[role="code_command", subs="quotes"]
+----
+#Create the `InventoryManager` class.#
+`src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
+----
+
+InventoryManager.java
+[source, java, linenums, role='code_column']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
-example, use the `fallbackForGet` method.
+The [hotspot=18]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
+example, use the [hotspot=23-31]`fallbackForGet()` method.
 
-The `fallbackForGet()` method, which is the designated fallback method for the original
+The [hotspot=23-31]`fallbackForGet()` method, which is the designated fallback method for the original
 `get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values from the inventory.
@@ -172,32 +230,53 @@ You successfully set up your microservice to have fault tolerance capability.
 // Building and running the application
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/mvnbuild.adoc[]
 
 When the server is running, point your browser to the
-`http://localhost:9080/inventory/systems/localhost` URL.
+http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
 You receive the system properties of your local JVM from the `inventory` service. Next, point your
-browser to the `system` service URL, which is located at `http://localhost:9080/system/properties`,
+browser to the `system` service URL, which is located at http://localhost:9080/system/properties[http://localhost:9080/system/properties^],
 to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
+[role="code_command", subs="quotes"]
+----
+#Update the configuration file.#
+`resources/CustomConfigSource.json`
+----
+
+CustomConfigSource.json
+[source, json, linenums, role='code_column']
+----
+include::finish/resources/CustomConfigSource.json[]
+----
+
+InventoryManager.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
+----
+
 You can test the fault tolerance mechanism of your microservices by dynamically changing
-the `io_openliberty_guides_system_inMaintenance` property value to `true` in the
+the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 `resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
-refresh to the `http://localhost:9080/inventory/systems/localhost` URL to view the cached version of
-the properties. The `fallbackForGet()` method, which is the designated fallback method, is called
+refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
+the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
-To see that the `system` service is down, point your browser to the `http://localhost:9080/system/properties` URL again.
+To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again.
 You see that the service displays a 503 HTTP response code.
 
-When you're done, change the `io_openliberty_guides_system_inMaintenance`
+When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the `resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvncompile.adoc[]
+
+
 
 // =================================================================================================
 // Testing the application
@@ -208,34 +287,38 @@ include::{common-includes}/mvncompile.adoc[]
 You can test your application manually, but automated tests ensure code quality because they trigger a failure
 whenever a code change introduces a defect. JUnit and the JAX-RS Client API provide a simple environment for you to write tests.
 
-Create the `FaultToleranceTest` class in the
-`src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java` file:
-
-[source, java]
+[role="code_command hotspot", subs="quotes"]
 ----
-include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
+#Create the `FaultToleranceTest` class.#
+`src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
-The `@Before` and `@After` annotations indicate that this method executes before or after the other test case.
+The [hotspot=21]`@Before` and [hotspot=27]`@After` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
 The teardown method simply destroys this client instance as well as the HTTP responses.
 
-The `testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
+The [hotspot=34-53]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
 host name before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
-The `@Test` annotation indicates that the method automatically executes when your test class runs.
+The [hotspot=33]`@Test` annotation indicates that the method automatically executes when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
 the code.
 
+FaultToleranceTest.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
+----
 // =================================================================================================
 // Running the tests
 // =================================================================================================
 
+[role='command']
 include::{common-includes}/mvnverify.adoc[]
 
 [source, role="no_copy"]
@@ -266,9 +349,21 @@ You see a test failure occur for the `testFallbackForGet()` test case.
 
 == Great work! You're done!
 
-You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance and wrote a test to validate it.
+You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance in Open Liberty and wrote a test to validate it.
 
 You can try one of the related MicroProfile guides. They demonstrate technologies that you can
 learn and expand on what you built here.
 
-include::{common-includes}/finish.adoc[]
+
+include::{common-includes}/attribution.adoc[subs="attributes"]
+
+// =================================================================================================
+// Related links
+// =================================================================================================
+
+== Related Links
+Dive into the MicroProfile config.
+
+https://github.com/microprofile[See MicroProfile Config specs (GitHub)]
+
+https://openliberty.io/docs/ref/microprofile[Another link to MicroProfile specs (openliberty.io)]
