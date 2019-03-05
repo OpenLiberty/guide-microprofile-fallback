@@ -159,7 +159,8 @@ This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=22 file=2]`IOException` is thrown.
 
-The `InventoryManager` class calls the public [hotspot=21-23 file=2]`getProperties()` method in this class.
+The `InventoryManager` class calls the [hotspot=21-23 file=2]`getProperties()` method
+in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
