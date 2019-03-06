@@ -153,7 +153,7 @@ Otherwise, the service returns a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE`
 Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
-you can follow this https://openliberty.io/guides/microprofile-rest-client.html[guide]. 
+you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces] guide.
 The `system` service as described in the [hotspot file=0]`SystemResource.java` file
 may return a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code.
 This code indicates that the server being called
