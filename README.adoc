@@ -75,12 +75,12 @@ To try out the application, navigate to the `finish` directory and run the follo
 mvn install liberty:start-server
 ```
 
-Point your browser to the `http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^]` URL, which accesses the
+Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the
 `inventory` service with a localhost host name. You see the system properties for this host.
 When you visit this URL, some of these system
 properties, such as the OS name and user name, are automatically stored in the inventory.
 
-[role="code_command hotspot=2", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Update the `CustomConfigSource` configuration file.#
 `resources/CustomConfigSource.json`
@@ -93,7 +93,7 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 [role="edit_command_text"]
-Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file. 
+Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file.
 
 You do not need
 to restart the server. Next, return to your browser and point back to the
@@ -101,9 +101,9 @@ http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventor
 The fallback mechanism is triggered because the `system` service is now in maintenance.
 You see the cached properties for this localhost.
 
-When you are done checking out the application, go to the `CustomConfigSource.json` file again.
+When you are done checking out the application, go to the [hotspot]`CustomConfigSource.json` file again.
 
-[role="code_command hotspot=2", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Update the `CustomConfigSource` configuration file.#
 `resources/CustomConfigSource.json`
@@ -129,7 +129,7 @@ mvn liberty:stop-server
 Navigate to the `start` directory to begin.
 
 The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=4]`pom.xml` file. Look for
-the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the 
+the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
 fault tolerance policies in your microservices.
 
 You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
@@ -148,17 +148,20 @@ First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemRes
 the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the [hotspot file=1]`CustomConfigSource` file.
-Otherwise, the service returns a [hotspot=23-25 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+Otherwise, the service returns a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
-makes a request to the `system` service and checks for the response.
-The `system` service may return a `Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. 
+makes a request to the `system` service through the MicroProfile Rest Client API.
+If you want to learn more about MicroProfile Rest Client,
+you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces] guide.
+The `system` service as described in the [hotspot file=0]`SystemResource.java` file
+may return a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code.
 This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=22 file=2]`IOException` is thrown.
 
-The public [hotspot=21-23 file=2]`getProperties()` method in this class calls the `getPropertiesHelper()` method.
-The `InventoryManager` class calls this public method.
+The `InventoryManager` class calls the [hotspot=21-23 file=2]`getProperties()` method
+in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
@@ -203,7 +206,7 @@ An IOException is thrown to simulate the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
 
-[role="code_command", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Create the `InventoryManager` class.#
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
@@ -219,7 +222,7 @@ The [hotspot=18]`@Fallback` annotation dictates a method to call when the origin
 example, use the [hotspot=23-31]`fallbackForGet()` method.
 
 The [hotspot=23-31]`fallbackForGet()` method, which is the designated fallback method for the original
-`get()` method, checks to see if the system's properties exist in the inventory.
+[hotspot=19-21]`get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values from the inventory.
 
@@ -261,7 +264,7 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
-`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
+[hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
 the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
@@ -272,7 +275,7 @@ To see that the `system` service is down, point your browser to the http://local
 You see that the service displays a 503 HTTP response code.
 
 When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
-property value back to `false` in the `resources/CustomConfigSource.json` file.
+property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvncompile.adoc[]
 
@@ -338,9 +341,9 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, comment out the `changeSystemProperty()` methods
-in the `FaultToleranceTest.java` file. Rerun the Maven build.
-You see a test failure occur for the `testFallbackForGet()` test case.
+To see if the tests detect a failure, comment out the [hotspot=40-41 hotspot=51-52]`changeSystemProperty()` methods
+in the [hotspot]`FaultToleranceTest.java` file. Rerun the Maven build.
+You see a test failure occur for the [hotspot=34-53]`testFallbackForGet()` test case.
 
 
 // =================================================================================================
