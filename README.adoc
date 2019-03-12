@@ -359,14 +359,3 @@ learn and expand on what you built here.
 
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
-
-// =================================================================================================
-// Related links
-// =================================================================================================
-
-== Related Links
-Dive into the MicroProfile config.
-
-https://github.com/microprofile[See MicroProfile Config specs (GitHub)]
-
-https://openliberty.io/docs/ref/microprofile[Another link to MicroProfile specs (openliberty.io)]
