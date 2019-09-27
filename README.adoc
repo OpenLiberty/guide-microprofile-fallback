@@ -1,4 +1,4 @@
-// Copyright (c) 2018 IBM Corporation and others.
+// Copyright (c) 2018, 2019 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -50,6 +50,9 @@ service is unavailable.
 You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
 a failed execution.
+
+You will also see the application metrics for the fault tolerance methods that are automatically enabled
+when you have the MicroProfile Metrics feature added to the application server configuration file.
 
 
 // =================================================================================================
@@ -229,6 +232,21 @@ message in the browser. Otherwise, this method returns the cached property value
 You successfully set up your microservice to have fault tolerance capability.
 
 
+== Viewing metrics for the fault tolerance methods
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
+----
+
+MicroProfile Fault Tolerance integrates with MicroProfile Metrics to provide metrics for the annotated fault tolerance methods.
+When both the [hotspot=mpFaultTolerance]`mpFaultTolerance` and the [hotspot=mpMetrics]`mpMetrics` features are included in the [hotspot]`server.xml` configuration file,
+the `@Fallback` fault tolerance annotation supplies metrics that count the total number of annotated method invocations and failed invocations, 
+as well, the total number of the fallback method calls.
+
+You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide.
+
 // =================================================================================================
 // Building and running the application
 // =================================================================================================
@@ -262,6 +280,19 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
+To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^].
+See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
+
+[role="no_copy"]
+----
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 1
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total 0
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 0
+----
+
 You can test the fault tolerance mechanism of your microservices by dynamically changing
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 [hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
@@ -274,11 +305,23 @@ The cached system properties contain only the OS name and user name key and valu
 To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again.
 You see that the service displays a 503 HTTP response code.
 
+Point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] again.
+See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
+
+[role="no_copy"]
+----
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 2
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total 0
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 1
+----
+
 When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
 
 include::{common-includes}/mvncompile.adoc[]
-
 
 
 // =================================================================================================
