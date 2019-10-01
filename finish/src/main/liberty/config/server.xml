@@ -14,7 +14,7 @@
     <!-- end::mpMetrics[] -->
   </featureManager>
 
-  <quickStartSecurity userName="user" userPassword="password"/>
+  <quickStartSecurity userName="admin" userPassword="adminpwd"/>
   <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore"/>
 
   <httpEndpoint host="*" httpPort="${default.http.port}"

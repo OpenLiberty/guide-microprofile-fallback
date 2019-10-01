@@ -242,7 +242,7 @@ include::finish/src/main/liberty/config/server.xml[]
 
 MicroProfile Fault Tolerance integrates with MicroProfile Metrics to provide metrics for the annotated fault tolerance methods.
 When both the [hotspot=mpFaultTolerance]`mpFaultTolerance` and the [hotspot=mpMetrics]`mpMetrics` features are included in the [hotspot]`server.xml` configuration file,
-the `@Fallback` fault tolerance annotation supplies metrics that count the total number of annotated method invocations and failed invocations, 
+the `@Fallback` fault tolerance annotation supplies metrics that count the total number of annotated method invocations and failed invocations,
 as well, the total number of the fallback method calls.
 
 You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide.
@@ -280,7 +280,7 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^].
+To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^]. Log in as the `admin` user with `adminpwd` as the password. 
 See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 [role="no_copy"]
