@@ -135,7 +135,7 @@ The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot 
 the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
 fault tolerance policies in your microservices.
 
-You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
+You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -245,7 +245,10 @@ When both the [hotspot=mpFaultTolerance]`mpFaultTolerance` and the [hotspot=mpMe
 the `@Fallback` fault tolerance annotation supplies metrics that count the total number of annotated method invocations and failed invocations,
 as well, the total number of the fallback method calls.
 
-You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide.
+Note that the [hotspot=mpMetrics]`mpMetrics` feature requires SSL and the configuration has been provided for you. The [hotspot=quickStartSecurity]`quickStartSecurity` and [hotspot=keyStore]`keyStore` configuration elements provide basic security to secure the
+server. When you visit the `/metrics` endpoint, use the credentials defined in the server configuration to log in to view the data for the fault tolerance methods.
+
+You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide. You can also learn more about the MicroProfile Fault Tolerance and Metrics integration in the MicroProfile Fault Tolerance https://github.com/eclipse/microprofile-fault-tolerance/releases[specification documentation^].
 
 // =================================================================================================
 // Building and running the application
@@ -280,7 +283,7 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^]. Log in as the `admin` user with `adminpwd` as the password. 
+To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^]. Log in as the `admin` user with `adminpwd` as the password.
 See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 [role="no_copy"]
