@@ -265,6 +265,23 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
+To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^]. Log in as the `admin` user with `adminpwd` as the password.
+See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
+
+[role="no_copy"]
+----
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 1
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total 0
+# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total counter
+application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 0
+----
+
+You can test the fault tolerance mechanism of your microservices by dynamically changing
+the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
+[hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
+
 [role="code_command", subs="quotes"]
 ----
 #Update the configuration file.#
@@ -283,22 +300,6 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-To see the application metrics, point your browser to https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^]. Log in as the `admin` user with `adminpwd` as the password.
-See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
-
-[role="no_copy"]
-----
-# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total counter
-application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total 1
-# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total counter
-application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_failed_total 0
-# TYPE application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total counter
-application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 0
-----
-
-You can test the fault tolerance mechanism of your microservices by dynamically changing
-the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
-[hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
 the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
