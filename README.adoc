@@ -248,7 +248,7 @@ as well, the total number of the fallback method calls.
 Note that the [hotspot=mpMetrics]`mpMetrics` feature requires SSL and the configuration has been provided for you. The [hotspot=quickStartSecurity]`quickStartSecurity` and [hotspot=keyStore]`keyStore` configuration elements provide basic security to secure the
 server. When you visit the `/metrics` endpoint, use the credentials defined in the server configuration to log in to view the data for the fault tolerance methods.
 
-You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide. You can also learn more about the MicroProfile Fault Tolerance and Metrics integration in the MicroProfile Fault Tolerance https://github.com/eclipse/microprofile-fault-tolerance/releases[specification documentation^].
+You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide. You can also learn more about the MicroProfile Fault Tolerance and Metrics integration in the https://github.com/eclipse/microprofile-fault-tolerance/releases[MicroProfile Fault Tolerance specification^].
 
 // =================================================================================================
 // Building and running the application
