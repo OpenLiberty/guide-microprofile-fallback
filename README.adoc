@@ -52,7 +52,7 @@ specification to define criteria for when to provide an alternative solution for
 a failed execution.
 
 You will also see the application metrics for the fault tolerance methods that are automatically enabled
-when you add the MicroProfile Metrics feature added to the server.
+when you add the MicroProfile Metrics feature to the server.
 
 
 // =================================================================================================
@@ -322,7 +322,7 @@ application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations
 application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 1
 ----
 
-Note that the `@Fallback` annotated method [hotspot=19-21 file=1]`get()` has a total 2 calls,
+Note that the `@Fallback` annotated method [hotspot=19-21 file=1]`get()` has a total of 2 calls,
 and the [hotspot=23-31 file=1]`fallbackForGet()` method has 1 call.
 
 When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
