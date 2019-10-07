@@ -15,6 +15,8 @@
 :page-tags: ['MicroProfile']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
+:page-seo-title: Building fault-tolerance microservices with the MicroProfile Fault Tolerance @Fallback annotation
+:page-seo-description: A tutorial and an example on how to build resilient microservices using MicroProfile Fault Tolerance.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :guide-author: Open Liberty
