@@ -165,7 +165,7 @@ in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
-[source, java, linenums, role='code_column tags=503_response']
+[source, java, linenums, role='code_column hide_tags=copyright tags=503_response']
 ----
 include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[]
 ----
@@ -177,19 +177,19 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 SystemClient.java
-[source, java, linenums, role='code_column tags=client']
+[source, java, linenums, role='code_column hide_tags=copyright tags=client']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
 ----
 
 server.xml
-[source, xml, linenums, role='code_column']
+[source, xml, linenums, role='code_column hide_tags=copyright']
 ----
 include::finish/src/main/liberty/config/server.xml[]
 ----
 
 pom.xml
-[source, xml, linenums, role='code_column']
+[source, xml, linenums, role='code_column hide_tags=copyright']
 ----
 include::finish/pom.xml[]
 ----
@@ -213,7 +213,7 @@ Now, set a fallback method to deal with this failure.
 ----
 
 InventoryManager.java
-[source, java, linenums, role='code_column tags=add_fallback']
+[source, java, linenums, role='code_column hide_tags=copyright tags=add_fallback']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
 ----
@@ -257,7 +257,7 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 InventoryManager.java
-[source, java, linenums, role='code_column tags=add_fallback']
+[source, java, linenums, role='code_column hide_tags=copyright tags=add_fallback']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
 ----
@@ -313,7 +313,7 @@ In addition, a few endpoint tests have been included for you to test the basic f
 the code.
 
 FaultToleranceTest.java
-[source, java, linenums, role='code_column hide_tags=ft_testing, javadoc']
+[source, java, linenums, role='code_column hide_tags=copyright, javadoc tags=ft_testing']
 ----
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
 ----
