@@ -45,7 +45,7 @@ public class FaultToleranceTest {
         response.close();
     }
 
-    // tag::javadoc1[]
+    // tag::javadoc[]
     /**
      * testFallbackForGet - test for checking if the fallback is being called
      * correctly 1. Return system properties for a hostname when inventory
@@ -56,7 +56,7 @@ public class FaultToleranceTest {
      * service is up, is greater than the total number of the system properties
      * when service is down.
      */
-    // end::javadoc1[]
+    // end::javadoc[]
 
     // tag::Test[]
     @Test
@@ -88,11 +88,11 @@ public class FaultToleranceTest {
     }
     // end::testFallbackForGet[]
 
-    // tag::javadoc2[]
+    // tag::javadoc[]
     /**
      * Asserts that the given URL has the correct response code of 200.
      */
-    // end::javadoc2[]
+    // end::javadoc[]
     private void assertResponse(String url, Response response) {
         assertEquals("Incorrect response code from " + url, 200,
                      response.getStatus());
