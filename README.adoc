@@ -165,9 +165,9 @@ in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
-[source, java, linenums, role='code_column']
+[source, java, linenums, role='code_column hide_tags=503_response']
 ----
-include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=503_response]
+include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[]
 ----
 
 CustomConfigSource.json
@@ -177,9 +177,9 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 SystemClient.java
-[source, java, linenums, role='code_column']
+[source, java, linenums, role='code_column hide_tags=client']
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=client]
+include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
 ----
 
 server.xml
@@ -191,7 +191,7 @@ include::finish/src/main/liberty/config/server.xml[]
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml[tags=**]
+include::finish/pom.xml[]
 ----
 
 // =================================================================================================
@@ -213,9 +213,9 @@ Now, set a fallback method to deal with this failure.
 ----
 
 InventoryManager.java
-[source, java, linenums, role='code_column']
+[source, java, linenums, role='code_column hide_tags=add_fallback']
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
 ----
 
 The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
@@ -257,9 +257,9 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 InventoryManager.java
-[source, java, linenums, role='code_column']
+[source, java, linenums, role='code_column hide_tags=add_fallback']
 ----
-include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
@@ -313,9 +313,9 @@ In addition, a few endpoint tests have been included for you to test the basic f
 the code.
 
 FaultToleranceTest.java
-[source, java, linenums, role='code_column']
+[source, java, linenums, role='code_column hide_tags=ft_testing, javadoc']
 ----
-include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[tags=ft_testing;!javadoc]
+include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
 ----
 // =================================================================================================
 // Running the tests
