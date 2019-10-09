@@ -129,10 +129,10 @@ mvn liberty:stop-server
 Navigate to the `start` directory to begin.
 
 The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=4]`pom.xml` file. Look for
-the dependency with the [hotspot=73-78 file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
+the dependency with the [hotspot=mpFaultTolerance file=4]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
 fault tolerance policies in your microservices.
 
-You can also find the [hotspot=9 file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
+You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
 To easily work through this guide, the two provided microservices are set up to run
@@ -145,22 +145,22 @@ The following two steps set up the dynamic configuration on the `system` service
 You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
 First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
-the [hotspot=21-23 file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
+the [hotspot=isInMaintenance file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you
 set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
 to `false` in the [hotspot file=1]`CustomConfigSource` file.
-Otherwise, the service returns a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+Otherwise, the service returns a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
 Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
 you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
 The `system` service as described in the [hotspot file=0]`SystemResource.java` file
-may return a [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code.
+may return a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code.
 This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
-likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=22 file=2]`IOException` is thrown.
+likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=IOException file=2]`IOException` is thrown.
 
-The `InventoryManager` class calls the [hotspot=21-23 file=2]`getProperties()` method
+The `InventoryManager` class calls the [hotspot=getProperties file=2]`getProperties()` method
 in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
@@ -218,11 +218,11 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[tags=add_fallback]
 ----
 
-The [hotspot=18]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
-example, use the [hotspot=23-31]`fallbackForGet()` method.
+The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
+example, use the [hotspot=fallbackForGet]`fallbackForGet()` method.
 
-The [hotspot=23-31]`fallbackForGet()` method, which is the designated fallback method for the original
-[hotspot=19-21]`get()` method, checks to see if the system's properties exist in the inventory.
+The [hotspot=fallbackForGet]`fallbackForGet()` method, which is the designated fallback method for the original
+[hotspot=get]`get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values from the inventory.
 
@@ -267,7 +267,7 @@ the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property valu
 [hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 After saving the file, go back to your browser and
 refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
-the properties. The [hotspot=23-31 file=1]`fallbackForGet()` method, which is the designated fallback method, is called
+the properties. The [hotspot=fallbackForGet file=1]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
 
@@ -296,17 +296,17 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java`
 ----
 
-The [hotspot=21]`@Before` and [hotspot=27]`@After` annotations indicate that this method executes before or after the other test case.
+The [hotspot=Before]`@Before` and [hotspot=After]`@After` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
 The teardown method simply destroys this client instance as well as the HTTP responses.
 
-The [hotspot=34-53]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
+The [hotspot=testFallbackForGet]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
 host name before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
-The [hotspot=33]`@Test` annotation indicates that the method automatically executes when your test class runs.
+The [hotspot=Test]`@Test` annotation indicates that the method automatically executes when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
@@ -341,9 +341,9 @@ Results :
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, comment out the [hotspot=40-41 hotspot=51-52]`changeSystemProperty()` methods
+To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
 in the [hotspot]`FaultToleranceTest.java` file. Rerun the Maven build.
-You see a test failure occur for the [hotspot=34-53]`testFallbackForGet()` test case.
+You see a test failure occur for the [hotspot=testFallbackForGet]`testFallbackForGet()` test case.
 
 
 // =================================================================================================

@@ -28,12 +28,16 @@ public class InventoryManager {
 
   private List<SystemData> systems = Collections.synchronizedList(new ArrayList<>());
   private InventoryUtils invUtils = new InventoryUtils();
-
+  // tag::Fallback[]
   @Fallback(fallbackMethod = "fallbackForGet")
+  // end::Fallback[]
+  // tag::get[]
   public Properties get(String hostname) throws IOException {
     return invUtils.getProperties(hostname);
   }
+  // end::get[]
 
+  // tag::fallbackForGet[]
   public Properties fallbackForGet(String hostname) {
     Properties properties = findHost(hostname);
     if (properties == null) {
@@ -43,7 +47,8 @@ public class InventoryManager {
     }
     return properties;
   }
-
+  // end::fallbackForGet[]
+  
   public void add(String hostname, Properties systemProps) {
     Properties props = new Properties();
     props.setProperty("os.name", systemProps.getProperty("os.name"));

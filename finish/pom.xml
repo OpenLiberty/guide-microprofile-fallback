@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>io.openliberty.guides</groupId>
-  <artifactId>microprofile-fallback</artifactId>
+  <artifactId>guide-microprofile-fallback</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
@@ -72,14 +72,14 @@
         <type>esa</type>
         <scope>provided</scope>
     </dependency>
-    <!-- tag::fault_tolerance[] -->
+    <!-- tag::mpFaultTolerance[] -->
     <dependency>
         <groupId>io.openliberty.features</groupId>
         <artifactId>mpFaultTolerance-2.0</artifactId>
         <type>esa</type>
         <scope>provided</scope>
     </dependency>
-    <!-- end::fault_tolerance[] -->
+    <!-- end::mpFaultTolerance[] -->
     <!-- For tests -->
     <dependency>
       <groupId>junit</groupId>

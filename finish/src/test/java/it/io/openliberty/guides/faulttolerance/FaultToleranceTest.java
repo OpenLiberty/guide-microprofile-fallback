@@ -30,14 +30,17 @@ public class FaultToleranceTest {
 
     private Response response;
     private Client client;
-
+    // tag::Before[]
     @Before
+    // end::Before[]
     public void setup() {
         client = ClientBuilder.newClient();
         client.register(JsrJsonpProvider.class);
     }
 
+    // tag::After[]
     @After
+    // end::After[]
     public void teardown() {
         client.close();
         response.close();
@@ -55,15 +58,21 @@ public class FaultToleranceTest {
      * when service is down.
      */
     // end::javadoc[]
+
+    // tag::Test[]
     @Test
+    // end::Test[]
+    // tag::testFallbackForGet[]
     public void testFallbackForGet() throws InterruptedException {
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
         assertResponse(TestUtils.baseUrl, response);
         JsonObject obj = response.readEntity(JsonObject.class);
         int propertiesSize = obj.size();
+        // tag::changeSystemProperty1[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_FALSE,
                                        TestUtils.SYSTEM_MAINTENANCE_TRUE);
+        // end::changeSystemProperty1[]
         Thread.sleep(3000);
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
@@ -73,9 +82,12 @@ public class FaultToleranceTest {
         assertTrue("The total number of properties from the @Fallback method "
                 + "is not smaller than the number from the system service, as expected.",
                    propertiesSize > propertiesSizeFallBack);
+        // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
+        // end::changeSystemProperty2[]
     }
+    // end::testFallbackForGet[]
 
     // tag::javadoc[]
     /**
