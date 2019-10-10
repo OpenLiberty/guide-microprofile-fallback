@@ -10,6 +10,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
+// tag::ft_testing[]
 package it.io.openliberty.guides.faulttolerance;
 
 import static org.junit.Assert.assertEquals;
@@ -98,3 +99,4 @@ public class FaultToleranceTest {
                      response.getStatus());
     }
 }
+// end::ft_testing[]
