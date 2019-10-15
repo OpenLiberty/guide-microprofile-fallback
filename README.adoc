@@ -313,7 +313,7 @@ In addition, a few endpoint tests have been included for you to test the basic f
 the code.
 
 FaultToleranceTest.java
-[source, java, linenums, role='code_column hide_tags=copyright, Javadoc1, Javadoc2']
+[source, java, linenums, role='code_column tags=ft_testing hide_tags=javadoc']
 ----
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceTest.java[]
 ----
