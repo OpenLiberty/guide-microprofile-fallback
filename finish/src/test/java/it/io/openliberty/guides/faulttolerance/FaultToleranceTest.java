@@ -30,6 +30,7 @@ public class FaultToleranceTest {
 
     private Response response;
     private Client client;
+    
     // tag::Before[]
     @Before
     // end::Before[]

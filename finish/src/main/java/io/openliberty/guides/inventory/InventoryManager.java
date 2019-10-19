@@ -28,6 +28,7 @@ public class InventoryManager {
 
   private List<SystemData> systems = Collections.synchronizedList(new ArrayList<>());
   private InventoryUtils invUtils = new InventoryUtils();
+  
   // tag::Fallback[]
   @Fallback(fallbackMethod = "fallbackForGet")
   // end::Fallback[]
