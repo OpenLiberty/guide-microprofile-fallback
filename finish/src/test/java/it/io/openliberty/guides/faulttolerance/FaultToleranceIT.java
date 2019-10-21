@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import it.io.openliberty.guides.utils.TestUtils;
 
-public class FaultToleranceTest {
+public class FaultToleranceIT {
 
     private Response response;
     private Client client;
