@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018 IBM Corporation and others.
+ * Copyright (c) 2018, 2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,16 +13,16 @@
 // tag::ft_testing[]
 package it.io.openliberty.guides.faulttolerance;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import it.io.openliberty.guides.utils.TestUtils;
 
@@ -31,13 +31,13 @@ public class FaultToleranceIT {
     private Response response;
     private Client client;
 
-    @Before
+    @BeforeEach
     public void setup() {
         client = ClientBuilder.newClient();
         client.register(JsrJsonpProvider.class);
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         client.close();
         response.close();
@@ -70,9 +70,9 @@ public class FaultToleranceIT {
         assertResponse(TestUtils.baseUrl, response);
         obj = response.readEntity(JsonObject.class);
         int propertiesSizeFallBack = obj.size();
-        assertTrue("The total number of properties from the @Fallback method "
-                + "is not smaller than the number from the system service, as expected.",
-                   propertiesSize > propertiesSizeFallBack);
+        assertTrue(propertiesSize > propertiesSizeFallBack, 
+                   "The total number of properties from the @Fallback method "
+                 + "is not smaller than the number from the system service, as expected.");
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
         Thread.sleep(3000);
@@ -84,8 +84,7 @@ public class FaultToleranceIT {
      */
     // end::javadoc[]
     private void assertResponse(String url, Response response) {
-        assertEquals("Incorrect response code from " + url, 200,
-                     response.getStatus());
+        assertEquals(200, response.getStatus(), "Incorrect response code from " + url);
     }
 }
 // end::ft_testing[]
