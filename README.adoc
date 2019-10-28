@@ -141,8 +141,8 @@ Start Open Liberty in development mode, which starts the Open Liberty server and
 mvn liberty:dev
 ```
 
-The MicroProfile Fault Tolerance API is included in the MicroProfile dependency specified by your [hotspot file=0]`pom.xml` file. 
-Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
+The MicroProfile Fault Tolerance API is included in the MicroProfile dependency specified by your [hotspot file=4]`pom.xml` file. 
+Look for the dependency with the [hotspot=microprofile file=4]`microprofile` artifact ID.
 This dependency provides a library that allows you to use fault tolerance policies in your microservices.
 
 You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
@@ -204,7 +204,7 @@ include::finish/src/main/liberty/config/server.xml[]
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml[tags=**]
+include::finish/pom.xml[]
 ----
 
 // =================================================================================================
@@ -293,7 +293,7 @@ You can test the fault tolerance mechanism of your microservices by dynamically 
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 [hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 
-[role="code_command", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Update the configuration file.#
 `resources/CustomConfigSource.json`
@@ -358,13 +358,13 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceIT.java`
 ----
 
-The [hotspot=21]`@Before` and [hotspot=27]`@After` annotations indicate that this method executes before or after the other test case.
+The [hotspot=21]`@BeforeEach` and [hotspot=27]`@AfterEach` annotations indicate that this method executes before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
 The teardown method simply destroys this client instance as well as the HTTP responses.
 
-The [hotspot=34-53]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
+The [hotspot=34-54]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
 host name before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
@@ -405,7 +405,7 @@ Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 To see if the tests detect a failure, comment out the [hotspot=40-41 hotspot=51-52]`changeSystemProperty()` methods
-in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see a test failure occur for the [hotspot=34-53]`testFallbackForGet()` test case.
+in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see a test failure occur for the [hotspot=34-54]`testFallbackForGet()` test case.
 
 
 // =================================================================================================
