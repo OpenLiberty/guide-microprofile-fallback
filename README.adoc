@@ -299,6 +299,9 @@ the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property valu
 `resources/CustomConfigSource.json`
 ----
 
+[role="edit_command_text"]
+Change the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file.
+
 CustomConfigSource.json
 [source, json, linenums, role='code_column']
 ----
@@ -339,6 +342,13 @@ including the previous call before turning the `system` service in maintenance.
 The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` data
 indicates that the [hotspot=23-31 file=1]`fallbackForGet()` method has 1 call.
 
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Update the configuration file.#
+`resources/CustomConfigSource.json`
+----
+
+[role="edit_command_text"]
 When you're done, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
 
