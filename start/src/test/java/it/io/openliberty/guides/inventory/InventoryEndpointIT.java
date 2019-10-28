@@ -15,6 +15,7 @@ package it.io.openliberty.guides.inventory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -57,28 +58,11 @@ public class InventoryEndpointIT {
     // tag::testSuite[]
     @Test
     public void testSuite() {
-        this.testEmptyInventory();
         this.testHostRegistration();
         this.testSystemPropertiesMatch();
         this.testUnknownHost();
     }
     // end::testSuite[]
-
-    // tag::testEmptyInventory[]
-    public void testEmptyInventory() {
-        Response response = this.getResponse(baseUrl + INVENTORY_HOSTS);
-        this.assertResponse(baseUrl, response);
-
-        JsonObject obj = response.readEntity(JsonObject.class);
-
-        int expected = 0;
-        int actual = obj.getInt("total");
-        assertEquals("The inventory should be empty on application start but it wasn't",
-                     expected, actual);
-
-        response.close();
-    }
-    // end::testEmptyInventory[]
 
     // tag::testHostRegistration[]
     public void testHostRegistration() {
@@ -89,14 +73,14 @@ public class InventoryEndpointIT {
 
         JsonObject obj = response.readEntity(JsonObject.class);
 
-        int expected = 1;
-        int actual = obj.getInt("total");
-        assertEquals("The inventory should have one entry for localhost",
-                     expected, actual);
+        JsonArray systems = obj.getJsonArray("systems");
 
-        boolean localhostExists = obj.getJsonArray("systems").getJsonObject(0)
-                                     .get("hostname").toString()
-                                     .contains("localhost");
+        boolean localhostExists = false;
+        for (int n = 0; n < systems.size(); n++) {
+            localhostExists = systems.getJsonObject(n)
+                                .get("hostname").toString()
+                                .contains("localhost");
+        }
         assertTrue("A host was registered, but it was not localhost",
                    localhostExists);
 
