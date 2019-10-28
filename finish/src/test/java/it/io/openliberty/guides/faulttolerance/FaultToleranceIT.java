@@ -75,6 +75,7 @@ public class FaultToleranceIT {
                    propertiesSize > propertiesSizeFallBack);
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
+        Thread.sleep(3000);
     }
 
     // tag::javadoc[]
