@@ -71,9 +71,9 @@ include::{common-includes}/gitclone.adoc[]
 === Try what you'll build
 
 The `finish` directory in the root of this guide contains the finished implementation
-for the application. You can give it a try before you proceed with building your own.
+for the application. Give it a try before you proceed with building your own.
 
-To try out the application, navigate to the `finish` directory and run the following command:
+To try out the application, first go to the `finish` directory and run the following Maven goal to build the application and deploy it to Open Liberty:
 
 [role='command']
 ```
@@ -407,6 +407,8 @@ Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 To see if the tests detect a failure, comment out the [hotspot=40-41 hotspot=51-52]`changeSystemProperty()` methods
 in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see a test failure occur for the [hotspot=34-54]`testFallbackForGet()` test case.
 
+When you are done checking out the service, exit development mode by typing `q` in the shell session 
+where you ran the server and then pressing the `enter/return` key.
 
 // =================================================================================================
 // Great work! You're done!
