@@ -2,6 +2,7 @@ language: java
 before_script:
 - unset _JAVA_OPTIONS
 - cd finish
+- chmod +x ../scripts/travisTest.sh
 script:
 - ../scripts/travisTest.sh
 - serverName=$(target/liberty/wlp/bin/server list | cut -d '.' -f2| tr -d '\n');
