@@ -234,7 +234,7 @@ message in the browser. Otherwise, this method returns the cached property value
 You successfully set up your microservice to have fault tolerance capability.
 
 
-== Viewing metrics for the fault tolerance methods
+== Enabling metrics for the fault tolerance methods
 
 server.xml
 [source, xml, linenums, role='code_column']
