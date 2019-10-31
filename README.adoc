@@ -221,7 +221,7 @@ Now, set a fallback method to deal with this failure.
 
 [role="code_command hotspot", subs="quotes"]
 ----
-#Create the `InventoryManager` class.#
+#Replace the `InventoryManager` class.#
 `src/main/java/io/openliberty/guides/inventory/InventoryManager.java`
 ----
 
