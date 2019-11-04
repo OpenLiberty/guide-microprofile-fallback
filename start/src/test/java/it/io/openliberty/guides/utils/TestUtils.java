@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 
 public class TestUtils {
 
-    private static String port = System.getProperty("liberty.test.port");
+    private static String port = System.getProperty("http.port");
 
     public static String baseUrl = "http://localhost:" + port + "/";
     public static final String INVENTORY_LOCALHOST_URL = baseUrl + "inventory/systems/localhost/";
