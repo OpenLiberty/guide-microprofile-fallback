@@ -46,7 +46,6 @@ public class FaultToleranceIT {
         client.close();
         response.close();
     }
-
     // tag::javadoc[]
     /**
      * testFallbackForGet - test for checking if the fallback is being called
@@ -82,7 +81,8 @@ public class FaultToleranceIT {
         int propertiesSizeFallBack = obj.size();
         assertTrue(propertiesSize > propertiesSizeFallBack, 
                    "The total number of properties from the @Fallback method "
-                 + "is not smaller than the number from the system service, as expected.");
+                 + "is not smaller than the number from the system service, 
+                    as expected.");
         // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
