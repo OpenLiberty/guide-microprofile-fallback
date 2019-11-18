@@ -31,10 +31,14 @@ public class SystemResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getProperties() {
+    // tag::isInMaintenance[]
     if (!systemConfig.isInMaintenance()) {
       return Response.ok(System.getProperties()).build();
     } else {
+    // end::isInMaintenance[]
+    // tag::response-status[]
       return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+    // end::response-status[]
     }
   }
 }
