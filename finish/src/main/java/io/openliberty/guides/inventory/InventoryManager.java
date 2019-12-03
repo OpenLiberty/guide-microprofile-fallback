@@ -10,7 +10,6 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-
 package io.openliberty.guides.inventory;
 
 import java.io.IOException;
