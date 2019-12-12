@@ -38,6 +38,6 @@ public interface SystemClient {
       // tag::IOException[]
       throws UnknownUrlException, IOException, ProcessingException;
       // end::IOException[]
+  // end::getProperties[]
 }
 // end::client[]
-// end::getProperties[]
