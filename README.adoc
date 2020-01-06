@@ -400,16 +400,16 @@ Since you started Open Liberty in development mode at the start of the guide, pr
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
+Running it.io.openliberty.guides.faulttolerance.FaultToleranceIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
 Running it.io.openliberty.guides.system.SystemEndpointIT
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.937 sec - in it.io.openliberty.guides.system.SystemEndpointIT
 Running it.io.openliberty.guides.inventory.InventoryEndpointIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.396 sec - in it.io.openliberty.guides.inventory.InventoryEndpointIT
-Running it.io.openliberty.guides.faulttolerance.FaultToleranceIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.396 sec - in it.io.openliberty.guides.inventory.InventoryEndpointIT
 
 Results :
 
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 To see if the tests detect a failure, comment out the [hotspot=40-41 hotspot=51-52]`changeSystemProperty()` methods
