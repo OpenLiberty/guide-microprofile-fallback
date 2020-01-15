@@ -15,8 +15,8 @@
 :page-tags: ['MicroProfile']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
-:page-seo-title: Building fault-tolerant microservices with the MicroProfile Fault Tolerance @Fallback annotation
-:page-seo-description: A tutorial and an example on how to use MicroProfile Fault Tolerance to build resilient microservices and obtain metrics from the Fault Tolerance methods with MicroProfile Metrics.
+:page-seo-title: Building fault-tolerant Java microservices with Eclipse MicroProfile Fault Tolerance's fallback policy
+:page-seo-description: A tutorial and an example on how to build resilient Java microservices to handle failed executions using MicroProfile Fault Tolerance and monitor fault-tolerant methods using MicroProfile Metrics.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :guide-author: Open Liberty
