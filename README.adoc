@@ -149,6 +149,21 @@ This dependency provides a library that allows you to use fault tolerance polici
 You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
+
+Option 1:
+
+To easily work through this guide, the two provided microservices are set up to run
+on the same server. To simulate the availability of the services and then to enable fault tolerance,
+dynamic configuration with MicroProfile Configuration is used so that you can easily take one service down.
+If you want to learn more about setting up dynamic configuration,
+see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
+
+The the `system` service reads the `io_openliberty_guides_system_inMaintenance` custom configuration property, which is set to `true` or `false` to determine
+the `system` service's availability. An `IOException` is thrown to simulate that the `system` service is unavailable.
+
+
+Option 2:
+
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
 dynamic configuration with MicroProfile Configuration is used so that you can easily take one service down.
@@ -157,20 +172,23 @@ see https://openliberty.io/guides/microprofile-config.html[Configuring microserv
 
 First, you set up the dynamic configuration on the `system` service to simulate its availability.
 The [hotspot file=0]`SystemResource` class has an injected `SystemConfig` instance,
-where the `isInMaintenance()` condition gets the configuration property from the `io_openliberty_guides_system_inMaintenance` key.
+where the `isInMaintenance()` condition gets the value from the `io_openliberty_guides_system_inMaintenance` configuration property.
+
 - If the configuration property is set to `false`, the `system` service is available and the system properties are returned.
 - If the configuration property is set to `true`, the `system` service is unavailable.
+
 The [hotspot=24 file=0]`Status.SERVICE_UNAVAILABLE` message, which is a `503` HTTP response status code.
 This code indicates that the server being called
 is unable to handle the request because of a temporary overload or scheduled maintenance, which would
 likely be alleviated after some delay.
 
-Next, you enable the [hotspot file=2]`SystemClient` class to throw an [hotspot=22 file=2]`IOException`
+Next, the [hotspot file=2]`SystemClient` class throws an [hotspot=22 file=2]`IOException`
 when the `system` service is called and the service is unavailable.
 The [hotspot file=2]`SystemClient` class is constructed using MicroProfile Rest Client.
 You can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
 
-Finally, the `get()` method in the [hotspot file=5]`InventoryManager` class calls the [hotspot=21-23 file=2]`getProperties()` method
+Finally, the `inventory` service calls the `system` service to get the system properties.
+The `get()` method in the [hotspot file=5]`InventoryManager` class calls the [hotspot=21-23 file=2]`getProperties()` method
 in the [hotspot file=2]`SystemClient.java` class.
 An `IOException` is thrown to simulate that the `system` service is unavailable.
 
