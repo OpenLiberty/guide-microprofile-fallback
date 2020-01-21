@@ -10,7 +10,7 @@
     <feature>mpFaultTolerance-2.0</feature>
     <!-- end::mpFaultTolerance[] -->
     <!-- tag::mpMetrics[] -->
-    <feature>mpMetrics-2.0</feature>
+    <feature>mpMetrics-2.2</feature>
     <!-- end::mpMetrics[] -->
   </featureManager>
 
