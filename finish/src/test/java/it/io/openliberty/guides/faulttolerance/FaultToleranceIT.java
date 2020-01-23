@@ -82,7 +82,7 @@ public class FaultToleranceIT {
         assertTrue(propertiesSize > propertiesSizeFallBack, 
                    "The total number of properties from the @Fallback method "
                  + "is not smaller than the number from the system service" 
-                +  "as expected.");
+                 +  "as expected.");
         // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
