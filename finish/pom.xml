@@ -24,9 +24,9 @@
     <liberty.var.default.https.port>9443</liberty.var.default.https.port>
   </properties>
 	
-  <!-- tag::microprofile[] -->
   <dependencies>
     <!-- Provided dependencies -->
+    <!-- tag::microprofile[] -->
     <dependency>
       <groupId>org.eclipse.microprofile</groupId>
       <artifactId>microprofile</artifactId>
