@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2017, 2018 IBM Corporation and others.
+ * Copyright (c) 2017, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,8 +10,6 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-
-// tag::add_fallback[]
 package io.openliberty.guides.inventory;
 
 import java.io.IOException;
@@ -29,11 +27,16 @@ public class InventoryManager {
   private List<SystemData> systems = Collections.synchronizedList(new ArrayList<>());
   private InventoryUtils invUtils = new InventoryUtils();
 
+  // tag::Fallback[]
   @Fallback(fallbackMethod = "fallbackForGet")
+  // end::Fallback[]
+  // tag::get[]
   public Properties get(String hostname) throws IOException {
     return invUtils.getProperties(hostname);
   }
+  // end::get[]
 
+  // tag::fallbackForGet[]
   public Properties fallbackForGet(String hostname) {
     Properties properties = findHost(hostname);
     if (properties == null) {
@@ -43,6 +46,7 @@ public class InventoryManager {
     }
     return properties;
   }
+  // end::fallbackForGet[]
 
   public void add(String hostname, Properties systemProps) {
     Properties props = new Properties();
@@ -68,4 +72,3 @@ public class InventoryManager {
     return null;
   }
 }
-// end::add_fallback[]
