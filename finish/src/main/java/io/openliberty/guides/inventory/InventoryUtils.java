@@ -32,7 +32,7 @@ public class InventoryUtils {
   public Properties getProperties(String hostname)
       throws IOException {
     String customURLString = "http://" + hostname + ":" + DEFAULT_PORT + "/system";
-    URL customURL = null;
+    URL customURL;
     try {
       customURL = new URL(customURLString);
       SystemClient customRestClient = RestClientBuilder.newBuilder()
@@ -52,13 +52,12 @@ public class InventoryUtils {
   }
   // end::builder[]
 
-  public void handleProcessingException(ProcessingException ex) {
+  public void handleProcessingException(ProcessingException ex) throws UnknownHostException {
     Throwable rootEx = ExceptionUtils.getRootCause(ex);
-    if (rootEx != null && rootEx instanceof UnknownHostException) {
-      System.err.println("The specified host is unknown.");
+    if (rootEx instanceof UnknownHostException) {
+      throw (UnknownHostException) rootEx;
     } else {
       throw ex;
     }
   }
-
 }

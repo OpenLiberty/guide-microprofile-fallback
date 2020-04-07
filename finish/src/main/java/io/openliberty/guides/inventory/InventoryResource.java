@@ -14,6 +14,7 @@
 // tag::fault_tolerance[]
 package io.openliberty.guides.inventory;
 
+import java.net.UnknownHostException;
 import java.util.Properties;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -39,17 +40,17 @@ public class InventoryResource {
   public Response getPropertiesForHost(@PathParam("hostname") String hostname)
       throws Exception {
     // Get properties
-    Properties props = manager.get(hostname);
-    if (props == null) {
-      return Response.status(Response.Status.NOT_FOUND)
-                     .entity(
-                         "ERROR: Unknown hostname or the resource may not be running on the host machine")
-                     .build();
-    }
+    try {
+      Properties props = manager.get(hostname);
 
-    // Add properties to inventory
-    manager.add(hostname, props);
-    return Response.ok(props).build();
+      // Add properties to inventory
+      manager.add(hostname, props);
+      return Response.ok(props).build();
+    } catch (UnknownHostException e) {
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity("ERROR: Unknown host")
+              .build();
+    }
   }
 
   @GET

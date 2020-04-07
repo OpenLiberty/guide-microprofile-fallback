@@ -30,8 +30,15 @@
     <dependency>
       <groupId>org.eclipse.microprofile</groupId>
       <artifactId>microprofile</artifactId>
-      <version>3.2</version>
+      <version>3.3</version>
       <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.eclipse.microprofile.fault-tolerance/microprofile-fault-tolerance-api -->
+    <dependency>
+      <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+      <artifactId>microprofile-fault-tolerance-api</artifactId>
+      <version>2.1</version>
       <scope>provided</scope>
     </dependency>
     <!-- end::microprofile[] -->
@@ -94,6 +101,11 @@
         <groupId>io.openliberty.tools</groupId>
         <artifactId>liberty-maven-plugin</artifactId>
 	<version>${version.liberty-maven-plugin}</version>
+        <configuration>
+          <install>
+            <runtimeUrl>https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/nightly/2020-04-02_0432/openliberty-all-20.0.0.4-cl200420200402-0432.zip  </runtimeUrl>
+          </install>
+        </configuration>
       </plugin>
       <!-- Plugin to run functional tests -->
       <plugin>

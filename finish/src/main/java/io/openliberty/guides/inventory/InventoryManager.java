@@ -13,6 +13,7 @@
 package io.openliberty.guides.inventory;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class InventoryManager {
   private InventoryUtils invUtils = new InventoryUtils();
 
   // tag::Fallback[]
-  @Fallback(fallbackMethod = "fallbackForGet")
+  @Fallback(fallbackMethod = "fallbackForGet", applyOn = {IOException.class}, skipOn = {UnknownHostException.class})
   // end::Fallback[]
   // tag::get[]
   public Properties get(String hostname) throws IOException {
