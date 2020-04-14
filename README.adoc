@@ -233,18 +233,16 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
 example, use the [hotspot=fallbackForGet]`fallbackForGet()` method.
 
+The [hotspot=Fallback]`@Fallback` annotation provides two parameters, [hotspot=applyOn]`applyOn` and [hotspot=skipOn]`skipOn`, which allow you to configure
+which exceptions trigger a fallback and which exceptions do not, respectively.
+In this example, the [hotspot=get]`get()` method throws `IOException` when the system service is unavailable, and throws
+`UnknownHostException` when the system service cannot be found on the specified host.
+The [hotspot=fallbackForGet]`fallbackForGet()` method can handle the first case, but not the second.
+
 The [hotspot=fallbackForGet]`fallbackForGet()` method, which is the designated fallback method for the original
 [hotspot=get]`get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
 message in the browser. Otherwise, this method returns the cached property values from the inventory.
-
-The [hotspot=Fallback]`@Fallback` annotation provides two parameters, [hotspot=33]`applyOn` and [hotspot=34]`skipOn`, which allow you to configure
-which exceptions trigger a fallback and which exceptions do not, respectively.
-In this example, the [hotspot=get]`get()` method throws `IOException` when the system service is unavailable and throws
-`UnknownHostException` when the system service cannot be found on the specified host.
-The [hotspot=fallbackForGet]`fallbackForGet()` method can handle the first case, but not the second.
-To trigger [hotspot=fallbackForGet]`fallbackForGet()` method when the system service is unavailable, the [hotspot=33]`applyOn` parameter is given the value `IOException.class`.
-To rethrow the `UnknownHostException` instead of triggering the [hotspot=fallbackForGet]`fallbackForGet()` method, the [hotspot=34]`skipOn` parameter is given the value `UnknownHostException.class`.
 
 You successfully set up your microservice to have fault tolerance capability.
 

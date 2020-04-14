@@ -30,8 +30,12 @@ public class InventoryManager {
 
     // tag::Fallback[]
     @Fallback(fallbackMethod = "fallbackForGet",
+            // tag::applyOn[]
             applyOn = {IOException.class},
+            // end::applyOn[]
+            // tag::skipOn[]
             skipOn = {UnknownHostException.class})
+            // end::skipOn[]
     // end::Fallback[]
     // tag::get[]
     public Properties get(String hostname) throws IOException {
@@ -44,7 +48,8 @@ public class InventoryManager {
         Properties properties = findHost(hostname);
         if (properties == null) {
             Properties msgProp = new Properties();
-            msgProp.setProperty(hostname, "System is not found in the inventory or system is in maintenance");
+            msgProp.setProperty(hostname,
+                    "System is not found in the inventory or system is in maintenance");
             return msgProp;
         }
         return properties;
