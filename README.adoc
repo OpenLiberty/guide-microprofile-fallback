@@ -68,17 +68,8 @@ include::{common-includes}/gitclone.adoc[]
 // Try what you'll build
 // =================================================================================================
 
-=== Try what you'll build
-
-The `finish` directory in the root of this guide contains the finished implementation
-for the application. Give it a try before you proceed with building your own.
-
-To try out the application, first go to the `finish` directory and run the following Maven goal to build the application and deploy it to Open Liberty:
-
 [role='command']
-```
-mvn liberty:run
-```
+include::{common-includes}/twyb-intro.adoc[]
 
 Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the
 `inventory` service with a localhost hostname. You see the system properties for this host.
@@ -118,13 +109,8 @@ When you are done checking out the application, go to the [hotspot]`CustomConfig
 Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
 
-After you are done checking out the application, stop the Open Liberty server by pressing `CTRL+C` in the shell session where you ran the server.
-Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
-
 [role='command']
-```
-mvn liberty:stop
-```
+include::{common-includes}/twyb-end.adoc[]
 
 // =================================================================================================
 // Enabling fault tolerance
