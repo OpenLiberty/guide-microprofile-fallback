@@ -380,6 +380,7 @@ include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToler
 [role='command']
 include::{common-includes}/devmode-test.adoc[]
 
+If the tests pass, you see a similar output to the following example:
 [source, role="no_copy"]
 ----
 -------------------------------------------------------
@@ -400,8 +401,8 @@ Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
 in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the [hotspot=testFallbackForGet]`testFallbackForGet()` test case.
 
-When you are done checking out the service, exit development mode by typing `q` in the shell session
-where you ran the server, and then press the `enter/return` key.
+[role='command']
+include::{common-includes}/devmode-quit.adoc[]
 
 // =================================================================================================
 // Great work! You're done!
