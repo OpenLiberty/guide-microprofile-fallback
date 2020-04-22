@@ -15,7 +15,6 @@ package io.openliberty.guides.inventory.client;
 
 import java.util.Properties;
 import java.io.IOException;
-import javax.enterprise.context.Dependent;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
