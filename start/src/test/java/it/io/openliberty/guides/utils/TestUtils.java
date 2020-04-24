@@ -26,7 +26,7 @@ public class TestUtils {
 
     public static String baseUrl = "http://localhost:" + port + "/";
     public static final String INVENTORY_LOCALHOST_URL = baseUrl + "inventory/systems/localhost/";
-    public static final String INVENTORY_LOCALHOT_URL = baseUrl + "inventory/systems/localhot";
+    public static final String INVENTORY_UNKNOWN_HOST_URL = baseUrl + "inventory/systems/unknown";
     public static final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
     public static final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
 

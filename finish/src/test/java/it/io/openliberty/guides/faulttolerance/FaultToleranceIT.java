@@ -105,10 +105,10 @@ public class FaultToleranceIT {
     // tag::testFallbackSkipForGet[]
     public void testFallbackSkipForGet() {
         response = TestUtils.getResponse(client,
-                TestUtils.INVENTORY_LOCALHOT_URL);
+                TestUtils.INVENTORY_UNKNOWN_HOST_URL);
         assertResponse(TestUtils.baseUrl, response, 404);
         assertEquals("ERROR: Unknown host", response.readEntity(String.class),
-                "Incorrect response body from " + TestUtils.INVENTORY_LOCALHOT_URL);
+                "Incorrect response body from " + TestUtils.INVENTORY_UNKNOWN_HOST_URL);
     }
 
     // tag::javadoc[]

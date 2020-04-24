@@ -364,7 +364,7 @@ hostname before and after the `system` service becomes unavailable. Then, it ass
 to ensure that they are different from each other.
 
 The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a request to the `inventory` service to
-get the system properties for an incorrect hostname (`localhot`). Then, it confirms that the fallback method has not been
+get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been
 called by asserting that the response's status code is `404` with an error message in the response body.
 
 The [hotspot=Test]`@Test` annotations indicate that the methods automatically execute when your test class runs.
