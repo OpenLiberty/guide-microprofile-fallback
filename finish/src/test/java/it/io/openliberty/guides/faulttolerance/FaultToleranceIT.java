@@ -110,6 +110,7 @@ public class FaultToleranceIT {
         assertEquals("ERROR: Unknown host", response.readEntity(String.class),
                 "Incorrect response body from " + TestUtils.INVENTORY_UNKNOWN_HOST_URL);
     }
+    //end::testFallbackSkipForGet[]
 
     // tag::javadoc[]
     /**
@@ -117,7 +118,8 @@ public class FaultToleranceIT {
      */
     // end::javadoc[]
     private void assertResponse(String url, Response response, int status_code) {
-        assertEquals(status_code, response.getStatus(), "Incorrect response code from " + url);
+        assertEquals(status_code, response.getStatus(),
+                "Incorrect response code from " + url);
     }
 
     // tag::javadoc[]
