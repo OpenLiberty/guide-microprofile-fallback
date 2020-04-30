@@ -404,7 +404,8 @@ Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
-in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the [hotspot=testFallbackForGet]`testFallbackForGet()` test case.
+in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the
+[hotspot=testFallbackForGet]`testFallbackForGet()` and [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test cases.
 
 [role='command']
 include::{common-includes}/devmode-quit.adoc[]
