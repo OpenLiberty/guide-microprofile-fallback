@@ -352,7 +352,8 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceIT.java`
 ----
 
-The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either before or after the other test case.
+The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either
+before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
@@ -362,7 +363,11 @@ The [hotspot=testFallbackForGet]`testFallbackForGet()` test case sends a request
 hostname before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
-The [hotspot=Test]`@Test` annotation indicates that the method automatically executes when your test class runs.
+The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a request to the `inventory` service to
+get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been
+called by asserting that the response's status code is `404` with an error message in the response body.
+
+The [hotspot=Test1 hotspot=Test2]`@Test` annotations indicate that the methods automatically execute when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
@@ -387,7 +392,7 @@ If the tests pass, you see a similar output to the following example:
  T E S T S
 -------------------------------------------------------
 Running it.io.openliberty.guides.faulttolerance.FaultToleranceIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
 Running it.io.openliberty.guides.system.SystemEndpointIT
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.937 sec - in it.io.openliberty.guides.system.SystemEndpointIT
 Running it.io.openliberty.guides.inventory.InventoryEndpointIT
@@ -395,11 +400,12 @@ Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.396 sec - in i
 
 Results :
 
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
-in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the [hotspot=testFallbackForGet]`testFallbackForGet()` test case.
+in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the
+[hotspot=testFallbackForGet]`testFallbackForGet()` and [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test cases.
 
 [role='command']
 include::{common-includes}/devmode-quit.adoc[]
