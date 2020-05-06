@@ -367,7 +367,7 @@ The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a
 get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been
 called by asserting that the response's status code is `404` with an error message in the response body.
 
-The [hotspot=Test]`@Test` annotations indicate that the methods automatically execute when your test class runs.
+The [hotspot=Test1 hotspot=Test2]`@Test` annotations indicate that the methods automatically execute when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into

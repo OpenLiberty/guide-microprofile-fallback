@@ -59,9 +59,9 @@ public class FaultToleranceIT {
      */
     // end::javadoc[]
 
-    // tag::Test[]
+    // tag::Test1[]
     @Test
-    // end::Test[]
+    // end::Test1[]
     // tag::testFallbackForGet[]
     public void testFallbackForGet() throws InterruptedException {
         response = TestUtils.getResponse(client,
@@ -99,9 +99,9 @@ public class FaultToleranceIT {
      * 3. Verify that the response text is "ERROR: Unknown host"
      */
     // end::javadoc[]
-    // tag::Test[]
+    // tag::Test2[]
     @Test
-    // end::Test[]
+    // end::Test2[]
     // tag::testFallbackSkipForGet[]
     public void testFallbackSkipForGet() {
         response = TestUtils.getResponse(client,
