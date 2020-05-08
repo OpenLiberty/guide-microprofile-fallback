@@ -59,9 +59,9 @@ public class FaultToleranceIT {
      */
     // end::javadoc[]
 
-    // tag::Test[]
+    // tag::Test1[]
     @Test
-    // end::Test[]
+    // end::Test1[]
     // tag::testFallbackForGet[]
     public void testFallbackForGet() throws InterruptedException {
         response = TestUtils.getResponse(client,
@@ -90,14 +90,45 @@ public class FaultToleranceIT {
         Thread.sleep(3000);
     }
     // end::testFallbackForGet[]
-    
+
+    // tag::javadoc[]
+    /**
+     * testFallbackForGet - test for checking if the fallback skip mechanism is working as intended:
+     * 1. Access system properties for the wrong hostname (localhot)
+     * 2. Verify that the response code is 404
+     * 3. Verify that the response text is "ERROR: Unknown host"
+     */
+    // end::javadoc[]
+    // tag::Test2[]
+    @Test
+    // end::Test2[]
+    // tag::testFallbackSkipForGet[]
+    public void testFallbackSkipForGet() {
+        response = TestUtils.getResponse(client,
+                TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+        assertResponse(TestUtils.baseUrl, response, 404);
+        assertEquals("ERROR: Unknown host", response.readEntity(String.class),
+                "Incorrect response body from " + TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+    }
+    //end::testFallbackSkipForGet[]
+
+    // tag::javadoc[]
+    /**
+     * Asserts that the given URL's response code matches the given status code.
+     */
+    // end::javadoc[]
+    private void assertResponse(String url, Response response, int status_code) {
+        assertEquals(status_code, response.getStatus(),
+                "Incorrect response code from " + url);
+    }
+
     // tag::javadoc[]
     /**
      * Asserts that the given URL has the correct response code of 200.
      */
     // end::javadoc[]
     private void assertResponse(String url, Response response) {
-        assertEquals(200, response.getStatus(), "Incorrect response code from " + url);
+        assertResponse(url, response, 200);
     }
 }
 // end::ft_testing[]

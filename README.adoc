@@ -68,17 +68,8 @@ include::{common-includes}/gitclone.adoc[]
 // Try what you'll build
 // =================================================================================================
 
-=== Try what you'll build
-
-The `finish` directory in the root of this guide contains the finished implementation
-for the application. Give it a try before you proceed with building your own.
-
-To try out the application, first go to the `finish` directory and run the following Maven goal to build the application and deploy it to Open Liberty:
-
 [role='command']
-```
-mvn liberty:run
-```
+include::{common-includes}/twyb-intro.adoc[]
 
 Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the
 `inventory` service with a localhost hostname. You see the system properties for this host.
@@ -118,13 +109,8 @@ When you are done checking out the application, go to the [hotspot]`CustomConfig
 Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
 
-After you are done checking out the application, stop the Open Liberty server by pressing `CTRL+C` in the shell session where you ran the server.
-Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
-
 [role='command']
-```
-mvn liberty:stop
-```
+include::{common-includes}/twyb-end.adoc[]
 
 // =================================================================================================
 // Enabling fault tolerance
@@ -134,12 +120,8 @@ mvn liberty:stop
 
 Navigate to the `start` directory to begin.
 
-Start Open Liberty in development mode, which starts the Open Liberty server and listens for file changes:
-
-[role=command]
-```
-mvn liberty:dev
-```
+[role='command']
+include::{common-includes}/devmode-start.adoc[]
 
 The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your [hotspot file=4]`pom.xml` file.
 Look for the dependency with the [hotspot=microprofile file=4]`microprofile` artifact ID.
@@ -233,6 +215,12 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
 example, use the [hotspot=fallbackForGet]`fallbackForGet()` method.
 
+The [hotspot=Fallback]`@Fallback` annotation provides two parameters, [hotspot=applyOn]`applyOn` and [hotspot=skipOn]`skipOn`, which allow you to configure
+which exceptions trigger a fallback and which exceptions do not, respectively.
+In this example, the [hotspot=get]`get()` method throws `IOException` when the system service is unavailable, and throws
+`UnknownHostException` when the system service cannot be found on the specified host.
+The [hotspot=fallbackForGet]`fallbackForGet()` method can handle the first case, but not the second.
+
 The [hotspot=fallbackForGet]`fallbackForGet()` method, which is the designated fallback method for the original
 [hotspot=get]`get()` method, checks to see if the system's properties exist in the inventory.
 If the system properties entry is not found in the inventory, the method prints out a warning
@@ -259,12 +247,11 @@ server. When you go to the `/metrics` endpoint, use the credentials that are def
 You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide. You can also learn more about the MicroProfile Fault Tolerance and MicroProfile Metrics integration in the https://github.com/eclipse/microprofile-fault-tolerance/releases[MicroProfile Fault Tolerance specification^].
 
 // =================================================================================================
-// Building and running the application
+// Running the application
 // =================================================================================================
 
-== Building and running the application
-
-The Open Liberty server started in development mode at the beginning of the guide and all the changes were automatically picked up.
+[role='command']
+include::{common-includes}/devmode-build.adoc[]
 
 When the server is running, point your browser to the
 http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
@@ -365,7 +352,8 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceIT.java`
 ----
 
-The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either before or after the other test case.
+The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either
+before or after the other test case.
 These methods are generally used to perform any setup and teardown tasks. In this case,
 the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
 client must also be registered with a JSON-P provider to process JSON resources.
@@ -375,7 +363,11 @@ The [hotspot=testFallbackForGet]`testFallbackForGet()` test case sends a request
 hostname before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
 to ensure that they are different from each other.
 
-The [hotspot=Test]`@Test` annotation indicates that the method automatically executes when your test class runs.
+The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a request to the `inventory` service to
+get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been
+called by asserting that the response's status code is `404` with an error message in the response body.
+
+The [hotspot=Test1 hotspot=Test2]`@Test` annotations indicate that the methods automatically execute when your test class runs.
 
 In addition, a few endpoint tests have been included for you to test the basic functionality of the
 `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
@@ -390,17 +382,17 @@ include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToler
 // Running the tests
 // =================================================================================================
 
-=== Running the tests
+[role='command']
+include::{common-includes}/devmode-test.adoc[]
 
-Since you started Open Liberty in development mode at the start of the guide, press the `enter/return` key to run the tests. You see the following output:
-
+If the tests pass, you see a similar output to the following example:
 [source, role="no_copy"]
 ----
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
 Running it.io.openliberty.guides.faulttolerance.FaultToleranceIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.517 sec - in it.io.openliberty.guides.faulttolerance.FaultToleranceIT
 Running it.io.openliberty.guides.system.SystemEndpointIT
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.937 sec - in it.io.openliberty.guides.system.SystemEndpointIT
 Running it.io.openliberty.guides.inventory.InventoryEndpointIT
@@ -408,14 +400,15 @@ Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.396 sec - in i
 
 Results :
 
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
-in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the [hotspot=testFallbackForGet]`testFallbackForGet()` test case.
+in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the
+[hotspot=testFallbackForGet]`testFallbackForGet()` and [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test cases.
 
-When you are done checking out the service, exit development mode by typing `q` in the shell session
-where you ran the server, and then press the `enter/return` key.
+[role='command']
+include::{common-includes}/devmode-quit.adoc[]
 
 // =================================================================================================
 // Great work! You're done!
