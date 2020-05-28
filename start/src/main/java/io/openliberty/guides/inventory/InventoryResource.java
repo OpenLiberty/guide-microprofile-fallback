@@ -47,7 +47,6 @@ public class InventoryResource {
       manager.add(hostname, props);
       return Response.ok(props).build();
     } catch (UnknownHostException e) {
-      // Error for unknown host
       return Response.status(Response.Status.NOT_FOUND)
                      .entity("{ \"error\" : " 
                              + "\"Unknown hostname or the resource may not be "
