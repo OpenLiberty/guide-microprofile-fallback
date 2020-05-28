@@ -49,7 +49,8 @@ public class InventoryResource {
     } catch (UnknownHostException e) {
       return Response.status(Response.Status.NOT_FOUND)
                      .entity("{ \"error\" : " 
-                             + "\"Unknown hostname or the resource may not be "
+                             + "\"Unknown hostname " + hostname 
+                             + " or the resource may not be "
                              + "running on the host machine\" }")
                      .build();
     }
