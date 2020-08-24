@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2019 IBM Corporation and others.
+ * Copyright (c) 2018, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,18 +31,21 @@ public class FaultToleranceIT {
     private Response response;
     private Client client;
 
+    // tag::Before[]
     @BeforeEach
+    // end::Before[]
     public void setup() {
         client = ClientBuilder.newClient();
         client.register(JsrJsonpProvider.class);
     }
 
+    // tag::After[]
     @AfterEach
+    // end::After[]
     public void teardown() {
         client.close();
         response.close();
     }
-
     // tag::javadoc[]
     /**
      * testFallbackForGet - test for checking if the fallback is being called
@@ -55,15 +58,21 @@ public class FaultToleranceIT {
      * when service is down.
      */
     // end::javadoc[]
+
+    // tag::Test1[]
     @Test
+    // end::Test1[]
+    // tag::testFallbackForGet[]
     public void testFallbackForGet() throws InterruptedException {
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
         assertResponse(TestUtils.baseUrl, response);
         JsonObject obj = response.readEntity(JsonObject.class);
         int propertiesSize = obj.size();
+        // tag::changeSystemProperty1[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_FALSE,
                                        TestUtils.SYSTEM_MAINTENANCE_TRUE);
+        // end::changeSystemProperty1[]
         Thread.sleep(3000);
         response = TestUtils.getResponse(client,
                                          TestUtils.INVENTORY_LOCALHOST_URL);
@@ -72,10 +81,45 @@ public class FaultToleranceIT {
         int propertiesSizeFallBack = obj.size();
         assertTrue(propertiesSize > propertiesSizeFallBack,
                    "The total number of properties from the @Fallback method "
-                 + "should be smaller than the number from the system service.");
+                 + "is not smaller than the number from the system service" 
+                 +  "as expected.");
+        // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
+        // end::changeSystemProperty2[]
         Thread.sleep(3000);
+    }
+    // end::testFallbackForGet[]
+
+    // tag::javadoc[]
+    /**
+     * testFallbackForGet - test for checking if the fallback skip mechanism is working as intended:
+     * 1. Access system properties for the wrong hostname (localhot)
+     * 2. Verify that the response code is 404
+     * 3. Verify that the response text contains an error
+     */
+    // end::javadoc[]
+    // tag::Test2[]
+    @Test
+    // end::Test2[]
+    // tag::testFallbackSkipForGet[]
+    public void testFallbackSkipForGet() {
+        response = TestUtils.getResponse(client,
+                TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+        assertResponse(TestUtils.baseUrl, response, 404);
+        assertTrue(response.readEntity(String.class).contains("error"),
+                   "Incorrect response body from " + TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+    }
+    //end::testFallbackSkipForGet[]
+
+    // tag::javadoc[]
+    /**
+     * Asserts that the given URL's response code matches the given status code.
+     */
+    // end::javadoc[]
+    private void assertResponse(String url, Response response, int status_code) {
+        assertEquals(status_code, response.getStatus(),
+                "Incorrect response code from " + url);
     }
 
     // tag::javadoc[]
@@ -84,7 +128,7 @@ public class FaultToleranceIT {
      */
     // end::javadoc[]
     private void assertResponse(String url, Response response) {
-        assertEquals(200, response.getStatus(), "Incorrect response code from " + url);
+        assertResponse(url, response, 200);
     }
 }
 // end::ft_testing[]

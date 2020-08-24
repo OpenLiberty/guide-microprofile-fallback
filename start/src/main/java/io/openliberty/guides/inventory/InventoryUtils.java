@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2017, 2018 IBM Corporation and others.
+ * Copyright (c) 2017, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,16 +30,16 @@ public class InventoryUtils {
 
   // tag::builder[]
   public Properties getProperties(String hostname)
-      throws IOException {
+          throws IOException {
     String customURLString = "http://" + hostname + ":" + DEFAULT_PORT + "/system";
-    URL customURL = null;
+    URL customURL;
     try {
       customURL = new URL(customURLString);
       SystemClient customRestClient = RestClientBuilder.newBuilder()
-                                                       .baseUrl(customURL)
-                                                       .register(
-                                                           ExceptionMapper.class)
-                                                       .build(SystemClient.class);
+              .baseUrl(customURL)
+              .register(
+                      ExceptionMapper.class)
+              .build(SystemClient.class);
       return customRestClient.getProperties();
     } catch (ProcessingException ex) {
       handleProcessingException(ex);
@@ -52,13 +52,12 @@ public class InventoryUtils {
   }
   // end::builder[]
 
-  public void handleProcessingException(ProcessingException ex) {
+  public void handleProcessingException(ProcessingException ex) throws UnknownHostException {
     Throwable rootEx = ExceptionUtils.getRootCause(ex);
-    if (rootEx != null && rootEx instanceof UnknownHostException) {
-      System.err.println("The specified host is unknown.");
+    if (rootEx instanceof UnknownHostException) {
+      throw (UnknownHostException) rootEx;
     } else {
       throw ex;
     }
   }
-
 }

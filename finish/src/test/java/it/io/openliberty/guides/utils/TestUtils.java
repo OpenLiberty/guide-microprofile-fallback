@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018 IBM Corporation and others.
+ * Copyright (c) 2018, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,6 +26,7 @@ public class TestUtils {
 
     public static String baseUrl = "http://localhost:" + port + "/";
     public static final String INVENTORY_LOCALHOST_URL = baseUrl + "inventory/systems/localhost/";
+    public static final String INVENTORY_UNKNOWN_HOST_URL = baseUrl + "inventory/systems/unknown";
     public static final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
     public static final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
 
