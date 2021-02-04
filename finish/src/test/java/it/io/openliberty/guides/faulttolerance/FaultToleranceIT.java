@@ -79,7 +79,7 @@ public class FaultToleranceIT {
         assertResponse(TestUtils.baseUrl, response);
         obj = response.readEntity(JsonObject.class);
         int propertiesSizeFallBack = obj.size();
-        assertTrue(propertiesSize > propertiesSizeFallBack, 
+        assertTrue(propertiesSize > propertiesSizeFallBack,
                    "The total number of properties from the @Fallback method "
                  + "is not smaller than the number from the system service" 
                  +  "as expected.");

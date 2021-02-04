@@ -43,13 +43,14 @@ retry policies, bulkheads, and circuit breakers are popular concepts in this are
 They dictate whether and when executions take place, and fallbacks offer an alternative result
 when an execution does not complete successfully.
 
-The application that you will be working with is an `inventory` service, which collects,
+The microservice that you will be working with is an `inventory` service, which collects,
 stores, and returns the system properties.
 It uses the `system` service to retrieve the system properties for a particular host.
 You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
 service is unavailable.
 
-You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
+You will build the fault-tolerance microservice with the `@Fallback` annotation
+from the MP Fault Tolerance MicroProfile Fault Tolerance
 specification to define criteria for when to provide an alternative solution for
 a failed execution.
 
@@ -72,7 +73,7 @@ include::{common-includes}/gitclone.adoc[]
 include::{common-includes}/twyb-intro.adoc[]
 
 Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the
-`inventory` service with a localhost hostname. You see the system properties for this host.
+`inventory` service with a `localhost` hostname. You see the system properties for this host.
 When you visit this URL, some of these system
 properties, such as the OS name and user name, are automatically stored in the inventory.
 
@@ -95,7 +96,7 @@ You do not need
 to restart the server. Next, return to your browser and point back to the
 http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
 The fallback mechanism is triggered because the `system` service is now in maintenance.
-You see the cached properties for this localhost.
+You see the cached properties that were previously stored in the inventory.
 
 When you are done checking out the application, go to the [hotspot]`CustomConfigSource.json` file again.
 
@@ -130,10 +131,25 @@ This dependency provides a library that allows you to use fault tolerance polici
 You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
+
+Option 1:
+
 To easily work through this guide, the two provided microservices are set up to run
 on the same server. To simulate the availability of the services and then to enable fault tolerance,
-dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
-or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
+dynamic configuration with MicroProfile Configuration is used so that you can easily take one service down.
+If you want to learn more about setting up dynamic configuration,
+see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
+
+The the `system` service reads the `io_openliberty_guides_system_inMaintenance` custom configuration property, which is set to `true` or `false` to determine
+the `system` service's availability. An `IOException` is thrown to simulate that the `system` service is unavailable.
+
+
+Option 2:
+
+To easily work through this guide, the two provided microservices are set up to run
+on the same server. To simulate the availability of the services and then to enable fault tolerance,
+dynamic configuration with MicroProfile Configuration is used so that you can easily take one service down.
+If you want to learn more about setting up dynamic configuration,
 see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
 
 The following two steps set up the dynamic configuration on the `system` service and its client.
@@ -156,7 +172,7 @@ likely be alleviated after some delay. To simulate that the system is unavailabl
 
 The `InventoryManager` class calls the [hotspot=getProperties file=2]`getProperties()` method
 in the [hotspot file=2]`SystemClient.java` class.
-You will look into the `InventoryManager` class in more detail in the next section.
+An `IOException` is thrown to simulate that the `system` service is unavailable.
 
 SystemResource.java
 [source, java, linenums, role='code_column hide_tags=copyright tags=503_response']
@@ -188,6 +204,12 @@ pom.xml
 include::finish/pom.xml[]
 ----
 
+InventoryManager.java
+[source, java, linenums, role='code_column']
+----
+include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
+----
+
 // =================================================================================================
 // Adding the @Fallback annotation
 // =================================================================================================
@@ -196,7 +218,7 @@ include::finish/pom.xml[]
 
 The `inventory` service is now able to recognize that the `system` service
 was taken down for maintenance.
-An IOException is thrown to simulate the `system` service is unavailable.
+An `IOException` is thrown to simulate that the `system` service is unavailable.
 Now, set a fallback method to deal with this failure.
 
 
@@ -253,15 +275,17 @@ You can learn more about MicroProfile Metrics in the https://openliberty.io/guid
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
 
-When the server is running, point your browser to the
-http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
-You receive the system properties of your local JVM from the `inventory` service. Next, point your
+When the server is running, point your
 browser to the `system` service URL, which is located at http://localhost:9080/system/properties[http://localhost:9080/system/properties^],
-to retrieve the system properties for the specific localhost.
+to retrieve the system properties for the specific `localhost`.
+Next, point your browser to the
+http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
+You see all of the system properties in your local JVM.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
+When you visit the `http://localhost:9080/inventory/systems/localhost` URL, the OS name and user name properties are stored in the inventory.
 
-To see the application metrics, go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. Log in as the `admin` user, and use `adminpwd` as the password.
+You can also see the application metrics in the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. Log in as the `admin` user, and use `adminpwd` as the password.
 See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 [role="no_copy"]
@@ -274,7 +298,7 @@ application:ft_io_openliberty_guides_inventory_inventory_manager_get_invocations
 application:ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total 0
 ----
 
-You can test the fault tolerance mechanism of your microservices by dynamically changing
+Next, you can test the fault tolerance mechanism of your microservices by dynamically changing
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
 [hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
 
@@ -309,7 +333,7 @@ To see that the `system` service is down, point your browser to the http://local
 You see that the service displays a 503 HTTP response code.
 
 Go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL again.
-See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
+See the following metrics outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
 
 [role="no_copy"]
 ----
