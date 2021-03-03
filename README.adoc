@@ -278,6 +278,7 @@ You can learn more about MicroProfile Metrics in the https://openliberty.io/guid
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
 
+// Following context for the static guide:
 ifndef::cloud-hosted[]
 When the server is running, point your browser to the
 http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
@@ -289,10 +290,13 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-To see the application metrics, go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. Log in as the `admin` user, and use `adminpwd` as the password.
+To see the application metrics, go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. 
+Log in as the `admin` user, and use `adminpwd` as the password. 
+See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 endif::[]
 
+// Following context for the static guide:
 ifdef::cloud-hosted[]
 When the server is running, run the following curl command
 ```
@@ -317,9 +321,8 @@ curl -k -u admin https://localhost:9443/metrics/application
 ```
 {: codeblock}
 
+See the following sample outputs for the **@Fallback** annotated method and the fallback method before a fallback occurs:
 endif::[]
-
-See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 [role="no_copy"]
 ----
