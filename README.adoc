@@ -119,7 +119,7 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 You do not need to restart the server. 
-Next, run the following curl command
+Next, run the following curl command:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -305,7 +305,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-When the server is running, run the following curl command
+When the server is running, run the following curl command:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -313,7 +313,7 @@ curl http://localhost:9080/inventory/systems/localhost
 
 You receive the system properties of your local JVM from the **inventory** service.
 
-Next, run the following curl command which accesses the **system** service, to retrieve the system properties for the specific localhost.
+Next, run the following curl command which accesses the **system** service, to retrieve the system properties for the specific localhost:
 ```
 curl http://localhost:9080/system/properties
 ```
@@ -377,7 +377,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-After saving the file, run the following curl command to view the cached version of the properties. 
+After saving the file, run the following curl command to view the cached version of the properties:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -395,7 +395,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-To see that the **system** service is down, run the following curl command.
+To see that the **system** service is down, run the following curl command:
 ```
 curl -I http://localhost:9080/system/properties
 ```
@@ -412,7 +412,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Run the following curl command again and enter **adminpwd** as the password.
+Run the following curl command again and enter **adminpwd** as the password:
 ```
 curl -k -u admin https://localhost:9443/metrics/application
 ```
