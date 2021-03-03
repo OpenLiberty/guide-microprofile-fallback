@@ -404,6 +404,7 @@ endif::[]
 // Following context for the static guide:
 ifndef::cloud-hosted[]
 Go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL again.
+See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
 endif::[]
 
 // Following context for the cloud-hosted guide:
@@ -413,9 +414,9 @@ Run the following curl command again and enter **adminpwd** as the password.
 curl -k -u admin https://localhost:9443/metrics/application
 ```
 {: codeblock}
-endif::[]
 
-See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
+See the following sample outputs for the **@Fallback** annotated method and the fallback method after a fallback occurs:
+endif::[]
 
 [role="no_copy"]
 ----
