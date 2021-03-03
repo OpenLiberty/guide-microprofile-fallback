@@ -112,6 +112,8 @@ ifndef::cloud-hosted[]
 You do not need
 to restart the server. Next, return to your browser and point back to the
 http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
+The fallback mechanism is triggered because the `system` service is now in maintenance.
+You see the cached properties for this localhost.
 endif::[]
 
 // Following context for the cloud-hosted guide:
@@ -122,9 +124,10 @@ Next, run the following curl command
 curl http://localhost:9080/inventory/systems/localhost
 ```
 {: codeblock}
-endif::[]
-The fallback mechanism is triggered because the `system` service is now in maintenance.
+
+The fallback mechanism is triggered because the **system** service is now in maintenance.
 You see the cached properties for this localhost.
+endif::[]
 
 When you are done checking out the application, go to the [hotspot]`CustomConfigSource.json` file again.
 
