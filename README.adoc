@@ -369,6 +369,7 @@ After saving the file, go back to your browser and
 refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
 the properties. The [hotspot=fallbackForGet file=1]`fallbackForGet()` method, which is the designated fallback method, is called
 when the `system` service is not available.
+The cached system properties contain only the OS name and user name key and value pairs.
 endif::[]
 
 // Following context for the cloud-hosted guide:
@@ -379,9 +380,9 @@ curl http://localhost:9080/inventory/systems/localhost
 ```
 {: codeblock}
 
-The [hotspot=fallbackForGet file=1]`fallbackForGet()` method, which is the designated fallback method, is called when the **system** service is not available.
-endif::[]
+The **fallbackForGet()** method, which is the designated fallback method, is called when the **system** service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
+endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
