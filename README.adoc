@@ -81,6 +81,15 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE.
+
+Run the following command to navigate to the **/home/project** directory:
+
+```
+cd /home/project
+```
+{: codeblock}
+
 To access the **inventory** service with a localhost hostname, run the following curl command:
 ```
 curl http://localhost:9080/inventory/systems/localhost
