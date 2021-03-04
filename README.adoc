@@ -81,7 +81,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-To access the **inventory** service with a localhost hostname, run the following curl command:
+To access the **inventory** service with a localhost hostname, run the following curl command from the terminal in the IDE:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -119,7 +119,7 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 You do not need to restart the server. 
-Next, run the following curl command:
+Next, run the following curl command from the terminal in the IDE:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -305,7 +305,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-When the server is running, run the following curl command:
+When the server is running, run the following curl command from the terminal in the IDE:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -322,7 +322,7 @@ curl http://localhost:9080/system/properties
 Notice that the results from the two URLs are identical because the **inventory** service gets its results from
 calling the **`system** service.
 
-To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
+To see the application metrics, run the following curl commmand from the terminal in the IDE. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
 ```
 curl -k -u admin https://localhost:9443/metrics/application
 ```
@@ -395,7 +395,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-To see that the **system** service is down, run the following curl command:
+To see that the **system** service is down, run the following curl command from the terminal in the IDE:
 ```
 curl -I http://localhost:9080/system/properties
 ```
