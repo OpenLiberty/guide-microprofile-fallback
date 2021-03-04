@@ -151,7 +151,19 @@ include::{common-includes}/twyb-end.adoc[]
 
 == Enabling fault tolerance
 
+// static guide instructions:
+ifndef::cloud-hosted[]
 Navigate to the `start` directory to begin.
+endif::[]
+
+// cloud-hosted guide instructions:
+ifdef::cloud-hosted[]
+To begin, run the following command to navigate to the **start** directory:
+```
+cd /home/project/guide-microprofile-jwt/start
+```
+{: codeblock}
+endif::[]
 
 [role='command']
 include::{common-includes}/devmode-lmp33-start.adoc[]
