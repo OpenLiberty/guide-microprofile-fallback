@@ -333,7 +333,7 @@ curl http://localhost:9080/system/properties
 {: codeblock}
 
 Notice that the results from the two URLs are identical because the **inventory** service gets its results from
-calling the **`system** service.
+calling the **system** service.
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
 ```
