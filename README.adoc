@@ -81,6 +81,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE.
 To access the **inventory** service with a localhost hostname, run the following curl command:
 ```
 curl http://localhost:9080/inventory/systems/localhost
@@ -150,7 +151,19 @@ include::{common-includes}/twyb-end.adoc[]
 
 == Enabling fault tolerance
 
+// static guide instructions:
+ifndef::cloud-hosted[]
 Navigate to the `start` directory to begin.
+endif::[]
+
+// cloud-hosted guide instructions:
+ifdef::cloud-hosted[]
+To begin, run the following command to navigate to the **start** directory:
+```
+cd /home/project/guide-microprofile-fallback/start
+```
+{: codeblock}
+endif::[]
 
 [role='command']
 include::{common-includes}/devmode-lmp33-start.adoc[]
