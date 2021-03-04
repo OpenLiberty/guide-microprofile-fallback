@@ -377,7 +377,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-After saving the file, run the following curl command to view the cached version of the properties:
+After saving the file, run the following curl command from the terminal in the IDE to view the cached version of the properties:
 ```
 curl http://localhost:9080/inventory/systems/localhost
 ```
@@ -412,7 +412,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Run the following curl command again and enter **adminpwd** as the password:
+Run the following curl command again from the terminal in the IDE and enter **adminpwd** as the password:
 ```
 curl -k -u admin https://localhost:9443/metrics/application
 ```
