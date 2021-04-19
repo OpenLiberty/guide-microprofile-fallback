@@ -398,10 +398,16 @@ curl http://localhost:9080/inventory/systems/localhost
 
 The **fallbackForGet()** method, which is the designated fallback method, is called when the **system** service is not available.
 The cached system properties contain only the OS name and user name key and value pairs.
+endif::[]
 
+// Following context for the static guide:
+ifndef::cloud-hosted[]
 To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again.
 You see that the service displays a 503 HTTP response code.
+endif::[]
 
+// Following context for the cloud-hosted guide:
+ifdef::cloud-hosted[]
 To see that the **system** service is down, run the following curl command:
 ```
 curl -I http://localhost:9080/system/properties
