@@ -92,7 +92,8 @@ You see the system properties for this host.
 When you run this curl command, some of these system properties, such as the OS name and user name, are automatically stored in the inventory.
 endif::[]
 
-
+// Following context for the static guide:
+ifndef::cloud-hosted[]
 [role="code_command hotspot", subs="quotes"]
 ----
 #Update the `CustomConfigSource` configuration file.#
@@ -107,6 +108,22 @@ include::finish/resources/CustomConfigSource.json[]
 
 [role="edit_command_text"]
 Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file.
+endif::[]
+
+// cloud-hosted guide instructions:
+ifdef::cloud-hosted[]
+Update the **CustomConfigSource** configuration file.
+Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file.
+
+> From the menu of the IDE, select 
+ **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+
+```
+{"config_ordinal":500,
+"io_openliberty_guides_system_inMaintenance":true}
+```
+{: codeblock}
+endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
@@ -132,6 +149,8 @@ endif::[]
 
 When you are done checking out the application, go to the [hotspot]`CustomConfigSource.json` file again.
 
+// static guide instructions:
+ifndef::cloud-hosted[]
 [role="code_command hotspot", subs="quotes"]
 ----
 #Update the `CustomConfigSource` configuration file.#
@@ -141,6 +160,23 @@ When you are done checking out the application, go to the [hotspot]`CustomConfig
 [role="edit_command_text"]
 Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
 condition back to its original value.
+endif::[]
+
+// cloud-hosted guide instructions:
+ifdef::cloud-hosted[]
+Update the **CustomConfigSource** configuration file.
+Change the **`io_openliberty_guides_system_inMaintenance`** property from **true** to **false** to set this
+condition back to its original value.
+
+> From the menu of the IDE, select 
+ **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+
+```
+{"config_ordinal":500,
+"io_openliberty_guides_system_inMaintenance":false}
+```
+{: codeblock}
+endif::[]
 
 [role='command']
 include::{common-includes}/twyb-end.adoc[]
@@ -356,8 +392,10 @@ application_ft_io_openliberty_guides_inventory_InventoryManager_get_fallback_cal
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
 the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
-[hotspot file=0]`resources/CustomConfigSource.json` file, which turns the `system` service in maintenance.
+[hotspot file=0]`resources/CustomConfigSource.json` file, which puts the `system` service in maintenance.
 
+// Following context for the static guide:
+ifndef::cloud-hosted[]
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Update the configuration file.#
@@ -366,6 +404,22 @@ the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property valu
 
 [role="edit_command_text"]
 Change the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property from `false` to `true` and save the file.
+endif::[]
+
+// Following context for the cloud-hosted guide:
+ifdef::cloud-hosted[]
+Update the configuration file.
+Change the **`io_openliberty_guides_system_inMaintenance`** property from **false** to **true** and save the file.
+
+> From the menu of the IDE, select 
+ **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+
+```
+{"config_ordinal":500,
+"io_openliberty_guides_system_inMaintenance":true}
+```
+{: codeblock}
+endif::[]
 
 CustomConfigSource.json
 [source, json, linenums, role='code_column']
@@ -449,6 +503,8 @@ data indicates that the [hotspot=get file=1]`get()` was called twice including t
 The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` data
 indicates that the [hotspot=fallbackForGet file=1]`fallbackForGet()` method was called once.
 
+// Following context for the static guide:
+ifndef::cloud-hosted[]
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Update the configuration file.#
@@ -458,7 +514,23 @@ indicates that the [hotspot=fallbackForGet file=1]`fallbackForGet()` method was 
 [role="edit_command_text"]
 After you finish, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
 property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
+endif::[]
 
+// Following context for the cloud-hosted guide:
+ifdef::cloud-hosted[]
+Update the configuration file.
+After you finish, change the **`io_openliberty_guides_system_inMaintenance`**
+property value back to **false** in the **resources/CustomConfigSource.json** file.
+
+> From the menu of the IDE, select 
+ **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+
+```
+{"config_ordinal":500,
+"io_openliberty_guides_system_inMaintenance":false}
+```
+{: codeblock}
+endif::[]
 
 // =================================================================================================
 // Testing the application
