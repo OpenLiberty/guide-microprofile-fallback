@@ -113,7 +113,7 @@ endif::[]
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
 Update the **CustomConfigSource** configuration file.
-Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from **false** to **true** and save the file.
+Change the **`io_openliberty_guides_system_inMaintenance`** property from **false** to **true** and save the file.
 
 > From the menu of the IDE, select 
  **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
