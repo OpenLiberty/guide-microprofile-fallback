@@ -382,9 +382,6 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE base_REST_request_total counter
-# HELP base_REST_request_total The number of invocations and total response time of this RESTful resource method since the start of the server. The metric will not record the elapsed time nor count of a REST request if it resulted in an unmapped exception. Also tracks the highest recorded time duration within the previous completed full minute and lowest recorded time duration within the previous completed full minute.
-base_REST_request_total{class="io.openliberty.guides.inventory.InventoryResource",method="getPropertiesForHost_java.lang.String"} 1
 # TYPE base_ft_invocations_total counter
 base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
 base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 0
@@ -492,9 +489,6 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE base_REST_request_total counter
-# HELP base_REST_request_total The number of invocations and total response time of this RESTful resource method since the start of the server. The metric will not record the elapsed time nor count of a REST request if it resulted in an unmapped exception. Also tracks the highest recorded time duration within the previous completed full minute and lowest recorded time duration within the previous completed full minute.
-base_REST_request_total{class="io.openliberty.guides.inventory.InventoryResource",method="getPropertiesForHost_java.lang.String"} 2
 # TYPE base_ft_invocations_total counter
 base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
 base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
@@ -502,10 +496,9 @@ base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.in
 base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
 
-From the output, the `base_REST_request_total{class="io.openliberty.guides.inventory.InventoryResource",method="getPropertiesForHost_java.lang.String"}`
-data indicates that the [hotspot=get file=1]`get()` was called twice including the previous call before turning the `system` service in maintenance.
+From the output, the `base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data shows that the [hotspot=get file=1]`get()` method was called once without triggering fallback.
 The `base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data
-indicates that the [hotspot=fallbackForGet file=1]`fallbackForGet()` method was called once.
+indicates that the the [hotspot=get file=1]`get()` method was called once triggering the fallback[hotspot=fallbackForGet file=1]`fallbackForGet()` method.
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
