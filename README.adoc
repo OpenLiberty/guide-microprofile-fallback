@@ -346,7 +346,7 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-To see the application metrics, go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. 
+To see the application metrics, go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL. 
 Log in as the `admin` user, and use `adminpwd` as the password. 
 See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
@@ -373,7 +373,7 @@ calling the **system** service.
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
 ```
-curl -k -u admin https://localhost:9443/metrics/application
+curl -k -u admin https://localhost:9443/metrics/base
 ```
 {: codeblock}
 
@@ -473,7 +473,7 @@ endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-Go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL again.
+Go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL again.
 See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
 endif::[]
 
@@ -481,7 +481,7 @@ endif::[]
 ifdef::cloud-hosted[]
 Run the following curl command again and enter **adminpwd** as the password:
 ```
-curl -k -u admin https://localhost:9443/metrics/application
+curl -k -u admin https://localhost:9443/metrics/base
 ```
 {: codeblock}
 
