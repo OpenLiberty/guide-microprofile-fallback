@@ -501,6 +501,7 @@ ifndef::cloud-hosted[]
 From the output, the `base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data shows that the [hotspot=get file=1]`get()` method was called once without triggering a fallback method.
 The `base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data
 indicates that the [hotspot=get file=1]`get()` method was called once and the fallback [hotspot=fallbackForGet file=1]`fallbackForGet()` method was triggered.
+endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
