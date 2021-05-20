@@ -346,7 +346,7 @@ to retrieve the system properties for the specific localhost.
 Notice that the results from the two URLs are identical because the `inventory` service gets its results from
 calling the `system` service.
 
-To see the application metrics, go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL. 
+To see the application metrics, go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL. 
 Log in as the `admin` user, and use `adminpwd` as the password. 
 See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
@@ -373,7 +373,7 @@ calling the **system** service.
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
 ```
-curl -k -u admin https://localhost:9443/metrics/application
+curl -k -u admin https://localhost:9443/metrics/base
 ```
 {: codeblock}
 
@@ -382,12 +382,11 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_total 1
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_failed_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_failed_total 0
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_fallback_calls_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_fallback_calls_total 0
+# TYPE base_ft_invocations_total counter
+base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 0
+base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing
@@ -473,7 +472,7 @@ endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-Go to the https://localhost:9443/metrics/application[https://localhost:9443/metrics/application^] URL again.
+Go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL again.
 See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
 endif::[]
 
@@ -481,7 +480,7 @@ endif::[]
 ifdef::cloud-hosted[]
 Run the following curl command again and enter **adminpwd** as the password:
 ```
-curl -k -u admin https://localhost:9443/metrics/application
+curl -k -u admin https://localhost:9443/metrics/base
 ```
 {: codeblock}
 
@@ -490,21 +489,27 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_total 2
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_failed_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_invocations_failed_total 0
-# TYPE application_ft_io_openliberty_guides_inventory_InventoryManager_get_fallback_calls_total counter
-application_ft_io_openliberty_guides_inventory_InventoryManager_get_fallback_calls_total 1
+# TYPE base_ft_invocations_total counter
+base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
-
-From the output, the `ft_io_openliberty_guides_inventory_inventory_manager_get_invocations_total`
-data indicates that the [hotspot=get file=1]`get()` was called twice including the previous call before turning the `system` service in maintenance.
-The `ft_io_openliberty_guides_inventory_inventory_manager_get_fallback_calls_total` data
-indicates that the [hotspot=fallbackForGet file=1]`fallbackForGet()` method was called once.
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
+From the output, the `base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data shows that the [hotspot=get file=1]`get()` method was called once without triggering a fallback method.
+The `base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data
+indicates that the [hotspot=get file=1]`get()` method was called once and the fallback [hotspot=fallbackForGet file=1]`fallbackForGet()` method was triggered.
+endif::[]
+
+// Following context for the cloud-hosted guide:
+ifdef::cloud-hosted[]
+From the output, the **`base_ft_invocations_total{fallback="notApplied",`** **`method="io.openliberty.guides.inventory.InventoryManager.get",`** **`result="valueReturned"}`** data shows that the **get()** method was called once without triggering a fallback method.
+The **`base_ft_invocations_total{fallback="applied",`** **`method="io.openliberty.guides.inventory.InventoryManager.get",`** **`result="valueReturned"}`** data
+indicates that the **get()** method was called once and the fallback **fallbackForGet()** method was triggered.
+endif::[]
+
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Update the configuration file.#
