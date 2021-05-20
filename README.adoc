@@ -510,6 +510,8 @@ The **`base_ft_invocations_total{fallback="applied",`** **`method="io.openlibert
 indicates that the **get()** method was called once and the fallback **fallbackForGet()** method was triggered.
 endif::[]
 
+// Following context for the static guide:
+ifndef::cloud-hosted[]
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Update the configuration file.#
