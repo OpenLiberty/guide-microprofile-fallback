@@ -240,7 +240,7 @@ in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
-[source, java, linenums, role='code_column hide_tags=copyright tags=503_response']
+[source, java, linenums, role='code_column tags=503_response hide_tags=copyright']
 ----
 include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[]
 ----
@@ -252,7 +252,7 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 SystemClient.java
-[source, java, linenums, role='code_column hide_tags=copyright tags=client']
+[source, java, linenums, role='code_column tags=client hide_tags=copyright']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
 ----
