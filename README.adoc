@@ -84,7 +84,7 @@ ifdef::cloud-hosted[]
 Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE.
 To access the **inventory** service with a localhost hostname, run the following curl command:
 ```
-curl http://localhost:9080/inventory/systems/localhost
+curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
 {: codeblock}
 
@@ -139,7 +139,7 @@ ifdef::cloud-hosted[]
 You do not need to restart the server. 
 Next, run the following curl command:
 ```
-curl http://localhost:9080/inventory/systems/localhost
+curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
 {: codeblock}
 
@@ -240,7 +240,7 @@ in the [hotspot file=2]`SystemClient.java` class.
 You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
-[source, java, linenums, role='code_column hide_tags=copyright tags=503_response']
+[source, java, linenums, role='code_column tags=503_response hide_tags=copyright']
 ----
 include::finish/src/main/java/io/openliberty/guides/system/SystemResource.java[]
 ----
@@ -252,7 +252,7 @@ include::finish/resources/CustomConfigSource.json[]
 ----
 
 SystemClient.java
-[source, java, linenums, role='code_column hide_tags=copyright tags=client']
+[source, java, linenums, role='code_column tags=client hide_tags=copyright']
 ----
 include::finish/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
 ----
@@ -356,7 +356,7 @@ endif::[]
 ifdef::cloud-hosted[]
 When the server is running, run the following curl command:
 ```
-curl http://localhost:9080/inventory/systems/localhost
+curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
 {: codeblock}
 
@@ -364,7 +364,7 @@ You receive the system properties of your local JVM from the **inventory** servi
 
 Next, run the following curl command which accesses the **system** service, to retrieve the system properties for the specific localhost:
 ```
-curl http://localhost:9080/system/properties
+curl -s http://localhost:9080/system/properties | jq
 ```
 {: codeblock}
 
@@ -445,7 +445,7 @@ endif::[]
 ifdef::cloud-hosted[]
 After saving the file, run the following curl command to view the cached version of the properties:
 ```
-curl http://localhost:9080/inventory/systems/localhost
+curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
 {: codeblock}
 
