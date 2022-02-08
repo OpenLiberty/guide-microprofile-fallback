@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2020 IBM Corporation and others.
+ * Copyright (c) 2018, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,10 @@ package it.io.openliberty.guides.faulttolerance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import javax.json.JsonObject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
-import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
+import jakarta.json.JsonObject;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,6 @@ public class FaultToleranceIT {
     // end::Before[]
     public void setup() {
         client = ClientBuilder.newClient();
-        client.register(JsrJsonpProvider.class);
     }
 
     // tag::After[]
@@ -79,9 +77,9 @@ public class FaultToleranceIT {
         assertResponse(TestUtils.baseUrl, response);
         obj = response.readEntity(JsonObject.class);
         int propertiesSizeFallBack = obj.size();
-        assertTrue(propertiesSize > propertiesSizeFallBack, 
+        assertTrue(propertiesSize > propertiesSizeFallBack,
                    "The total number of properties from the @Fallback method "
-                 + "is not smaller than the number from the system service" 
+                 + "is not smaller than the number from the system service"
                  +  "as expected.");
         // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
