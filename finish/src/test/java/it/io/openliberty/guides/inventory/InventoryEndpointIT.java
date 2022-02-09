@@ -126,7 +126,8 @@ public class InventoryEndpointIT {
         this.assertResponse(baseUrl, response);
 
         Response badResponse =
-                            client.target(baseUrl + INVENTORY_HOSTS + "/" + "badhostname")
+                            client.target(baseUrl + INVENTORY_HOSTS
+                                         + "/" + "badhostname")
                                   .request(MediaType.APPLICATION_JSON)
                                   .get();
 
