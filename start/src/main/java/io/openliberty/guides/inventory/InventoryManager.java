@@ -22,14 +22,14 @@ import io.openliberty.guides.inventory.model.InventoryList;
 public class InventoryManager {
 
     public Properties get(String hostname) throws IOException {
-		return null;
+	    return null;
 	}
 
-	public void add(String hostname, Properties props) {
+    public void add(String hostname, Properties props) {
 	}
 
-	public InventoryList list() {
-		return null;
+    public InventoryList list() {
+	    return null;
 	}
 
 }
