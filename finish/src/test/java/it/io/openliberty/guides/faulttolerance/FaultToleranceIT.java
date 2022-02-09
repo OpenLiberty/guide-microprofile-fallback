@@ -91,7 +91,8 @@ public class FaultToleranceIT {
 
     // tag::javadoc[]
     /**
-     * testFallbackForGet - test for checking if the fallback skip mechanism is working as intended:
+     * testFallbackForGet : 
+     * test for checking if the fallback skip mechanism is working as intended:
      * 1. Access system properties for the wrong hostname (localhot)
      * 2. Verify that the response code is 404
      * 3. Verify that the response text contains an error
@@ -106,7 +107,8 @@ public class FaultToleranceIT {
                 TestUtils.INVENTORY_UNKNOWN_HOST_URL);
         assertResponse(TestUtils.baseUrl, response, 404);
         assertTrue(response.readEntity(String.class).contains("error"),
-                   "Incorrect response body from " + TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+                   "Incorrect response body from " +
+                   TestUtils.INVENTORY_UNKNOWN_HOST_URL);
     }
     //end::testFallbackSkipForGet[]
 

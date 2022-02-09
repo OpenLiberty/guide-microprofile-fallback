@@ -95,10 +95,11 @@ public class InventoryEndpointIT {
         this.assertResponse(baseUrl, invResponse);
         this.assertResponse(baseUrl, sysResponse);
 
-        JsonObject jsonFromInventory = (JsonObject) invResponse.readEntity(JsonObject.class)
-                                                               .getJsonArray("systems")
-                                                               .getJsonObject(0)
-                                                               .get("properties");
+        JsonObject jsonFromInventory =
+                                    (JsonObject) invResponse.readEntity(JsonObject.class)
+                                                            .getJsonArray("systems")
+                                                            .getJsonObject(0)
+                                                            .get("properties");
 
         JsonObject jsonFromSystem = sysResponse.readEntity(JsonObject.class);
 
@@ -124,15 +125,18 @@ public class InventoryEndpointIT {
         Response response = this.getResponse(baseUrl + INVENTORY_HOSTS);
         this.assertResponse(baseUrl, response);
 
-        Response badResponse = client.target(baseUrl + INVENTORY_HOSTS + "/" + "badhostname")
-                                     .request(MediaType.APPLICATION_JSON).get();
+        Response badResponse =
+                             client.target(baseUrl + INVENTORY_HOSTS + "/" + "badhostname")
+                                    .request(MediaType.APPLICATION_JSON).get();
 
         assertEquals(404, badResponse.getStatus(),
-                     "BadResponse expected status: 404. Response code not as expected.");
+                     "BadResponse expected status: 404."
+                     + "Response code not as expected.");
 
         String stringObj = badResponse.readEntity(String.class);
         boolean isError = stringObj.contains("error");
-        assertTrue(isError, "badhostname is not a valid host but it didn't raise an error");
+        assertTrue(isError, "badhostname is not a valid host"
+                   + "but it didn't raise an error");
 
         response.close();
         badResponse.close();

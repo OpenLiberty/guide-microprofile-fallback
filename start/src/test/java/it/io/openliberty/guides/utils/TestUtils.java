@@ -25,10 +25,14 @@ public class TestUtils {
     private static String port = System.getProperty("http.port");
 
     public static String baseUrl = "http://localhost:" + port + "/";
-    public static final String INVENTORY_LOCALHOST_URL = baseUrl + "inventory/systems/localhost/";
-    public static final String INVENTORY_UNKNOWN_HOST_URL = baseUrl + "inventory/systems/unknown";
-    public static final String SYSTEM_MAINTENANCE_FALSE = "io_openliberty_guides_system_inMaintenance\":false";
-    public static final String SYSTEM_MAINTENANCE_TRUE = "io_openliberty_guides_system_inMaintenance\":true";
+    public static final String INVENTORY_LOCALHOST_URL =
+    baseUrl + "inventory/systems/localhost/";
+    public static final String INVENTORY_UNKNOWN_HOST_URL =
+    baseUrl + "inventory/systems/unknown";
+    public static final String SYSTEM_MAINTENANCE_FALSE =
+    "io_openliberty_guides_system_inMaintenance\":false";
+    public static final String SYSTEM_MAINTENANCE_TRUE =
+    "io_openliberty_guides_system_inMaintenance\":true";
 
     /**
      * Returns response information from the specified URL.
@@ -44,9 +48,11 @@ public class TestUtils {
         try {
             String fileName = System.getProperty("user.dir").split("target")[0]
                     + "/resources/CustomConfigSource.json";
-            BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
+            BufferedReader reader =
+            new BufferedReader(new FileReader(new File(fileName)));
             String line = "";
-            String oldContent = "", newContent = "";
+            String oldContent = "";
+            String newContent = "";
             while ((line = reader.readLine()) != null) {
                 oldContent += line + "\r\n";
             }

@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.faulttolerance.Fallback;
-import io.openliberty.guides.inventory.model.*;
+import io.openliberty.guides.inventory.model.InventoryList;
+import io.openliberty.guides.inventory.model.SystemData;
 
 @ApplicationScoped
 public class InventoryManager {

@@ -52,7 +52,8 @@ public class InventoryUtils {
   }
   // end::builder[]
 
-  public void handleProcessingException(ProcessingException ex) throws UnknownHostException {
+  public void handleProcessingException(ProcessingException ex)
+  throws UnknownHostException {
     Throwable rootEx = ExceptionUtils.getRootCause(ex);
     if (rootEx instanceof UnknownHostException) {
       throw (UnknownHostException) rootEx;
