@@ -95,7 +95,7 @@ public class InventoryEndpointIT {
         this.assertResponse(baseUrl, invResponse);
         this.assertResponse(baseUrl, sysResponse);
 
-        JsonObject jsonFromInventory = (JsonObject) 
+        JsonObject jsonFromInventory = (JsonObject)
                                     invResponse.readEntity(JsonObject.class)
                                                .getJsonArray("systems")
                                                .getJsonObject(0)
@@ -126,9 +126,9 @@ public class InventoryEndpointIT {
         this.assertResponse(baseUrl, response);
 
         Response badResponse =
-                               client.target(baseUrl + INVENTORY_HOSTS + "/" + "badhostname")
-                                     .request(MediaType.APPLICATION_JSON)
-                                     .get();
+                            client.target(baseUrl + INVENTORY_HOSTS + "/" + "badhostname")
+                                  .request(MediaType.APPLICATION_JSON)
+                                  .get();
 
         assertEquals(404, badResponse.getStatus(),
                      "BadResponse expected status:"
