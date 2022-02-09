@@ -35,6 +35,8 @@ public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
       return new UnknownUrlException();
     case 503:
       return new IOException();
+    default :
+      return null;
     }
     return null;
   }

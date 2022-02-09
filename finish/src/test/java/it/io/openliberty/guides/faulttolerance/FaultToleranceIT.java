@@ -117,8 +117,8 @@ public class FaultToleranceIT {
      * Asserts that the given URL's response code matches the given status code.
      */
     // end::javadoc[]
-    private void assertResponse(String url, Response response, int status_code) {
-        assertEquals(status_code, response.getStatus(),
+    private void assertResponse(String url, Response response, int statusCode) {
+        assertEquals(statusCode, response.getStatus(),
                 "Incorrect response code from " + url);
     }
 
