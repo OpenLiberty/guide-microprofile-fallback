@@ -16,6 +16,7 @@ package io.openliberty.guides.inventory.client;
 import java.io.IOException;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 
