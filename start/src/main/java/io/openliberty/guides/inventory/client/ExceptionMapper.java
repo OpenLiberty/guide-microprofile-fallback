@@ -38,7 +38,6 @@ public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
     default :
       return null;
     }
-    return null;
   }
 }
 // end::mapper[]
