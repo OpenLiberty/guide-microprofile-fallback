@@ -66,10 +66,9 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. To access the **inventory** service with a localhost hostname, run the following curl command:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
 You see the system properties for this host. When you run this curl command, some of these system properties, such as the OS name and user name, are automatically stored in the inventory.
 endif::[]
@@ -96,14 +95,15 @@ endif::[]
 ifdef::cloud-hosted[]
 Update the **CustomConfigSource** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **false** to **true** and save the file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/finish/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":true}
 ```
-{: codeblock}
 endif::[]
 
 // Following context for the static guide:
@@ -114,10 +114,9 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 You do not need to restart the server. Next, run the following curl command:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
 The fallback mechanism is triggered because the **system** service is now in maintenance. You see the cached properties for this localhost.
 endif::[]
@@ -140,14 +139,15 @@ endif::[]
 ifdef::cloud-hosted[]
 Update the **CustomConfigSource** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **true** to **false** to set this condition back to its original value.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/finish/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":false}
 ```
-{: codeblock}
 endif::[]
 
 [role='command']
@@ -167,10 +167,9 @@ endif::[]
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
 To begin, run the following command to navigate to the **start** directory:
-```
+```bash
 cd /home/project/guide-microprofile-fallback/start
 ```
-{: codeblock}
 endif::[]
 
 [role='command']
@@ -284,26 +283,23 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 When the server is running, run the following curl command:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
 You receive the system properties of your local JVM from the **inventory** service.
 
 Next, run the following curl command which accesses the **system** service, to retrieve the system properties for the specific localhost:
-```
+```bash
 curl -s http://localhost:9080/system/properties | jq
 ```
-{: codeblock}
 
 Notice that the results from the two URLs are identical because the **inventory** service gets its results from calling the **system** service.
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
-```
+```bash
 curl -k -u admin https://localhost:9443/metrics/base | grep _ft_
 ```
-{: codeblock}
 
 See the following sample outputs for the **@Fallback** annotated method and the fallback method before a fallback occurs:
 endif::[]
@@ -335,14 +331,15 @@ endif::[]
 ifdef::cloud-hosted[]
 Update the configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **false** to **true** and save the file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/start/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":true}
 ```
-{: codeblock}
 endif::[]
 
 CustomConfigSource.json
@@ -365,10 +362,9 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 After saving the file, run the following curl command to view the cached version of the properties:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
 The **fallbackForGet()** method, which is the designated fallback method, is called when the **system** service is not available. The cached system properties contain only the OS name and user name key and value pairs.
 endif::[]
@@ -381,10 +377,9 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 To see that the **system** service is down, run the following curl command:
-```
+```bash
 curl -I http://localhost:9080/system/properties
 ```
-{: codeblock}
 
 You see that the service displays a 503 HTTP response code.
 endif::[]
@@ -397,10 +392,9 @@ endif::[]
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 Run the following curl command again and enter **adminpwd** as the password:
-```
+```bash
 curl -k -u admin https://localhost:9443/metrics/base | grep _ft_
 ```
-{: codeblock}
 
 See the following sample outputs for the **@Fallback** annotated method and the fallback method after a fallback occurs:
 endif::[]
@@ -440,14 +434,15 @@ endif::[]
 ifdef::cloud-hosted[]
 Update the configuration file. After you finish, change the ***io_openliberty_guides_system_inMaintenance*** property value back to **false** in the **resources/CustomConfigSource.json** file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/start/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":false}
 ```
-{: codeblock}
 endif::[]
 
 // =================================================================================================
