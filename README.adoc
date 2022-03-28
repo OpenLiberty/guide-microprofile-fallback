@@ -65,7 +65,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. To access the **inventory** service with a localhost hostname, run the following curl command:
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. To access the ***inventory*** service with a localhost hostname, run the following curl command:
 ```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
@@ -93,7 +93,7 @@ endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-Update the **CustomConfigSource** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **false** to **true** and save the file.
+Update the ***CustomConfigSource*** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***false*** to ***true*** and save the file.
 
 > To open the CustomConfigSource.json file in your IDE, select 
 > **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
@@ -137,7 +137,7 @@ endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-Update the **CustomConfigSource** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **true** to **false** to set this condition back to its original value.
+Update the ***CustomConfigSource*** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***true*** to ***false*** to set this condition back to its original value.
 
 > To open the CustomConfigSource.json file in your IDE, select 
 > **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
@@ -166,7 +166,7 @@ endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-To begin, run the following command to navigate to the **start** directory:
+To begin, run the following command to navigate to the ***start*** directory:
 ```bash
 cd /home/project/guide-microprofile-fallback/start
 ```
@@ -329,7 +329,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Update the configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from **false** to **true** and save the file.
+Update the configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***false*** to ***true*** and save the file.
 
 > To open the CustomConfigSource.json file in your IDE, select 
 > **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
@@ -376,7 +376,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-To see that the **system** service is down, run the following curl command:
+To see that the ***system*** service is down, run the following curl command:
 ```bash
 curl -I http://localhost:9080/system/properties
 ```
@@ -391,12 +391,12 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Run the following curl command again and enter **adminpwd** as the password:
+Run the following curl command again and enter ***adminpwd*** as the password:
 ```bash
 curl -k -u admin https://localhost:9443/metrics/base | grep _ft_
 ```
 
-See the following sample outputs for the **@Fallback** annotated method and the fallback method after a fallback occurs:
+See the following sample outputs for the ***@Fallback*** annotated method and the fallback method after a fallback occurs:
 endif::[]
 
 [role="no_copy"]
@@ -415,7 +415,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-From the output, the ***base_ft_invocations_total{fallback="notApplied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data shows that the **get()** method was called once without triggering a fallback method. The ***base_ft_invocations_total{fallback="applied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data indicates that the **get()** method was called once and the fallback **fallbackForGet()** method was triggered.
+From the output, the ***base_ft_invocations_total{fallback="notApplied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data shows that the ***get()*** method was called once without triggering a fallback method. The ***base_ft_invocations_total{fallback="applied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data indicates that the ***get()*** method was called once and the fallback ***fallbackForGet()*** method was triggered.
 endif::[]
 
 // Following context for the static guide:
@@ -432,7 +432,7 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Update the configuration file. After you finish, change the ***io_openliberty_guides_system_inMaintenance*** property value back to **false** in the **resources/CustomConfigSource.json** file.
+Update the configuration file. After you finish, change the ***io_openliberty_guides_system_inMaintenance*** property value back to ***false*** in the ***resources/CustomConfigSource.json*** file.
 
 > To open the CustomConfigSource.json file in your IDE, select 
 > **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
