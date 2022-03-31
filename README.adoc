@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2021 IBM Corporation and others.
+// Copyright (c) 2018, 2022 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -33,28 +33,15 @@ You'll explore how to manage the impact of failures using MicroProfile Fault Tol
 
 == What you'll learn
 
-You will learn how to use MicroProfile (MP) Fault Tolerance to build resilient microservices
-that reduce the impact from failure and ensure continued operation of services.
+You will learn how to use MicroProfile (MP) Fault Tolerance to build resilient microservices that reduce the impact from failure and ensure continued operation of services.
 
-MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices.
-Fault tolerance leverages different strategies to guide the execution and result of logic.
-As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website^],
-retry policies, bulkheads, and circuit breakers are popular concepts in this area.
-They dictate whether and when executions take place, and fallbacks offer an alternative result
-when an execution does not complete successfully.
+MP Fault Tolerance provides a simple and flexible solution to build fault-tolerant microservices. Fault tolerance leverages different strategies to guide the execution and result of logic. As stated in the https://microprofile.io/project/eclipse/microprofile-fault-tolerance[MicroProfile website^], retry policies, bulkheads, and circuit breakers are popular concepts in this area. They dictate whether and when executions take place, and fallbacks offer an alternative result when an execution does not complete successfully.
 
-The application that you will be working with is an `inventory` service, which collects,
-stores, and returns the system properties.
-It uses the `system` service to retrieve the system properties for a particular host.
-You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system`
-service is unavailable.
+The application that you will be working with is an `inventory` service, which collects, stores, and returns the system properties. It uses the `system` service to retrieve the system properties for a particular host. You will add fault tolerance to the `inventory` service so that it reacts accordingly when the `system` service is unavailable.
 
-You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance
-specification to define criteria for when to provide an alternative solution for
-a failed execution.
+You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance specification to define criteria for when to provide an alternative solution for a failed execution.
 
-You will also see the application metrics for the fault tolerance methods that are automatically enabled
-when you add the MicroProfile Metrics feature to the server.
+You will also see the application metrics for the fault tolerance methods that are automatically enabled when you add the MicroProfile Metrics feature to the server.
 
 
 // =================================================================================================
@@ -73,23 +60,17 @@ include::{common-includes}/twyb-intro.adoc[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the
-`inventory` service with a localhost hostname. You see the system properties for this host.
-When you visit this URL, some of these system
-properties, such as the OS name and user name, are automatically stored in the inventory.
+Point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL, which accesses the `inventory` service with a localhost hostname. You see the system properties for this host. When you visit this URL, some of these system properties, such as the OS name and user name, are automatically stored in the inventory.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE.
-To access the **inventory** service with a localhost hostname, run the following curl command:
-```
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. To access the ***inventory*** service with a localhost hostname, run the following curl command:
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
-You see the system properties for this host.
-When you run this curl command, some of these system properties, such as the OS name and user name, are automatically stored in the inventory.
+You see the system properties for this host. When you run this curl command, some of these system properties, such as the OS name and user name, are automatically stored in the inventory.
 endif::[]
 
 // Following context for the static guide:
@@ -112,39 +93,32 @@ endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-Update the **CustomConfigSource** configuration file.
-Change the **`io_openliberty_guides_system_inMaintenance`** property from **false** to **true** and save the file.
+Update the ***CustomConfigSource*** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***false*** to ***true*** and save the file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/finish/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":true}
 ```
-{: codeblock}
 endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-You do not need
-to restart the server. Next, return to your browser and point back to the
-http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
-The fallback mechanism is triggered because the `system` service is now in maintenance.
-You see the cached properties for this localhost.
+You do not need to restart the server. Next, return to your browser and point back to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL. The fallback mechanism is triggered because the `system` service is now in maintenance. You see the cached properties for this localhost.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-You do not need to restart the server. 
-Next, run the following curl command:
-```
+You do not need to restart the server. Next, run the following curl command:
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
-The fallback mechanism is triggered because the **system** service is now in maintenance.
-You see the cached properties for this localhost.
+The fallback mechanism is triggered because the **system** service is now in maintenance. You see the cached properties for this localhost.
 endif::[]
 
 When you are done checking out the application, go to the [hotspot]`CustomConfigSource.json` file again.
@@ -158,24 +132,22 @@ ifndef::cloud-hosted[]
 ----
 
 [role="edit_command_text"]
-Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this
-condition back to its original value.
+Change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property from `true` to `false` to set this condition back to its original value.
 endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-Update the **CustomConfigSource** configuration file.
-Change the **`io_openliberty_guides_system_inMaintenance`** property from **true** to **false** to set this
-condition back to its original value.
+Update the ***CustomConfigSource*** configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***true*** to ***false*** to set this condition back to its original value.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/finish/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/finish/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":false}
 ```
-{: codeblock}
 endif::[]
 
 [role='command']
@@ -194,50 +166,28 @@ endif::[]
 
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
-To begin, run the following command to navigate to the **start** directory:
-```
+To begin, run the following command to navigate to the ***start*** directory:
+```bash
 cd /home/project/guide-microprofile-fallback/start
 ```
-{: codeblock}
 endif::[]
 
 [role='command']
 include::{common-includes}/devmode-lmp33-start.adoc[]
 
-The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your [hotspot file=4]`pom.xml` file.
-Look for the dependency with the [hotspot=microprofile file=4]`microprofile` artifact ID.
-This dependency provides a library that allows you to use fault tolerance policies in your microservices.
+The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your [hotspot file=4]`pom.xml` file. Look for the dependency with the [hotspot=microprofile file=4]`microprofile` artifact ID. This dependency provides a library that allows you to use fault tolerance policies in your microservices.
 
-You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration,
-which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
+You can also find the [hotspot=mpFaultTolerance file=3]`mpFaultTolerance` feature in your [hotspot file=3]`src/main/liberty/config/server.xml` server configuration, which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
-To easily work through this guide, the two provided microservices are set up to run
-on the same server. To simulate the availability of the services and then to enable fault tolerance,
-dynamic configuration with MicroProfile Configuration is used so that you can easily take one service
-or the other down for maintenance. If you want to learn more about setting up dynamic configuration,
-see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
+To easily work through this guide, the two provided microservices are set up to run on the same server. To simulate the availability of the services and then to enable fault tolerance, dynamic configuration with MicroProfile Configuration is used so that you can easily take one service or the other down for maintenance. If you want to learn more about setting up dynamic configuration, see https://openliberty.io/guides/microprofile-config.html[Configuring microservices^].
 
-The following two steps set up the dynamic configuration on the `system` service and its client.
-You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
+The following two steps set up the dynamic configuration on the `system` service and its client. You can move on to the next section, which adds the fallback mechanism on the `inventory` service.
 
-First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has
-the [hotspot=isInMaintenance file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property
-to `false` in the [hotspot file=1]`CustomConfigSource` file.
-Otherwise, the service returns a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
+First, the [hotspot file=0]`src/main/java/io/openliberty/guides/system/SystemResource.java` file has the [hotspot=isInMaintenance file=0]`isInMaintenance()` condition, which determines that the system properties are returned only if you set the [hotspot=2 file=1]`io_openliberty_guides_system_inMaintenance` configuration property to `false` in the [hotspot file=1]`CustomConfigSource` file. Otherwise, the service returns a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which makes it unavailable.
 
-Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
-makes a request to the `system` service through the MicroProfile Rest Client API.
-If you want to learn more about MicroProfile Rest Client,
-you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
-The `system` service as described in the [hotspot file=0]`SystemResource.java` file
-may return a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code.
-This code indicates that the server being called
-is unable to handle the request because of a temporary overload or scheduled maintenance, which would
-likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=IOException file=2]`IOException` is thrown.
+Next, the [hotspot file=2]`src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file makes a request to the `system` service through the MicroProfile Rest Client API. If you want to learn more about MicroProfile Rest Client, you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide. The `system` service as described in the [hotspot file=0]`SystemResource.java` file may return a [hotspot=response-status file=0]`Status.SERVICE_UNAVAILABLE` message, which is a 503 status code. This code indicates that the server being called is unable to handle the request because of a temporary overload or scheduled maintenance, which would likely be alleviated after some delay. To simulate that the system is unavailable, an [hotspot=IOException file=2]`IOException` is thrown.
 
-The `InventoryManager` class calls the [hotspot=getProperties file=2]`getProperties()` method
-in the [hotspot file=2]`SystemClient.java` class.
-You will look into the `InventoryManager` class in more detail in the next section.
+The `InventoryManager` class calls the [hotspot=getProperties file=2]`getProperties()` method in the [hotspot file=2]`SystemClient.java` class. You will look into the `InventoryManager` class in more detail in the next section.
 
 SystemResource.java
 [source, java, linenums, role='code_column tags=503_response hide_tags=copyright']
@@ -275,10 +225,7 @@ include::finish/pom.xml[]
 
 === Adding the @Fallback annotation
 
-The `inventory` service is now able to recognize that the `system` service
-was taken down for maintenance.
-An IOException is thrown to simulate the `system` service is unavailable.
-Now, set a fallback method to deal with this failure.
+The `inventory` service is now able to recognize that the `system` service was taken down for maintenance. An IOException is thrown to simulate the `system` service is unavailable. Now, set a fallback method to deal with this failure.
 
 
 [role="code_command hotspot", subs="quotes"]
@@ -293,19 +240,11 @@ InventoryManager.java
 include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.java[]
 ----
 
-The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this
-example, use the [hotspot=fallbackForGet]`fallbackForGet()` method.
+The [hotspot=Fallback]`@Fallback` annotation dictates a method to call when the original method encounters a failed execution. In this example, use the [hotspot=fallbackForGet]`fallbackForGet()` method.
 
-The [hotspot=Fallback]`@Fallback` annotation provides two parameters, [hotspot=applyOn]`applyOn` and [hotspot=skipOn]`skipOn`, which allow you to configure
-which exceptions trigger a fallback and which exceptions do not, respectively.
-In this example, the [hotspot=get]`get()` method throws `IOException` when the system service is unavailable, and throws
-`UnknownHostException` when the system service cannot be found on the specified host.
-The [hotspot=fallbackForGet]`fallbackForGet()` method can handle the first case, but not the second.
+The [hotspot=Fallback]`@Fallback` annotation provides two parameters, [hotspot=applyOn]`applyOn` and [hotspot=skipOn]`skipOn`, which allow you to configure which exceptions trigger a fallback and which exceptions do not, respectively. In this example, the [hotspot=get]`get()` method throws `IOException` when the system service is unavailable, and throws `UnknownHostException` when the system service cannot be found on the specified host. The [hotspot=fallbackForGet]`fallbackForGet()` method can handle the first case, but not the second.
 
-The [hotspot=fallbackForGet]`fallbackForGet()` method, which is the designated fallback method for the original
-[hotspot=get]`get()` method, checks to see if the system's properties exist in the inventory.
-If the system properties entry is not found in the inventory, the method prints out a warning
-message in the browser. Otherwise, this method returns the cached property values from the inventory.
+The [hotspot=fallbackForGet]`fallbackForGet()` method, which is the designated fallback method for the original [hotspot=get]`get()` method, checks to see if the system's properties exist in the inventory. If the system properties entry is not found in the inventory, the method prints out a warning message in the browser. Otherwise, this method returns the cached property values from the inventory.
 
 You successfully set up your microservice to have fault tolerance capability.
 
@@ -318,12 +257,9 @@ server.xml
 include::finish/src/main/liberty/config/server.xml[]
 ----
 
-MicroProfile Fault Tolerance integrates with MicroProfile Metrics to provide metrics for the annotated fault tolerance methods.
-When both the [hotspot=mpFaultTolerance]`mpFaultTolerance` and the [hotspot=mpMetrics]`mpMetrics` features are included in the [hotspot]`server.xml` configuration file,
-the `@Fallback` fault tolerance annotation provides metrics that count the following things: the total number of annotated method invocations, the total number of failed annotated method invocations, and the total number of the fallback method calls.
+MicroProfile Fault Tolerance integrates with MicroProfile Metrics to provide metrics for the annotated fault tolerance methods. When both the [hotspot=mpFaultTolerance]`mpFaultTolerance` and the [hotspot=mpMetrics]`mpMetrics` features are included in the [hotspot]`server.xml` configuration file, the `@Fallback` fault tolerance annotation provides metrics that count the following things: the total number of annotated method invocations, the total number of failed annotated method invocations, and the total number of the fallback method calls.
 
-The [hotspot=mpMetrics]`mpMetrics` feature requires SSL and the configuration is provided for you. The [hotspot=quickStartSecurity]`quickStartSecurity` configuration element provides basic security to secure the
-server. When you go to the `/metrics` endpoint, use the credentials that are defined in the server configuration to log in to view the data for the fault tolerance methods.
+The [hotspot=mpMetrics]`mpMetrics` feature requires SSL and the configuration is provided for you. The [hotspot=quickStartSecurity]`quickStartSecurity` configuration element provides basic security to secure the server. When you go to the `/metrics` endpoint, use the credentials that are defined in the server configuration to log in to view the data for the fault tolerance methods.
 
 You can learn more about MicroProfile Metrics in the https://openliberty.io/guides/microprofile-metrics.html[Providing metrics from a microservice^] guide. You can also learn more about the MicroProfile Fault Tolerance and MicroProfile Metrics integration in the https://github.com/eclipse/microprofile-fault-tolerance/releases[MicroProfile Fault Tolerance specification^].
 
@@ -336,46 +272,34 @@ include::{common-includes}/devmode-build.adoc[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-When the server is running, point your browser to the
-http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL.
-You receive the system properties of your local JVM from the `inventory` service. 
+When the server is running, point your browser to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL. You receive the system properties of your local JVM from the `inventory` service. 
 
-Next, point your browser to the `system` service URL, 
-which is located at http://localhost:9080/system/properties[http://localhost:9080/system/properties^],
-to retrieve the system properties for the specific localhost.
-Notice that the results from the two URLs are identical because the `inventory` service gets its results from
-calling the `system` service.
+Next, point your browser to the `system` service URL,  which is located at http://localhost:9080/system/properties[http://localhost:9080/system/properties^], to retrieve the system properties for the specific localhost. Notice that the results from the two URLs are identical because the `inventory` service gets its results from calling the `system` service.
 
-To see the application metrics, go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL. 
-Log in as the `admin` user, and use `adminpwd` as the password. 
-See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
+To see the application metrics, go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL. Log in as the `admin` user, and use `adminpwd` as the password. See the following sample outputs for the `@Fallback` annotated method and the fallback method before a fallback occurs:
 
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 When the server is running, run the following curl command:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
 You receive the system properties of your local JVM from the **inventory** service.
 
 Next, run the following curl command which accesses the **system** service, to retrieve the system properties for the specific localhost:
-```
+```bash
 curl -s http://localhost:9080/system/properties | jq
 ```
-{: codeblock}
 
-Notice that the results from the two URLs are identical because the **inventory** service gets its results from
-calling the **system** service.
+Notice that the results from the two URLs are identical because the **inventory** service gets its results from calling the **system** service.
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
-```
+```bash
 curl -k -u admin https://localhost:9443/metrics/base | grep _ft_
 ```
-{: codeblock}
 
 See the following sample outputs for the **@Fallback** annotated method and the fallback method before a fallback occurs:
 endif::[]
@@ -389,9 +313,7 @@ base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.in
 base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
 
-You can test the fault tolerance mechanism of your microservices by dynamically changing
-the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the
-[hotspot file=0]`resources/CustomConfigSource.json` file, which puts the `system` service in maintenance.
+You can test the fault tolerance mechanism of your microservices by dynamically changing the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the [hotspot file=0]`resources/CustomConfigSource.json` file, which puts the `system` service in maintenance.
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
@@ -407,17 +329,17 @@ endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Update the configuration file.
-Change the **`io_openliberty_guides_system_inMaintenance`** property from **false** to **true** and save the file.
+Update the configuration file. Change the ***io_openliberty_guides_system_inMaintenance*** property from ***false*** to ***true*** and save the file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/start/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":true}
 ```
-{: codeblock}
 endif::[]
 
 CustomConfigSource.json
@@ -434,57 +356,47 @@ include::finish/src/main/java/io/openliberty/guides/inventory/InventoryManager.j
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-After saving the file, go back to your browser and
-refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of
-the properties. The [hotspot=fallbackForGet file=1]`fallbackForGet()` method, which is the designated fallback method, is called
-when the `system` service is not available.
-The cached system properties contain only the OS name and user name key and value pairs.
+After saving the file, go back to your browser and refresh to the http://localhost:9080/inventory/systems/localhost[http://localhost:9080/inventory/systems/localhost^] URL to view the cached version of the properties. The [hotspot=fallbackForGet file=1]`fallbackForGet()` method, which is the designated fallback method, is called when the `system` service is not available. The cached system properties contain only the OS name and user name key and value pairs.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
 After saving the file, run the following curl command to view the cached version of the properties:
-```
+```bash
 curl -s http://localhost:9080/inventory/systems/localhost | jq
 ```
-{: codeblock}
 
-The **fallbackForGet()** method, which is the designated fallback method, is called when the **system** service is not available.
-The cached system properties contain only the OS name and user name key and value pairs.
+The **fallbackForGet()** method, which is the designated fallback method, is called when the **system** service is not available. The cached system properties contain only the OS name and user name key and value pairs.
 endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again.
-You see that the service displays a 503 HTTP response code.
+To see that the `system` service is down, point your browser to the http://localhost:9080/system/properties[http://localhost:9080/system/properties^] URL again. You see that the service displays a 503 HTTP response code.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-To see that the **system** service is down, run the following curl command:
-```
+To see that the ***system*** service is down, run the following curl command:
+```bash
 curl -I http://localhost:9080/system/properties
 ```
-{: codeblock}
 
 You see that the service displays a 503 HTTP response code.
 endif::[]
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-Go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL again.
-See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
+Go to the https://localhost:9443/metrics/base[https://localhost:9443/metrics/base^] URL again. See the following sample outputs for the `@Fallback` annotated method and the fallback method after a fallback occurs:
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Run the following curl command again and enter **adminpwd** as the password:
-```
+Run the following curl command again and enter ***adminpwd*** as the password:
+```bash
 curl -k -u admin https://localhost:9443/metrics/base | grep _ft_
 ```
-{: codeblock}
 
-See the following sample outputs for the **@Fallback** annotated method and the fallback method after a fallback occurs:
+See the following sample outputs for the ***@Fallback*** annotated method and the fallback method after a fallback occurs:
 endif::[]
 
 [role="no_copy"]
@@ -498,16 +410,12 @@ base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inven
 
 // Following context for the static guide:
 ifndef::cloud-hosted[]
-From the output, the `base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data shows that the [hotspot=get file=1]`get()` method was called once without triggering a fallback method.
-The `base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data
-indicates that the [hotspot=get file=1]`get()` method was called once and the fallback [hotspot=fallbackForGet file=1]`fallbackForGet()` method was triggered.
+From the output, the `base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data shows that the [hotspot=get file=1]`get()` method was called once without triggering a fallback method. The `base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"}` data indicates that the [hotspot=get file=1]`get()` method was called once and the fallback [hotspot=fallbackForGet file=1]`fallbackForGet()` method was triggered.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-From the output, the **`base_ft_invocations_total{fallback="notApplied",`** **`method="io.openliberty.guides.inventory.InventoryManager.get",`** **`result="valueReturned"}`** data shows that the **get()** method was called once without triggering a fallback method.
-The **`base_ft_invocations_total{fallback="applied",`** **`method="io.openliberty.guides.inventory.InventoryManager.get",`** **`result="valueReturned"}`** data
-indicates that the **get()** method was called once and the fallback **fallbackForGet()** method was triggered.
+From the output, the ***base_ft_invocations_total{fallback="notApplied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data shows that the ***get()*** method was called once without triggering a fallback method. The ***base_ft_invocations_total{fallback="applied",*** ***method="io.openliberty.guides.inventory.InventoryManager.get",*** ***result="valueReturned"}*** data indicates that the ***get()*** method was called once and the fallback ***fallbackForGet()*** method was triggered.
 endif::[]
 
 // Following context for the static guide:
@@ -519,24 +427,22 @@ ifndef::cloud-hosted[]
 ----
 
 [role="edit_command_text"]
-After you finish, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance`
-property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
+After you finish, change the [hotspot=2]`io_openliberty_guides_system_inMaintenance` property value back to `false` in the [hotspot file=0]`resources/CustomConfigSource.json` file.
 endif::[]
 
 // Following context for the cloud-hosted guide:
 ifdef::cloud-hosted[]
-Update the configuration file.
-After you finish, change the **`io_openliberty_guides_system_inMaintenance`**
-property value back to **false** in the **resources/CustomConfigSource.json** file.
+Update the configuration file. After you finish, change the ***io_openliberty_guides_system_inMaintenance*** property value back to ***false*** in the ***resources/CustomConfigSource.json*** file.
 
-> From the menu of the IDE, select 
- **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json
+> To open the CustomConfigSource.json file in your IDE, select 
+> **File** > **Open** > guide-microprofile-fallback/start/resources/CustomConfigSource.json, or click the following button
+
+::openFile{path="/home/project/guide-microprofile-fallback/start/resources/CustomConfigSource.json"}
 
 ```
 {"config_ordinal":500,
 "io_openliberty_guides_system_inMaintenance":false}
 ```
-{: codeblock}
 endif::[]
 
 // =================================================================================================
@@ -545,8 +451,7 @@ endif::[]
 
 == Testing the application
 
-You can test your application manually, but automated tests ensure code quality because they trigger a failure
-whenever a code change introduces a defect. JUnit and the JAX-RS Client API provide a simple environment for you to write tests.
+You can test your application manually, but automated tests ensure code quality because they trigger a failure whenever a code change introduces a defect. JUnit and the JAX-RS Client API provide a simple environment for you to write tests.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -554,32 +459,22 @@ whenever a code change introduces a defect. JUnit and the JAX-RS Client API prov
 `src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceIT.java`
 ----
 
-The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either
-before or after the other test case.
-These methods are generally used to perform any setup and teardown tasks. In this case,
-the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This
-client must also be registered with a JSON-P provider to process JSON resources.
-The teardown method simply destroys this client instance as well as the HTTP responses.
-
-The [hotspot=testFallbackForGet]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a
-hostname before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests
-to ensure that they are different from each other.
-
-The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a request to the `inventory` service to
-get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been
-called by asserting that the response's status code is `404` with an error message in the response body.
-
-The [hotspot=Test1 hotspot=Test2]`@Test` annotations indicate that the methods automatically execute when your test class runs.
-
-In addition, a few endpoint tests have been included for you to test the basic functionality of the
-`inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into
-the code.
-
 FaultToleranceIT.java
 [source, java, linenums, role='code_column hide_tags=copyright,javadoc']
 ----
 include::finish/src/test/java/it/io/openliberty/guides/faulttolerance/FaultToleranceIT.java[]
 ----
+
+The [hotspot=Before]`@BeforeEach` and [hotspot=After]`@AfterEach` annotations indicate that this method runs either before or after the other test case. These methods are generally used to perform any setup and teardown tasks. In this case, the setup method creates a JAX-RS client, which makes HTTP requests to the `inventory` service. This client must also be registered with a JSON-P provider to process JSON resources. The teardown method simply destroys this client instance as well as the HTTP responses.
+
+The [hotspot=testFallbackForGet]`testFallbackForGet()` test case sends a request to the `inventory` service to get the systems properties for a hostname before and after the `system` service becomes unavailable. Then, it asserts outputs from the two requests to ensure that they are different from each other.
+
+The [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test case sends a request to the `inventory` service to get the system properties for an incorrect hostname (`unknown`). Then, it confirms that the fallback method has not been called by asserting that the response's status code is `404` with an error message in the response body.
+
+The [hotspot=Test1 hotspot=Test2]`@Test` annotations indicate that the methods automatically execute when your test class runs.
+
+In addition, a few endpoint tests have been included for you to test the basic functionality of the `inventory` and `system` services. If a test failure occurs, then you might have introduced a bug into the code.
+
 // =================================================================================================
 // Running the tests
 // =================================================================================================
@@ -605,9 +500,7 @@ Results :
 Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods
-in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the
-[hotspot=testFallbackForGet]`testFallbackForGet()` and [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test cases.
+To see if the tests detect a failure, comment out the [hotspot=changeSystemProperty1 hotspot=changeSystemProperty2]`changeSystemProperty()` methods in the [hotspot]`FaultToleranceIT.java` file. Rerun the tests to see that a test failure occurs for the [hotspot=testFallbackForGet]`testFallbackForGet()` and [hotspot=testFallbackSkipForGet]`testFallbackSkipForGet()` test cases.
 
 [role='command']
 include::{common-includes}/devmode-quit.adoc[]
@@ -620,8 +513,7 @@ include::{common-includes}/devmode-quit.adoc[]
 
 You just learned how to build a fallback mechanism for a microservice with MicroProfile Fault Tolerance in Open Liberty and wrote a test to validate it.
 
-You can try one of the related MicroProfile guides. They demonstrate technologies that you can
-learn and expand on what you built here.
+You can try one of the related MicroProfile guides. They demonstrate technologies that you can learn and expand on what you built here.
 
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
