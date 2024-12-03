@@ -30,7 +30,7 @@ mvn liberty:start
 
 curl http://localhost:9080/inventory/systems/localhost
 
-COUNT=$(curl -k -u admin:adminpwd https://localhost:9443/metrics/base | wc -l)
+COUNT=$(curl -k -u admin:adminpwd https://localhost:9443/metrics?scope=base | wc -l)
 
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
