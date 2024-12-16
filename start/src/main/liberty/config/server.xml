@@ -2,7 +2,7 @@
 
   <featureManager>
     <platform>jakartaee-10.0</platform>
-    <platform>microprofile-6.1</platform>
+    <platform>microprofile-7.0</platform>
     <feature>restfulWS</feature>
     <feature>jsonb</feature>
     <feature>jsonp</feature>
@@ -13,7 +13,7 @@
     <feature>mpFaultTolerance</feature>
     <!-- end::mpFaultTolerance[] -->
     <!-- tag::mpMetrics[] -->
-    <feature>mpMetrics</feature>
+    <feature>mpMetrics-5.1</feature>
     <!-- end::mpMetrics[] -->
   </featureManager>
 
