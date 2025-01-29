@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2022 IBM Corporation and others.
+ * Copyright (c) 2018, 2025 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
@@ -26,8 +26,8 @@ import it.io.openliberty.guides.utils.TestUtils;
 
 public class FaultToleranceIT {
 
-    private Response response;
     private Client client;
+    private Response response;
 
     // tag::Before[]
     @BeforeEach
@@ -40,8 +40,8 @@ public class FaultToleranceIT {
     @AfterEach
     // end::After[]
     public void teardown() {
-        client.close();
         response.close();
+        client.close();
     }
     // tag::javadoc[]
     /**
@@ -78,8 +78,8 @@ public class FaultToleranceIT {
         int propertiesSizeFallBack = obj.size();
         assertTrue(propertiesSize > propertiesSizeFallBack,
                    "The total number of properties from the @Fallback method "
-                 + "is not smaller than the number from the system service"
-                 +  "as expected.");
+                   + "is not smaller than the number from the system service"
+                   +  "as expected.");
         // tag::changeSystemProperty2[]
         TestUtils.changeSystemProperty(TestUtils.SYSTEM_MAINTENANCE_TRUE,
                                        TestUtils.SYSTEM_MAINTENANCE_FALSE);
@@ -103,7 +103,7 @@ public class FaultToleranceIT {
     // tag::testFallbackSkipForGet[]
     public void testFallbackSkipForGet() {
         response = TestUtils.getResponse(client,
-                TestUtils.INVENTORY_UNKNOWN_HOST_URL);
+                   TestUtils.INVENTORY_UNKNOWN_HOST_URL);
         assertResponse(TestUtils.baseUrl, response, 404);
         assertTrue(response.readEntity(String.class).contains("error"),
                    "Incorrect response body from "
@@ -118,7 +118,7 @@ public class FaultToleranceIT {
     // end::javadoc[]
     private void assertResponse(String url, Response response, int statusCode) {
         assertEquals(statusCode, response.getStatus(),
-                "Incorrect response code from " + url);
+                     "Incorrect response code from " + url);
     }
 
     // tag::javadoc[]
