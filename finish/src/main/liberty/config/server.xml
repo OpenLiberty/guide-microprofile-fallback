@@ -13,7 +13,7 @@
     <feature>mpFaultTolerance</feature>
     <!-- end::mpFaultTolerance[] -->
     <!-- tag::mpMetrics[] -->
-    <feature>mpMetrics-5.1</feature>
+    <feature>mpMetrics</feature>
     <!-- end::mpMetrics[] -->
   </featureManager>
 
