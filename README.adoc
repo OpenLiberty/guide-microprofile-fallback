@@ -1,4 +1,4 @@
-// Copyright (c) 2018, 2023 IBM Corporation and others.
+// Copyright (c) 2018, 2025 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -12,7 +12,7 @@
 :page-guide-category: microprofile
 :page-essential: false
 :page-description: Learn how to add fallback behavior to microservice dependencies to manage the impact of failures.
-:page-tags: ['MicroProfile']
+:page-tags: ['microprofile']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['rest-intro', 'cdi-intro', 'microprofile-config', 'circuit-breaker']
 :page-seo-title: Building fault-tolerant Java microservices with Eclipse MicroProfile Fault Tolerance's fallback policy
@@ -298,7 +298,7 @@ Notice that the results from the two URLs are identical because the **inventory*
 
 To see the application metrics, run the following curl commmand. This command will Log in using **admin** user, and you will have to enter **adminpwd** as the password.
 ```bash
-curl -k -u admin https://localhost:9443/metrics?scope=base | grep _ft_
+curl -k -u admin https://localhost:9443/metrics?scope=base | grep ft_
 ```
 
 See the following sample outputs for the **@Fallback** annotated method and the fallback method before a fallback occurs:
@@ -306,11 +306,11 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE base_ft_invocations_total counter
-base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
-base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 0
-base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
-base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+# TYPE ft_invocations_total counter
+ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 0
+ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
 
 You can test the fault tolerance mechanism of your microservices by dynamically changing the [hotspot=2 file=0]`io_openliberty_guides_system_inMaintenance` property value to `true` in the [hotspot file=0]`resources/CustomConfigSource.json` file, which puts the `system` service in maintenance.
@@ -393,7 +393,7 @@ endif::[]
 ifdef::cloud-hosted[]
 Run the following curl command again and enter ***adminpwd*** as the password:
 ```bash
-curl -k -u admin https://localhost:9443/metrics?scope=base | grep _ft_
+curl -k -u admin https://localhost:9443/metrics?scope=base | grep ft_
 ```
 
 See the following sample outputs for the ***@Fallback*** annotated method and the fallback method after a fallback occurs:
@@ -401,11 +401,11 @@ endif::[]
 
 [role="no_copy"]
 ----
-# TYPE base_ft_invocations_total counter
-base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
-base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
-base_ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
-base_ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+# TYPE ft_invocations_total counter
+ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="valueReturned"} 1
+ft_invocations_total{fallback="notApplied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
+ft_invocations_total{fallback="applied",method="io.openliberty.guides.inventory.InventoryManager.get",result="exceptionThrown"} 0
 ----
 
 // Following context for the static guide:
