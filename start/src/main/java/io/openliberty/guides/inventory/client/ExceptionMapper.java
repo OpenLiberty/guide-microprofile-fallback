@@ -30,14 +30,11 @@ public class ExceptionMapper implements ResponseExceptionMapper<Exception> {
 
   @Override
   public Exception toThrowable(Response response) {
-    switch (response.getStatus()) {
-    case 404:
-      return new UnknownUrlException();
-    case 503:
-      return new IOException();
-    default :
-      return null;
-    }
+    return switch (response.getStatus()) {
+    case 404 -> new UnknownUrlException();
+    case 503 -> new IOException();
+    default  -> null;
+    };
   }
 }
 // end::mapper[]
