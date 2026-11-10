@@ -56,8 +56,8 @@ public class InventoryUtils {
   public void handleProcessingException(ProcessingException ex)
   throws UnknownHostException {
     Throwable rootEx = ExceptionUtils.getRootCause(ex);
-    if (rootEx instanceof UnknownHostException exception) {
-      throw exception;
+    if (rootEx instanceof UnknownHostException) {
+      throw (UnknownHostException) rootEx;
     } else {
       throw ex;
     }
